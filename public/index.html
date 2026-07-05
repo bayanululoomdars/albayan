@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>AL BAYAN MEDIA | Muttichira Bayanul Uloom Dars</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="AL BAYAN, Bayanul Uloom, Dars, Muttichira, Islamic Education" name="keywords">
+  <meta content="Official website of Muttichira Bayanul Uloom Dars - Islamic educational institution" name="description">
+
+  <!-- Favicons -->
+  <link href="img/new_logo.png" rel="icon">
+  <link href="img/new_logo.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap CSS File -->
+  <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Libraries CSS Files -->
+  <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="lib/animate/animate.min.css" rel="stylesheet">
+  <link href="lib/ionicons/css/ionicons.min.css" rel="stylesheet">
+  <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+  <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+
+  <!-- Main Stylesheet File -->
+  <link href="css/style.css" rel="stylesheet">
+
+  <!-- Modern Override Styles -->
+  <style>
+    :root {
+      --primary: #0a4d2e;
+      --primary-light: #0f6b3f;
+      --primary-dark: #063a22;
+      --accent: #d4af37;
+      --accent-light: #e8c84a;
+      --bg-dark: #0a1628;
+      --bg-card: rgba(255,255,255,0.03);
+      --text-light: #f0f0f0;
+      --glass-bg: rgba(10, 22, 40, 0.85);
+      --glass-border: rgba(212, 175, 55, 0.15);
+      --shadow-gold: 0 4px 30px rgba(212, 175, 55, 0.1);
+    }
+
+    /* ── MODERN NAVBAR ────────────────────────────── */
+    #header {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%) !important;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.3) !important;
+      height: auto !important;
+      padding: 0 !important;
+      border-bottom: 2px solid var(--accent);
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 9999;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #header.header-scrolled {
+      padding: 0 !important;
+      background: linear-gradient(135deg, rgba(6,58,34,0.98), rgba(10,77,46,0.98)) !important;
+      backdrop-filter: blur(20px);
+    }
+
+    .navbar-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 20px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .navbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .navbar-logo img {
+      height: 52px;
+      width: auto;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+      transition: transform 0.3s;
+    }
+
+    .navbar-logo:hover img {
+      transform: scale(1.05);
+    }
+
+    .navbar-logo .logo-text {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: var(--accent);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      line-height: 1.2;
+    }
+
+    .navbar-logo .logo-text small {
+      display: block;
+      font-size: 0.6rem;
+      color: rgba(255,255,255,0.7);
+      font-weight: 400;
+      letter-spacing: 2px;
+    }
+
+    /* Nav Links */
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-links li a {
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      position: relative;
+      letter-spacing: 0.3px;
+    }
+
+    .nav-links li a:hover,
+    .nav-links li a.active {
+      color: var(--accent);
+      background: rgba(212, 175, 55, 0.1);
+    }
+
+    .nav-links li a::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      left: 50%;
+      width: 0;
+      height: 2px;
+      background: var(--accent);
+      transition: all 0.3s ease;
+      transform: translateX(-50%);
+      border-radius: 2px;
+    }
+
+    .nav-links li a:hover::after,
+    .nav-links li a.active::after {
+      width: 60%;
+    }
+
+    /* Admission Button - Special Highlight */
+    .nav-links li .nav-btn-admission {
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      color: var(--primary-dark) !important;
+      font-weight: 700;
+      border-radius: 25px;
+      padding: 8px 22px;
+      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .nav-links li .nav-btn-admission:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(212, 175, 55, 0.5);
+      background: linear-gradient(135deg, var(--accent-light), var(--accent));
+    }
+
+    .nav-links li .nav-btn-admission::after {
+      display: none;
+    }
+
+    /* Mobile Menu Toggle */
+    .mobile-toggle {
+      display: none;
+      background: none;
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      font-size: 1.4rem;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .mobile-toggle:hover {
+      background: var(--accent);
+      color: var(--primary-dark);
+    }
+
+    @media (max-width: 991px) {
+      .mobile-toggle { display: block; }
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: linear-gradient(180deg, var(--primary-dark), var(--primary));
+        flex-direction: column;
+        padding: 20px;
+        border-top: 1px solid var(--glass-border);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        gap: 4px;
+      }
+      .nav-links.show { display: flex; }
+      .nav-links li { width: 100%; }
+      .nav-links li a {
+        display: block;
+        padding: 12px 20px;
+        border-radius: 10px;
+      }
+    }
+
+    /* ── SECTION TITLES ────────────────────────────── */
+    .section-header h3,
+    .section-header .section-title {
+      font-family: 'Outfit', sans-serif !important;
+      font-weight: 700;
+      color: var(--primary-dark);
+      position: relative;
+      padding-bottom: 15px;
+    }
+
+    .section-header h3::after,
+    .section-header .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--primary));
+      border-radius: 3px;
+    }
+
+    /* ── ADMISSION SECTION ─────────────────────────── */
+    #admission {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      padding: 80px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #admission::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(212,175,55,0.1), transparent 70%);
+      border-radius: 50%;
+    }
+
+    #admission .section-header h3 {
+      color: var(--accent) !important;
+    }
+
+    #admission .section-header h3::after {
+      background: linear-gradient(90deg, var(--accent), var(--accent-light)) !important;
+    }
+
+    #admission .section-header p {
+      color: rgba(255,255,255,0.8);
+    }
+
+    .admission-card {
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(212,175,55,0.2);
+      border-radius: 16px;
+      padding: 30px;
+      text-align: center;
+      transition: all 0.4s ease;
+      margin-bottom: 20px;
+    }
+
+    .admission-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      border-color: var(--accent);
+    }
+
+    .admission-card .card-icon {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 1.6rem;
+      color: var(--primary-dark);
+    }
+
+    .admission-card h4 {
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .admission-card p {
+      color: rgba(255,255,255,0.7);
+      font-size: 0.9rem;
+      margin-bottom: 0;
+    }
+
+    .btn-admission {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      color: var(--primary-dark);
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 14px 40px;
+      border-radius: 50px;
+      text-decoration: none;
+      transition: all 0.4s ease;
+      box-shadow: 0 8px 25px rgba(212,175,55,0.3);
+      margin-top: 30px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-admission:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(212,175,55,0.5);
+      color: var(--primary-dark);
+      text-decoration: none;
+    }
+
+    /* ── TOAST NOTIFICATIONS ───────────────────────── */
+    .toast-container {
+      position: fixed;
+      top: 90px;
+      right: 20px;
+      z-index: 99999;
+    }
+
+    .toast-msg {
+      background: var(--primary);
+      color: #fff;
+      padding: 14px 24px;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      margin-bottom: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      border-left: 4px solid var(--accent);
+      animation: slideIn 0.4s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .toast-msg.error {
+      border-left-color: #e74c3c;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    /* ── DYNAMIC NEWS CARDS ────────────────────────── */
+    .news-card-dynamic {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+      margin-bottom: 20px;
+    }
+
+    .news-card-dynamic:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+    }
+
+    .news-card-dynamic img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .news-card-dynamic .card-body {
+      padding: 20px;
+    }
+
+    .news-card-dynamic .card-body h4 {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      color: var(--primary-dark);
+      font-size: 1.1rem;
+    }
+
+    .news-card-dynamic .card-body p {
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .news-card-dynamic .card-date {
+      font-size: 0.75rem;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* ── GALLERY DYNAMIC ───────────────────────────── */
+    .gallery-item-dynamic {
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .gallery-item-dynamic img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      transition: transform 0.4s;
+    }
+
+    .gallery-item-dynamic:hover img {
+      transform: scale(1.05);
+    }
+
+    .gallery-item-dynamic .overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.7));
+      padding: 20px;
+      transform: translateY(100%);
+      transition: transform 0.3s;
+    }
+
+    .gallery-item-dynamic:hover .overlay {
+      transform: translateY(0);
+    }
+
+    .gallery-item-dynamic .overlay h5 {
+      color: #fff;
+      margin: 0;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .gallery-item-dynamic .overlay span {
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    /* ── FOOTER MODERNIZE ──────────────────────────── */
+    #footer {
+      font-family: 'Inter', sans-serif;
+    }
+
+    .footer-top {
+      background: var(--primary-dark) !important;
+      color: rgba(255,255,255,0.8);
+    }
+
+    .footer-top h3, .footer-top h4 {
+      color: var(--accent) !important;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    #footer .copyright {
+      background: #031a0e;
+      color: rgba(255,255,255,0.5);
+    }
+
+    #footer .credits a {
+      color: var(--accent);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!--==========================
+    Modern Header / Navbar
+  ============================-->
+  <header id="header" class="fixed-top">
+    <div class="navbar-container">
+      <a href="#intro" class="navbar-logo scrollto">
+        <img src="img/new_logo.png" alt="AL BAYAN Logo">
+        <div class="logo-text">
+          AL BAYAN
+          <small>MEDIA WING</small>
+        </div>
+      </a>
+
+      <button class="mobile-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')">
+        <i class="fa fa-bars"></i>
+      </button>
+
+      <ul class="nav-links">
+        <li><a href="#intro" class="active scrollto">Home</a></li>
+        <li><a href="#services" class="scrollto">Latest News</a></li>
+        <li><a href="#portfolio" class="scrollto">Gallery</a></li>
+        <li><a href="#about" class="scrollto">About Us</a></li>
+        <li><a href="#admission" class="nav-btn-admission scrollto">Admission</a></li>
+        <li><a href="#contact" class="scrollto">Contact Us</a></li>
+      </ul>
+    </div>
+  </header><!-- #header -->
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!--==========================
+    Intro Section
+  ============================-->
+  <section id="intro" class="clearfix">
+    <div id="demo" class="carousel slide" data-ride="carousel">
+      <ul class="carousel-indicators">
+        <li data-target="#demo" data-slide-to="0" class="active"></li>
+        <li data-target="#demo" data-slide-to="1"></li>
+        <li data-target="#demo" data-slide-to="2"></li>
+        <li data-target="#demo" data-slide-to="3"></li>
+      </ul>
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img src="img/palli.jpg" alt="Muttichira Juma Masjid" class="img-fluid">
+        </div>
+        <div class="carousel-item">
+          <img src="img/black set.svg" alt="AL BAYAN" class="img-fluid">
+        </div>
+        <div class="carousel-item">
+          <img src="img/usthad.svg" alt="Usthad" class="img-fluid">
+        </div>
+        <div class="carousel-item">
+          <img src="img/fest hd set.svg" alt="Dars Fest" class="img-fluid">
+        </div>
+      </div>
+      <a class="carousel-control-prev" href="#demo" data-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+      </a>
+      <a class="carousel-control-next" href="#demo" data-slide="next">
+        <span class="carousel-control-next-icon"></span>
+      </a>
+    </div>
+  </section><!-- #intro -->
+
+  <main id="main">
+
+    <!--==========================
+      Latest News Section (Dynamic from MongoDB)
+    ============================-->
+    <section id="services" class="section-bg">
+      <div class="container">
+        <header class="section-header">
+          <h3>Latest News</h3>
+          <p>All the news that are relevant for our small community</p>
+        </header>
+
+        <!-- Static fallback news (shown until DB loads) -->
+        <div class="row" id="staticNews">
+          <div class="wow bounceInUp" data-wow-duration="1.4s">
+            <div class="box firstbox">
+              <div class="icon"><img src="img/ANUSMARANA POSTER.jpg" width="90px" height="140px" alt="" style="padding-bottom: 10px;"></div>
+              <h2 class="title" style="font-family: Apple cards Anugraha; padding-left: 50px; "><a href="">അനുസ്മരണ സമ്മേളനം</h2>
+              <p class="description" style="padding-left: 50px;">മുട്ടിച്ചിറ ബായാനുല്‍ ഉലൂം ദര്‍സ് മുദരിസും വിദ്യാര്‍ത്ഥിയുമായ സുഹൈല്‍ ബാഖവിയുടെയും വിദ്യാര്‍ത്ഥികളായിരുന്ന <br> ഫര്‍സാദ് മുസ്ലിയാരുടെയും മുസ്ഥഫ മുസ്ലിയാരുടെയും  അനുസ്മരണ സമ്മേളനം</p>
+            </div>
+          </div>
+          <div class="wow bounceInUp" data-wow-duration="1.4s">
+            <div class="box" style="width: 124%;">
+              <div class="icon" id="iconja"><img src="img/fest.jpg" width="92px" height="86px" alt=""></div>
+              <h4 class="title" style="font-family: Apple cards Anugraha; "><a href="" style="padding-left: 50px;">ജാമിഅഃ ദർസ് ഫെസ്റ്റ്</a></h4>
+              <p class="description" style="padding-left: 50px;">ജാമിഅ: നൂരിയ്യ 2022 സംസ്ഥാന തല ദർസ് ഫെസ്റ്റിൽ <strong>Second Running Up </strong>നേടി മുട്ടിച്ചിറ ദർസ്</p>
+            </div>
+          </div>
+          <div class="wow bounceInUp" data-wow-duration="1.4s">
+            <div class="box" style="width: 125%; ">
+              <div class="icon" style="padding-top: 29px;"><img src="img/maxresdefault.jpg" width="86px" height="60px" alt=""></div>
+              <h4 class="title" style="font-family: Apple cards Anugraha; "><a href="" style="padding-left: 50px;">മീലാദ് മെഹ്റജാൻ റബീഅ് ഫെസ്റ്റ്</a></h4>
+              <p class="description" style="padding-left: 50px;">നബിദിനത്തോടനുബധിച്ച് നടത്തിയ റബീഅ് ഫെസ്റ്റ് മത്സരത്തില്‍ ചാമ്പ്യമാര്‍ കോര്‍ദോവഃ</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dynamic news from MongoDB -->
+        <div class="row" id="dynamicNews" style="display:none;"></div>
+      </div>
+    </section><!-- #services -->
+
+    <!--==========================
+      Gallery Section (Dynamic from MongoDB)
+    ============================-->
+    <section id="portfolio" class="clearfix">
+      <div class="container">
+        <header class="section-header">
+          <h3 class="section-title">Gallery</h3>
+        </header>
+
+        <div class="row">
+          <div class="col-lg-12">
+            <ul id="portfolio-flters">
+              <li data-filter="*" class="filter-active">All</li>
+              <li data-filter=".filter-app">Programme</li>
+              <li data-filter=".filter-card">Collections</li>
+              <li data-filter=".filter-web">Design</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Static gallery (existing images) -->
+        <div class="row portfolio-container" id="staticGallery">
+          <div class="col-lg-4 col-md-6 portfolio-item filter-app">
+            <div class="portfolio-wrap">
+              <img src="img/friday talk 2 and isthifadah workshop.png" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4><a href="#">Friday Talk & Workshop</a></h4>
+                <p>Programme</p>
+                <div>
+                  <a href="img/friday talk 2 and isthifadah workshop.png" data-lightbox="portfolio" data-title="Friday Talk" class="link-preview" title="Preview"><i class="ion ion-eye"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 portfolio-item filter-app" data-wow-delay="0.1s">
+            <div class="portfolio-wrap">
+              <img src="img/past year symposium.jpg" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4><a href="#">Symposium</a></h4>
+                <p>Programme</p>
+                <div>
+                  <a href="img/past year symposium.jpg" data-lightbox="portfolio" data-title="Symposium" class="link-preview" title="Preview"><i class="ion ion-eye"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 portfolio-item filter-web" data-wow-delay="0.2s">
+            <div class="portfolio-wrap">
+              <img src="img/e-vara.png" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4><a href="#">E-Vara Design</a></h4>
+                <p>Design</p>
+                <div>
+                  <a href="img/e-vara.png" class="link-preview" data-lightbox="portfolio" data-title="E-Vara" title="Preview"><i class="ion ion-eye"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 portfolio-item filter-app" data-wow-delay="0.3s">
+            <div class="portfolio-wrap">
+              <img src="img/3RD PRICE.png" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4><a href="#">3rd Prize</a></h4>
+                <p>Programme</p>
+                <div>
+                  <a href="img/3RD PRICE.png" class="link-preview" data-lightbox="portfolio" data-title="3rd Prize" title="Preview"><i class="ion ion-eye"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 portfolio-item filter-card">
+            <div class="portfolio-wrap">
+              <img src="img/jalika.jpg" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4><a href="#">Jalika</a></h4>
+                <p>Collections</p>
+                <div>
+                  <a href="img/jalika.jpg" class="link-preview" data-lightbox="portfolio" data-title="Jalika" title="Preview"><i class="ion ion-eye"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 portfolio-item filter-web" data-wow-delay="0.1s">
+            <div class="portfolio-wrap">
+              <img src="img/action plan.png" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4><a href="#">Action Plan</a></h4>
+                <p>Design</p>
+                <div>
+                  <a href="img/action plan.png" class="link-preview" data-lightbox="portfolio" data-title="Action Plan" title="Preview"><i class="ion ion-eye"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 portfolio-item filter-app" data-wow-delay="0.2s">
+            <div class="portfolio-wrap">
+              <img src="img/fist epi.png" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4><a href="#">First Episode</a></h4>
+                <p>Programme</p>
+                <div>
+                  <a href="img/fist epi.png" class="link-preview" data-lightbox="portfolio" data-title="First Episode" title="Preview"><i class="ion ion-eye"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 portfolio-item filter-card">
+            <div class="portfolio-wrap">
+              <img src="img/launchinhg 1.png" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4><a href="#">Launching</a></h4>
+                <p>Collections</p>
+                <div>
+                  <a href="img/launchinhg 1.png" class="link-preview" data-lightbox="portfolio" data-title="Launching" title="Preview"><i class="ion ion-eye"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 portfolio-item filter-web" data-wow-delay="0.2s">
+            <div class="portfolio-wrap">
+              <img src="img/launchinhg.png" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4><a href="#">Launch Design</a></h4>
+                <p>Design</p>
+                <div>
+                  <a href="img/launchinhg.png" class="link-preview" data-lightbox="portfolio" data-title="Launch Design" title="Preview"><i class="ion ion-eye"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dynamic gallery from MongoDB -->
+        <div class="row portfolio-container" id="dynamicGallery"></div>
+      </div>
+    </section><!-- #portfolio -->
+
+    <!--==========================
+      About Us Section
+    ============================-->
+    <section id="about">
+      <div class="container">
+        <header class="section-header">
+          <h3>About Us</h3>
+          <p>It helps you to know and understand something about Muttichira Bayanul Uloom Dars</p>
+        </header>
+        <div class="divider div-transparent div-arrow-down"></div>
+
+        <div class="row about-container">
+          <p>
+            <strong style="color: rgb(5, 52, 90);">Muttichira Bayanul Uloom Dars </strong>is located in the historic Muttichira Shuhada Juma Mosque, which is situated near Talappara Town.
+          </p>
+
+          <div class="icon-box wow fadeInUp">
+            <div class="icon"><i class="fa fa-graduation-cap"></i></div>
+            <h4 class="title"><a href="">Student</a></h4>
+            <p class="description">Our Dars has more than 90 Students and under the managment of <strong>six Usthad</strong></p>
+          </div>
+
+          <div class="icon-box wow fadeInUp" data-wow-delay="0.2s">
+            <div class="icon"><i class="fa fa-users"></i></div>
+            <h4 class="title"><a href="">Sahithya Samajam</a></h4>
+            <p class="description"><strong style="color: rgb(6, 46, 105);">Bayanul Uloom Sahithya Samajam is a platform for the literary and non literary activities of students. The activities of the Samajam begin after the official inauguration every year. All extra curricular activities conducted by the Bayanul Uloom Dars are under the auspicious of Sahithya Samajam. It aims the Islamic literary and artistic development of the students</p>
+          </div>
+
+          <div class="icon-box wow fadeInUp" data-wow-delay="0.4s">
+            <div class="icon"><i class="fa fa-book"></i></div>
+            <h4 class="title"><a href="">Library</a></h4>
+            <p class="description" style="color: rgb(0, 0, 0);">It is a collection of books for explore extra curricular activities.</p>
+          </div>
+        </div>
+
+        <div class="row about-extra ">
+          <div class="icon-box wow fadeInUp">
+            <div class="icon"><i class="fa fa-newspaper-o"></i></div>
+            <h4 class="title"><a href="">Magazine</a></h4>
+            <p class="description" style="color: rgb(0, 0, 0);">Magazines impulse the writing abilities of a student. AL Bayan Magazine is publishing to improve the writing and literacy skills of students.</p>
+          </div>
+
+          <div class="icon-box wow fadeInUp" data-wow-delay="0.2s">
+            <div class="icon"><i class="fa fa-graduation-cap"></i></div>
+            <h4 class="title"><a href="">Education</a></h4>
+            <p class="description" style="color: rgb(0, 0, 0);">It is an important wing of BUSS under the control of experienced faculties in different educational sectors.</p>
+          </div>
+
+          <div class="icon-box wow fadeInUp" data-wow-delay="0.4s">
+            <div class="icon"><i class="fa fa-desktop"></i></div>
+            <h4 class="title"><a href="">Computer Lab</a></h4>
+            <p class="description" style="color: rgb(0, 0, 0);">It is a space provides Computer Services to students. There are 8 computers for 92 students. Alhamdulillah.</p>
+          </div>
+
+          <div class="icon-box wow fadeInUp">
+            <div class="icon"><i class="fa fa-rss" aria-hidden="true"></i></div>
+            <h4 class="title"><a href="">Smart Class</a></h4>
+            <p class="description" style="color: rgb(0, 0, 0);">It is a virtual platform for expanded research in religious studies.</p>
+          </div>
+
+          <div class="icon-box wow fadeInUp" data-wow-delay="0.2s">
+            <div class="icon"><i class="fa fa-shopping-bag" aria-hidden="true"></i></div>
+            <h4 class="title"><a href="">Store</a></h4>
+            <p class="description" style="color: rgb(0, 0, 0);">It provides the purposes of students to everlasting their wealth.</p>
+          </div>
+
+          <div class="icon-box wow fadeInUp" data-wow-delay="0.4s">
+            <div class="icon"><i class="fa fa-plus-square"></i></div>
+            <h4 class="title"><a href="">Medical Wing</a></h4>
+            <p class="description" style="color: rgb(0, 0, 0);">It provides the purpose of students to everlasting their health.</p>
+          </div>
+        </div>
+      </div>
+    </section><!-- #about -->
+
+    <!--==========================
+      Admission Section (NEW)
+    ============================-->
+    <section id="admission">
+      <div class="container">
+        <header class="section-header">
+          <h3>Admission</h3>
+          <p>Join Muttichira Bayanul Uloom Dars and begin your journey in Islamic education</p>
+        </header>
+
+        <div class="row" style="margin-top: 40px;">
+          <div class="col-lg-4 col-md-6">
+            <div class="admission-card wow fadeInUp">
+              <div class="card-icon">
+                <i class="fa fa-graduation-cap"></i>
+              </div>
+              <h4>Eligibility</h4>
+              <p>Students who have completed basic Islamic education and wish to pursue advanced religious studies are welcome to apply.</p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="admission-card wow fadeInUp" data-wow-delay="0.2s">
+              <div class="card-icon">
+                <i class="fa fa-book"></i>
+              </div>
+              <h4>Curriculum</h4>
+              <p>Comprehensive curriculum covering Quran, Hadith, Fiqh, Arabic language, and modern subjects guided by experienced Usthads.</p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="admission-card wow fadeInUp" data-wow-delay="0.4s">
+              <div class="card-icon">
+                <i class="fa fa-home"></i>
+              </div>
+              <h4>Facilities</h4>
+              <p>Library, Computer Lab, Smart Class, Medical Wing, and Store — all designed to support holistic student development.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top: 20px;">
+          <div class="col-lg-4 col-md-6">
+            <div class="admission-card wow fadeInUp" data-wow-delay="0.1s">
+              <div class="card-icon">
+                <i class="fa fa-calendar"></i>
+              </div>
+              <h4>Academic Year</h4>
+              <p>Admissions open annually. Contact the Dars office for the current academic year's dates and procedures.</p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="admission-card wow fadeInUp" data-wow-delay="0.3s">
+              <div class="card-icon">
+                <i class="fa fa-users"></i>
+              </div>
+              <h4>Community</h4>
+              <p>Join a vibrant community of 90+ students engaged in literary, artistic, and extra-curricular activities through Sahithya Samajam.</p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="admission-card wow fadeInUp" data-wow-delay="0.5s">
+              <div class="card-icon">
+                <i class="fa fa-phone"></i>
+              </div>
+              <h4>Enquiry</h4>
+              <p>Call us at <strong style="color: var(--accent);">+91 9526 919 218</strong> or email <strong style="color: var(--accent);">darsbayanululoom@gmail.com</strong></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center">
+          <a href="#contact" class="btn-admission scrollto">
+            <i class="fa fa-envelope" style="margin-right: 8px;"></i> Apply Now / Enquire
+          </a>
+        </div>
+      </div>
+    </section><!-- #admission -->
+
+    <!--==========================
+      Burda Team Section
+    ============================-->
+    <section id="team">
+      <div class="container">
+        <div class="section-header">
+          <h3>Burda Team</h3>
+          <p>Bayanul Uloom Dars Al Bayan Burda Team</p>
+          <img src="img/burda team.png" class="rounded mx-auto d-block img-fluid" alt="Burda Team" >
+        </div>
+      </div>
+    </section><!-- #team -->
+
+    <!--==========================
+      Contact Section
+    ============================-->
+    <section id="contact">
+      <div class="container-fluid">
+        <div class="section-header">
+          <h3>Contact Us</h3>
+        </div>
+
+        <div class="row wow fadeInUp">
+          <div class="col-lg-6">
+            <div class="map mb-4 mb-lg-0">
+            </div>
+            <p>
+              <strong>Muttichira Bayanul Uloom Dars</strong>
+              <br>
+              Muttichira Juma Masjid, Moonniyur Post, Malappuram
+              <br>
+              Kerala, India
+            </p>
+            <p>
+              <strong>Phone:</strong>
+              <br>
+              +91 9526919218
+            </p>
+            <p>
+              <strong>E-Mail:</strong>
+              <br>
+              darsbayanululoom@gmail.com
+            </p>
+          </div>
+
+          <div class="col-lg-6">
+            <div class="row">
+              <div class="col-md-5 info">
+                <i class="ion-ios-location-outline"></i>
+                <p>Thalappara, Muttichira, Moonniyur P.O, 676311</p>
+              </div>
+              <div class="col-md-4 info">
+                <i class="ion-ios-email-outline"></i>
+                <p>darsbayanululoom@gmail.com</p>
+              </div>
+              <div class="col-md-3 info">
+                <i class="ion-ios-telephone-outline"></i>
+                <p>+91 9526 919 218</p>
+              </div>
+            </div>
+
+            <div class="form">
+              <form id="contactForm">
+                <div class="form-row">
+                  <div class="form-group col-lg-6">
+                    <input type="text" name="name" class="form-control" id="contactName" placeholder="Your Name" required />
+                  </div>
+                  <div class="form-group col-lg-6">
+                    <input type="email" class="form-control" name="email" id="contactEmail" placeholder="Your Email" required />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" name="subject" id="contactSubject" placeholder="Subject" required />
+                </div>
+                <div class="form-group">
+                  <textarea class="form-control" name="message" id="contactMessage" rows="5" placeholder="Message" required></textarea>
+                </div>
+                <div class="text-center"><button type="submit" title="Send Message" id="contactSubmitBtn">Send Message</button></div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section><!-- #contact -->
+
+  </main>
+
+  <!--==========================
+    Footer
+  ============================-->
+  <footer id="footer">
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4 col-md-6 footer-info">
+            <h3>AL BAYAN MEDIA</h3>
+            <p>Bayanul Uloom Sahithya Samajam is a platform for the literary and non literary activities of students. The activities of the Samajam begin after the official inauguration every year. All extra curricular activities conducted by the Bayanul Uloom Dars are under the auspicious of Sahithya Samajam. It aims the Islamic literary and artistic development of the students</p>
+          </div>
+
+          <div class="col-lg-2 col-md-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><a href="#intro">Home</a></li>
+              <li><a href="#about">About us</a></li>
+              <li><a href="#services">Latest News</a></li>
+              <li><a href="#admission">Admission</a></li>
+              <li><a href="#contact">Contact Us</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-3 col-md-6 footer-contact">
+            <h4>Contact Us</h4>
+            <p>
+              Thalappara <br>
+              Moonniyur P.O, PIN: 676311<br>
+              Kerala, India <br>
+              <strong>Phone:</strong> +91 9526 919 218<br>
+              <strong>Email:</strong> darsbayanululoom@gmail.com<br>
+            </p>
+            <div class="social-links">
+              <a href="https://wa.me/+919526919218/" class="twitter"><i class="fa fa-whatsapp"></i></a>
+              <a href="https://hi-in.facebook.com/bayanululoomdars.muttichira/photos" class="facebook"><i class="fa fa-facebook"></i></a>
+              <a href="#" class="instagram"><i class="fa fa-instagram"></i></a>
+              <a href="https://www.youtube.com/channel/UCnfgm7rNEqGDN68loux5-JQ" class="google-plus"><i class="fa fa-youtube"></i></a>
+              <a href="tel:+919526919218" class="linkedin"><i class="fa fa-phone"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6 footer-newsletter">
+            <h4>Our Newsletter</h4>
+            <p>Subscribe to get the latest updates from Bayanul Uloom Dars.</p>
+            <form id="newsletterForm">
+              <input type="email" name="email" id="newsletterEmail" placeholder="Your email" required>
+              <input type="submit" value="Subscribe">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="copyright">
+        &copy; Copyright <strong>AL BAYAN MEDIA</strong>. All Rights Reserved
+      </div>
+      <div class="credits">
+        Designed by <a href="">AL BAYAN MEDIA WING</a>
+      </div>
+    </div>
+  </footer><!-- #footer -->
+
+  <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+
+  <!-- JavaScript Libraries -->
+  <script src="lib/jquery/jquery.min.js"></script>
+  <script src="lib/jquery/jquery-migrate.min.js"></script>
+  <script src="lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="lib/easing/easing.min.js"></script>
+  <script src="lib/mobile-nav/mobile-nav.js"></script>
+  <script src="lib/wow/wow.min.js"></script>
+  <script src="lib/waypoints/waypoints.min.js"></script>
+  <script src="lib/counterup/counterup.min.js"></script>
+  <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+  <script src="lib/isotope/isotope.pkgd.min.js"></script>
+  <script src="lib/lightbox/js/lightbox.min.js"></script>
+
+  <!-- Template Main Javascript File -->
+  <script src="js/main.js"></script>
+
+  <!-- AL BAYAN API Integration -->
+  <script>
+    // ── Toast notification helper ──────────────────
+    function showToast(message, isError) {
+      var container = document.getElementById('toastContainer');
+      var toast = document.createElement('div');
+      toast.className = 'toast-msg' + (isError ? ' error' : '');
+      toast.innerHTML = '<i class="fa ' + (isError ? 'fa-times-circle' : 'fa-check-circle') + '"></i> ' + message;
+      container.appendChild(toast);
+      setTimeout(function() { toast.remove(); }, 4000);
+    }
+
+    // ── Contact Form AJAX ──────────────────────────
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var btn = document.getElementById('contactSubmitBtn');
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+
+      var data = {
+        name: document.getElementById('contactName').value,
+        email: document.getElementById('contactEmail').value,
+        subject: document.getElementById('contactSubject').value,
+        message: document.getElementById('contactMessage').value
+      };
+
+      fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(result) {
+        showToast(result.message, !result.success);
+        if (result.success) { document.getElementById('contactForm').reset(); }
+        btn.disabled = false;
+        btn.textContent = 'Send Message';
+      })
+      .catch(function() {
+        showToast('Network error. Please try again.', true);
+        btn.disabled = false;
+        btn.textContent = 'Send Message';
+      });
+    });
+
+    // ── Newsletter Form AJAX ───────────────────────
+    document.getElementById('newsletterForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var email = document.getElementById('newsletterEmail').value;
+
+      fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email })
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(result) {
+        showToast(result.message, !result.success);
+        if (result.success) { document.getElementById('newsletterForm').reset(); }
+      })
+      .catch(function() {
+        showToast('Network error. Please try again.', true);
+      });
+    });
+
+    // ── Load Dynamic News from MongoDB ─────────────
+    function loadNews() {
+      fetch('/api/news')
+        .then(function(res) { return res.json(); })
+        .then(function(news) {
+          if (news.length > 0) {
+            var container = document.getElementById('dynamicNews');
+            var html = '';
+            news.forEach(function(item) {
+              var date = new Date(item.createdAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' });
+              html += '<div class="col-lg-4 col-md-6">' +
+                '<div class="news-card-dynamic wow fadeInUp">' +
+                (item.imageUrl ? '<img src="' + item.imageUrl + '" alt="' + item.title + '">' : '') +
+                '<div class="card-body">' +
+                '<span class="card-date"><i class="fa fa-calendar"></i> ' + date + '</span>' +
+                '<h4>' + item.title + '</h4>' +
+                '<p>' + item.description + '</p>' +
+                '</div></div></div>';
+            });
+            container.innerHTML = html;
+            container.style.display = 'flex';
+          }
+        })
+        .catch(function() { /* Keep static news visible */ });
+    }
+
+    // ── Load Dynamic Gallery from MongoDB ──────────
+    function loadGallery() {
+      fetch('/api/gallery')
+        .then(function(res) { return res.json(); })
+        .then(function(items) {
+          if (items.length > 0) {
+            var container = document.getElementById('dynamicGallery');
+            var categoryMap = { 'Programme': 'filter-app', 'Collections': 'filter-card', 'Design': 'filter-web' };
+            var html = '';
+            items.forEach(function(item) {
+              var filterClass = categoryMap[item.category] || 'filter-app';
+              html += '<div class="col-lg-4 col-md-6 portfolio-item ' + filterClass + '">' +
+                '<div class="portfolio-wrap">' +
+                '<img src="' + item.imageUrl + '" class="img-fluid" alt="' + item.title + '">' +
+                '<div class="portfolio-info">' +
+                '<h4><a href="#">' + item.title + '</a></h4>' +
+                '<p>' + item.category + '</p>' +
+                '<div><a href="' + item.imageUrl + '" data-lightbox="portfolio" data-title="' + item.title + '" class="link-preview" title="Preview"><i class="ion ion-eye"></i></a></div>' +
+                '</div></div></div>';
+            });
+            container.innerHTML = html;
+          }
+        })
+        .catch(function() { /* Keep static gallery */ });
+    }
+
+    // ── Smooth scroll for nav links ────────────────
+    document.querySelectorAll('.scrollto').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        var target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          var offset = document.getElementById('header').offsetHeight;
+          window.scrollTo({ top: target.offsetTop - offset, behavior: 'smooth' });
+          // Close mobile menu
+          document.querySelector('.nav-links').classList.remove('show');
+          // Update active state
+          document.querySelectorAll('.nav-links li a').forEach(function(a) { a.classList.remove('active'); });
+          this.classList.add('active');
+        }
+      });
+    });
+
+    // ── Active nav on scroll ───────────────────────
+    window.addEventListener('scroll', function() {
+      var header = document.getElementById('header');
+      if (window.scrollY > 100) {
+        header.classList.add('header-scrolled');
+      } else {
+        header.classList.remove('header-scrolled');
+      }
+    });
+
+    // ── Initialize ─────────────────────────────────
+    document.addEventListener('DOMContentLoaded', function() {
+      loadNews();
+      loadGallery();
+    });
+  </script>
+
+</body>
+</html>

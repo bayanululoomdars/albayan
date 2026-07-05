@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Admin Panel | AL BAYAN MEDIA</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <link href="img/new_logo.png" rel="icon">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0a4d2e;
+      --primary-light: #0f6b3f;
+      --primary-dark: #063a22;
+      --accent: #d4af37;
+      --accent-light: #e8c84a;
+      --bg: #0f1923;
+      --bg-card: #1a2634;
+      --bg-input: #243040;
+      --text: #e0e0e0;
+      --text-muted: #8899aa;
+      --danger: #e74c3c;
+      --success: #2ecc71;
+      --border: rgba(212,175,55,0.15);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── LOGIN SCREEN ──────────────────────────────── */
+    .login-screen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--bg) 0%, #0d2818 100%);
+    }
+
+    .login-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 50px 40px;
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+
+    .login-box img {
+      height: 70px;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
+    }
+
+    .login-box h2 {
+      font-family: 'Outfit', sans-serif;
+      color: var(--accent);
+      margin-bottom: 8px;
+      font-size: 1.5rem;
+    }
+
+    .login-box p {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 30px;
+    }
+
+    .login-box input {
+      width: 100%;
+      padding: 14px 18px;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 1rem;
+      margin-bottom: 16px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .login-box input:focus {
+      border-color: var(--accent);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      color: var(--primary-dark);
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(212,175,55,0.3);
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, var(--danger), #c0392b);
+      color: #fff;
+    }
+
+    .btn-sm {
+      width: auto;
+      padding: 8px 16px;
+      font-size: 0.8rem;
+      border-radius: 8px;
+    }
+
+    .error-msg {
+      color: var(--danger);
+      font-size: 0.85rem;
+      margin-top: 10px;
+    }
+
+    /* ── ADMIN DASHBOARD ──────────────────────────── */
+    .dashboard { display: none; }
+
+    .admin-header {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      padding: 16px 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid var(--accent);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .admin-header h1 {
+      font-family: 'Outfit', sans-serif;
+      color: var(--accent);
+      font-size: 1.3rem;
+      margin: 0;
+    }
+
+    .admin-header .btn-logout {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 8px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.3s;
+    }
+
+    .admin-header .btn-logout:hover {
+      background: var(--danger);
+      border-color: var(--danger);
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      padding: 16px 24px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover { color: var(--text); }
+
+    .tab-btn.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    /* Content */
+    .tab-content {
+      display: none;
+      padding: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .tab-content.active { display: block; }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .card h3 {
+      font-family: 'Outfit', sans-serif;
+      color: var(--accent);
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--accent);
+    }
+
+    .form-group textarea { resize: vertical; min-height: 100px; }
+
+    /* Data Table */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .data-table th {
+      background: var(--bg-input);
+      color: var(--accent);
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .data-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.85rem;
+      color: var(--text);
+    }
+
+    .data-table tr:hover td {
+      background: rgba(212,175,55,0.03);
+    }
+
+    .data-table img {
+      width: 60px;
+      height: 40px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .badge-programme { background: rgba(52,152,219,0.2); color: #3498db; }
+    .badge-collections { background: rgba(46,204,113,0.2); color: #2ecc71; }
+    .badge-design { background: rgba(155,89,182,0.2); color: #9b59b6; }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .stat-card .stat-number {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .stat-card .stat-label {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 768px) {
+      .tab-content { padding: 16px; }
+      .data-table { font-size: 0.75rem; }
+      .data-table th, .data-table td { padding: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOGIN SCREEN -->
+  <div class="login-screen" id="loginScreen">
+    <div class="login-box">
+      <img src="img/new_logo.png" alt="AL BAYAN Logo">
+      <h2>Admin Panel</h2>
+      <p>Enter the admin password to manage content</p>
+      <input type="password" id="loginPassword" placeholder="Enter admin password" onkeypress="if(event.key==='Enter')doLogin()">
+      <button class="btn" onclick="doLogin()">
+        <i class="fa fa-lock"></i> Login
+      </button>
+      <p class="error-msg" id="loginError"></p>
+    </div>
+  </div>
+
+  <!-- ADMIN DASHBOARD -->
+  <div class="dashboard" id="dashboard">
+    <div class="admin-header">
+      <h1><i class="fa fa-shield"></i> AL BAYAN Admin</h1>
+      <div>
+        <a href="/" style="color:#fff; text-decoration:none; margin-right:16px; font-size:0.85rem;"><i class="fa fa-home"></i> View Site</a>
+        <button class="btn-logout" onclick="doLogout()"><i class="fa fa-sign-out"></i> Logout</button>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('overview')"><i class="fa fa-dashboard"></i> Overview</button>
+      <button class="tab-btn" onclick="switchTab('news')"><i class="fa fa-newspaper-o"></i> News</button>
+      <button class="tab-btn" onclick="switchTab('gallery')"><i class="fa fa-image"></i> Gallery</button>
+      <button class="tab-btn" onclick="switchTab('contacts')"><i class="fa fa-envelope"></i> Messages</button>
+      <button class="tab-btn" onclick="switchTab('subscribers')"><i class="fa fa-users"></i> Subscribers</button>
+    </div>
+
+    <!-- OVERVIEW TAB -->
+    <div class="tab-content active" id="tab-overview">
+      <div class="stats-row" id="statsRow">
+        <div class="stat-card">
+          <div class="stat-number" id="statNews">0</div>
+          <div class="stat-label">News Articles</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="statGallery">0</div>
+          <div class="stat-label">Gallery Images</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="statContacts">0</div>
+          <div class="stat-label">Messages</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="statSubscribers">0</div>
+          <div class="stat-label">Subscribers</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NEWS TAB -->
+    <div class="tab-content" id="tab-news">
+      <div class="card">
+        <h3><i class="fa fa-plus-circle"></i> Add News</h3>
+        <form id="newsForm" enctype="multipart/form-data">
+          <div class="form-group">
+            <label>Title</label>
+            <input type="text" id="newsTitle" placeholder="News title" required>
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea id="newsDesc" placeholder="News description" required></textarea>
+          </div>
+          <div class="form-group">
+            <label>Image (optional)</label>
+            <input type="file" id="newsImage" accept="image/*">
+          </div>
+          <button type="submit" class="btn" style="max-width:200px;"><i class="fa fa-plus"></i> Add News</button>
+        </form>
+      </div>
+      <div class="card">
+        <h3><i class="fa fa-list"></i> All News</h3>
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead><tr><th>Image</th><th>Title</th><th>Description</th><th>Date</th><th>Action</th></tr></thead>
+            <tbody id="newsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- GALLERY TAB -->
+    <div class="tab-content" id="tab-gallery">
+      <div class="card">
+        <h3><i class="fa fa-plus-circle"></i> Upload Gallery Image</h3>
+        <form id="galleryForm" enctype="multipart/form-data">
+          <div class="form-group">
+            <label>Title</label>
+            <input type="text" id="galleryTitle" placeholder="Image title" required>
+          </div>
+          <div class="form-group">
+            <label>Category</label>
+            <select id="galleryCategory" required>
+              <option value="">Select category</option>
+              <option value="Programme">Programme</option>
+              <option value="Collections">Collections</option>
+              <option value="Design">Design</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Image</label>
+            <input type="file" id="galleryImage" accept="image/*" required>
+          </div>
+          <button type="submit" class="btn" style="max-width:200px;"><i class="fa fa-upload"></i> Upload</button>
+        </form>
+      </div>
+      <div class="card">
+        <h3><i class="fa fa-th"></i> All Gallery Images</h3>
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead><tr><th>Image</th><th>Title</th><th>Category</th><th>Date</th><th>Action</th></tr></thead>
+            <tbody id="galleryTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTACTS TAB -->
+    <div class="tab-content" id="tab-contacts">
+      <div class="card">
+        <h3><i class="fa fa-envelope-open"></i> Contact Messages</h3>
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead><tr><th>Name</th><th>Email</th><th>Subject</th><th>Message</th><th>Date</th><th>Action</th></tr></thead>
+            <tbody id="contactsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUBSCRIBERS TAB -->
+    <div class="tab-content" id="tab-subscribers">
+      <div class="card">
+        <h3><i class="fa fa-users"></i> Newsletter Subscribers</h3>
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead><tr><th>#</th><th>Email</th><th>Subscribed At</th></tr></thead>
+            <tbody id="subscribersTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ── LOGIN / LOGOUT ─────────────────────────────
+    function doLogin() {
+      var pw = document.getElementById('loginPassword').value;
+      fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pw })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.success) {
+          sessionStorage.setItem('admin', 'true');
+          document.getElementById('loginScreen').style.display = 'none';
+          document.getElementById('dashboard').style.display = 'block';
+          loadAll();
+        } else {
+          document.getElementById('loginError').textContent = data.message;
+        }
+      })
+      .catch(function() {
+        document.getElementById('loginError').textContent = 'Network error';
+      });
+    }
+
+    function doLogout() {
+      sessionStorage.removeItem('admin');
+      location.reload();
+    }
+
+    // Auto-login if session exists
+    if (sessionStorage.getItem('admin')) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      setTimeout(loadAll, 100);
+    }
+
+    // ── TABS ───────────────────────────────────────
+    function switchTab(name) {
+      document.querySelectorAll('.tab-content').forEach(function(t) { t.classList.remove('active'); });
+      document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      document.getElementById('tab-' + name).classList.add('active');
+      event.target.closest('.tab-btn').classList.add('active');
+    }
+
+    // ── LOAD ALL DATA ──────────────────────────────
+    function loadAll() {
+      loadNewsAdmin();
+      loadGalleryAdmin();
+      loadContacts();
+      loadSubscribers();
+    }
+
+    // ── NEWS ───────────────────────────────────────
+    function loadNewsAdmin() {
+      fetch('/api/news').then(function(r) { return r.json(); }).then(function(data) {
+        document.getElementById('statNews').textContent = data.length;
+        var html = '';
+        data.forEach(function(item) {
+          var d = new Date(item.createdAt).toLocaleDateString('en-IN');
+          html += '<tr>' +
+            '<td>' + (item.imageUrl ? '<img src="' + item.imageUrl + '">' : '-') + '</td>' +
+            '<td>' + item.title + '</td>' +
+            '<td>' + item.description.substring(0, 60) + '...</td>' +
+            '<td>' + d + '</td>' +
+            '<td><button class="btn btn-danger btn-sm" onclick="deleteItem(\'news\',\'' + item._id + '\')"><i class="fa fa-trash"></i></button></td></tr>';
+        });
+        document.getElementById('newsTableBody').innerHTML = html || '<tr><td colspan="5" style="text-align:center;color:var(--text-muted)">No news yet</td></tr>';
+      });
+    }
+
+    document.getElementById('newsForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var fd = new FormData();
+      fd.append('title', document.getElementById('newsTitle').value);
+      fd.append('description', document.getElementById('newsDesc').value);
+      if (document.getElementById('newsImage').files[0]) {
+        fd.append('image', document.getElementById('newsImage').files[0]);
+      }
+      fetch('/api/news', { method: 'POST', body: fd })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.success) { document.getElementById('newsForm').reset(); loadNewsAdmin(); }
+          alert(data.message);
+        });
+    });
+
+    // ── GALLERY ────────────────────────────────────
+    function loadGalleryAdmin() {
+      fetch('/api/gallery').then(function(r) { return r.json(); }).then(function(data) {
+        document.getElementById('statGallery').textContent = data.length;
+        var badgeMap = { Programme: 'badge-programme', Collections: 'badge-collections', Design: 'badge-design' };
+        var html = '';
+        data.forEach(function(item) {
+          var d = new Date(item.createdAt).toLocaleDateString('en-IN');
+          html += '<tr>' +
+            '<td><img src="' + item.imageUrl + '"></td>' +
+            '<td>' + item.title + '</td>' +
+            '<td><span class="badge ' + (badgeMap[item.category] || '') + '">' + item.category + '</span></td>' +
+            '<td>' + d + '</td>' +
+            '<td><button class="btn btn-danger btn-sm" onclick="deleteItem(\'gallery\',\'' + item._id + '\')"><i class="fa fa-trash"></i></button></td></tr>';
+        });
+        document.getElementById('galleryTableBody').innerHTML = html || '<tr><td colspan="5" style="text-align:center;color:var(--text-muted)">No gallery items yet</td></tr>';
+      });
+    }
+
+    document.getElementById('galleryForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var fd = new FormData();
+      fd.append('title', document.getElementById('galleryTitle').value);
+      fd.append('category', document.getElementById('galleryCategory').value);
+      fd.append('image', document.getElementById('galleryImage').files[0]);
+      fetch('/api/gallery', { method: 'POST', body: fd })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.success) { document.getElementById('galleryForm').reset(); loadGalleryAdmin(); }
+          alert(data.message);
+        });
+    });
+
+    // ── CONTACTS ───────────────────────────────────
+    function loadContacts() {
+      fetch('/api/contacts').then(function(r) { return r.json(); }).then(function(data) {
+        document.getElementById('statContacts').textContent = data.length;
+        var html = '';
+        data.forEach(function(item) {
+          var d = new Date(item.createdAt).toLocaleDateString('en-IN');
+          html += '<tr>' +
+            '<td>' + item.name + '</td>' +
+            '<td>' + item.email + '</td>' +
+            '<td>' + item.subject + '</td>' +
+            '<td>' + item.message.substring(0, 50) + '...</td>' +
+            '<td>' + d + '</td>' +
+            '<td><button class="btn btn-danger btn-sm" onclick="deleteItem(\'contacts\',\'' + item._id + '\')"><i class="fa fa-trash"></i></button></td></tr>';
+        });
+        document.getElementById('contactsTableBody').innerHTML = html || '<tr><td colspan="6" style="text-align:center;color:var(--text-muted)">No messages yet</td></tr>';
+      });
+    }
+
+    // ── SUBSCRIBERS ────────────────────────────────
+    function loadSubscribers() {
+      fetch('/api/subscribers').then(function(r) { return r.json(); }).then(function(data) {
+        document.getElementById('statSubscribers').textContent = data.length;
+        var html = '';
+        data.forEach(function(item, i) {
+          var d = new Date(item.subscribedAt).toLocaleDateString('en-IN');
+          html += '<tr><td>' + (i + 1) + '</td><td>' + item.email + '</td><td>' + d + '</td></tr>';
+        });
+        document.getElementById('subscribersTableBody').innerHTML = html || '<tr><td colspan="3" style="text-align:center;color:var(--text-muted)">No subscribers yet</td></tr>';
+      });
+    }
+
+    // ── DELETE ITEM ────────────────────────────────
+    function deleteItem(type, id) {
+      if (!confirm('Are you sure you want to delete this?')) return;
+      fetch('/api/' + type + '/' + id, { method: 'DELETE' })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          alert(data.message);
+          loadAll();
+        });
+    }
+  </script>
+</body>
+</html>
