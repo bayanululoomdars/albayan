@@ -366,6 +366,8 @@
       <button class="tab-btn" onclick="switchTab('gallery')"><i class="fa fa-image"></i> Gallery</button>
       <button class="tab-btn" onclick="switchTab('contacts')"><i class="fa fa-envelope"></i> Messages</button>
       <button class="tab-btn" onclick="switchTab('subscribers')"><i class="fa fa-users"></i> Subscribers</button>
+      <button class="tab-btn" onclick="switchTab('sliders')"><i class="fa fa-sliders"></i> Sliders</button>
+      <button class="tab-btn" onclick="switchTab('sections')"><i class="fa fa-edit"></i> Sections</button>
     </div>
 
     <!-- OVERVIEW TAB -->
@@ -482,6 +484,72 @@
         </div>
       </div>
     </div>
+
+    <!-- SLIDERS TAB -->
+    <div class="tab-content" id="tab-sliders">
+      <div class="card">
+        <h3><i class="fa fa-plus-circle"></i> Add Intro Slider</h3>
+        <form id="sliderForm" enctype="multipart/form-data">
+          <div class="form-group">
+            <label>Title (optional)</label>
+            <input type="text" id="sliderTitle" placeholder="Slider text">
+          </div>
+          <div class="form-group">
+            <label>Media Type</label>
+            <select id="sliderMediaType" required>
+              <option value="image">Image</option>
+              <option value="video">Video</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Media File</label>
+            <input type="file" id="sliderMedia" accept="image/*,video/mp4,video/webm" required>
+          </div>
+          <button type="submit" class="btn" style="max-width:200px;"><i class="fa fa-upload"></i> Upload</button>
+        </form>
+      </div>
+      <div class="card">
+        <h3><i class="fa fa-th"></i> All Sliders</h3>
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead><tr><th>Media</th><th>Type</th><th>Title</th><th>Date</th><th>Action</th></tr></thead>
+            <tbody id="slidersTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTIONS TAB -->
+    <div class="tab-content" id="tab-sections">
+      <div class="card">
+        <h3><i class="fa fa-edit"></i> Edit Homepage Sections</h3>
+        <div class="form-group">
+          <label>Select Section to Edit</label>
+          <select id="sectionSelector" onchange="loadSectionEditor()">
+            <option value="latestNews">Latest News</option>
+            <option value="gallery">Gallery</option>
+            <option value="admission">Admission</option>
+            <option value="aboutUs">About Us</option>
+            <option value="contact">Contact</option>
+          </select>
+        </div>
+        <form id="sectionForm">
+          <div class="form-group">
+            <label>Section Title</label>
+            <input type="text" id="sectionTitle" required>
+          </div>
+          <div class="form-group">
+            <label>Introduction Text</label>
+            <textarea id="sectionDesc" required></textarea>
+          </div>
+          <div class="form-group">
+            <label>Read More Link</label>
+            <input type="text" id="sectionLink" placeholder="e.g., https://example.com or #about" required>
+          </div>
+          <button type="submit" class="btn" style="max-width:200px;"><i class="fa fa-save"></i> Save Section</button>
+        </form>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -535,6 +603,8 @@
       loadGalleryAdmin();
       loadContacts();
       loadSubscribers();
+      loadSlidersAdmin();
+      loadSectionEditor();
     }
 
     // ── NEWS ───────────────────────────────────────
@@ -646,6 +716,91 @@
           loadAll();
         });
     }
+
+    // ── SLIDERS ────────────────────────────────────
+    function loadSlidersAdmin() {
+      fetch('/api/sliders').then(function(r) { return r.json(); }).then(function(data) {
+        var html = '';
+        data.forEach(function(item) {
+          var d = new Date(item.createdAt).toLocaleDateString('en-IN');
+          var mediaTag = item.mediaType === 'video' ? 
+            '<video src="'+item.mediaUrl+'" style="width:60px; height:40px; object-fit:cover;" muted></video>' : 
+            '<img src="'+item.mediaUrl+'">';
+          html += '<tr>' +
+            '<td>' + mediaTag + '</td>' +
+            '<td><span class="badge badge-collections">' + item.mediaType + '</span></td>' +
+            '<td>' + (item.title || '-') + '</td>' +
+            '<td>' + d + '</td>' +
+            '<td><button class="btn btn-danger btn-sm" onclick="deleteItem(\'sliders\',\'' + item._id + '\')"><i class="fa fa-trash"></i></button></td></tr>';
+        });
+        document.getElementById('slidersTableBody').innerHTML = html || '<tr><td colspan="5" style="text-align:center;color:var(--text-muted)">No sliders yet</td></tr>';
+      });
+    }
+
+    document.getElementById('sliderForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var fd = new FormData();
+      fd.append('title', document.getElementById('sliderTitle').value);
+      fd.append('mediaType', document.getElementById('sliderMediaType').value);
+      fd.append('media', document.getElementById('sliderMedia').files[0]);
+      
+      fetch('/api/sliders', { method: 'POST', body: fd })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.success) { document.getElementById('sliderForm').reset(); loadSlidersAdmin(); }
+          alert(data.message);
+        });
+    });
+
+    // ── SECTIONS ───────────────────────────────────
+    let currentSections = [];
+    function fetchAllSections() {
+      return fetch('/api/sections').then(r => r.json()).then(data => {
+        currentSections = data;
+        return data;
+      });
+    }
+
+    function loadSectionEditor() {
+      fetchAllSections().then(() => {
+        const selectedId = document.getElementById('sectionSelector').value;
+        const section = currentSections.find(s => s.sectionId === selectedId);
+        if (section) {
+          document.getElementById('sectionTitle').value = section.title || '';
+          document.getElementById('sectionDesc').value = section.description || '';
+          document.getElementById('sectionLink').value = section.readMoreLink || '#';
+        } else {
+          document.getElementById('sectionTitle').value = '';
+          document.getElementById('sectionDesc').value = '';
+          document.getElementById('sectionLink').value = '#';
+        }
+      });
+    }
+
+    document.getElementById('sectionForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const selectedId = document.getElementById('sectionSelector').value;
+      const data = {
+        title: document.getElementById('sectionTitle').value,
+        description: document.getElementById('sectionDesc').value,
+        readMoreLink: document.getElementById('sectionLink').value
+      };
+      
+      fetch('/api/sections/' + selectedId, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(res) {
+        if (res.success) {
+          alert('Section updated successfully!');
+          loadSectionEditor();
+        } else {
+          alert(res.message);
+        }
+      });
+    });
   </script>
 </body>
 </html>

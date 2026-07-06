@@ -510,8 +510,8 @@
         <li><a href="#intro" class="active scrollto">Home</a></li>
         <li><a href="#services" class="scrollto">Latest News</a></li>
         <li><a href="#portfolio" class="scrollto">Gallery</a></li>
-        <li><a href="#about" class="scrollto">About Us</a></li>
         <li><a href="#admission" class="nav-btn-admission scrollto">Admission</a></li>
+        <li><a href="#about" class="scrollto">About Us</a></li>
         <li><a href="#contact" class="scrollto">Contact Us</a></li>
       </ul>
     </div>
@@ -525,24 +525,14 @@
   ============================-->
   <section id="intro" class="clearfix">
     <div id="demo" class="carousel slide" data-ride="carousel">
-      <ul class="carousel-indicators">
+      <ul class="carousel-indicators" id="sliderIndicators">
+        <!-- Default static indicators -->
         <li data-target="#demo" data-slide-to="0" class="active"></li>
-        <li data-target="#demo" data-slide-to="1"></li>
-        <li data-target="#demo" data-slide-to="2"></li>
-        <li data-target="#demo" data-slide-to="3"></li>
       </ul>
-      <div class="carousel-inner">
+      <div class="carousel-inner" id="sliderInner">
+        <!-- Default static image -->
         <div class="carousel-item active">
           <img src="img/palli.jpg" alt="Muttichira Juma Masjid" class="img-fluid">
-        </div>
-        <div class="carousel-item">
-          <img src="img/black set.svg" alt="AL BAYAN" class="img-fluid">
-        </div>
-        <div class="carousel-item">
-          <img src="img/usthad.svg" alt="Usthad" class="img-fluid">
-        </div>
-        <div class="carousel-item">
-          <img src="img/fest hd set.svg" alt="Dars Fest" class="img-fluid">
         </div>
       </div>
       <a class="carousel-control-prev" href="#demo" data-slide="prev">
@@ -561,9 +551,10 @@
     ============================-->
     <section id="services" class="section-bg">
       <div class="container">
-        <header class="section-header">
+        <header class="section-header" id="newsSecHeader">
           <h3>Latest News</h3>
           <p>All the news that are relevant for our small community</p>
+          <a href="#" class="btn btn-outline-success btn-sm mt-3" style="display:none;" id="newsReadMore">Read more...</a>
         </header>
 
         <!-- Static fallback news (shown until DB loads) -->
@@ -601,8 +592,10 @@
     ============================-->
     <section id="portfolio" class="clearfix">
       <div class="container">
-        <header class="section-header">
+        <header class="section-header" id="gallerySecHeader">
           <h3 class="section-title">Gallery</h3>
+          <p>Explore our latest moments and activities</p>
+          <a href="#" class="btn btn-outline-success btn-sm mt-3" style="display:none;" id="galleryReadMore">Read more...</a>
         </header>
 
         <div class="row">
@@ -738,9 +731,10 @@
     ============================-->
     <section id="about">
       <div class="container">
-        <header class="section-header">
+        <header class="section-header" id="aboutSecHeader">
           <h3>About Us</h3>
           <p>It helps you to know and understand something about Muttichira Bayanul Uloom Dars</p>
+          <a href="#" class="btn btn-outline-success btn-sm mt-3" style="display:none;" id="aboutReadMore">Read more...</a>
         </header>
         <div class="divider div-transparent div-arrow-down"></div>
 
@@ -813,9 +807,10 @@
     ============================-->
     <section id="admission">
       <div class="container">
-        <header class="section-header">
+        <header class="section-header" id="admissionSecHeader">
           <h3>Admission</h3>
           <p>Join Muttichira Bayanul Uloom Dars and begin your journey in Islamic education</p>
+          <a href="#" class="btn btn-outline-success btn-sm mt-3" style="display:none;" id="admissionReadMore">Read more...</a>
         </header>
 
         <div class="row" style="margin-top: 40px;">
@@ -904,8 +899,10 @@
     ============================-->
     <section id="contact">
       <div class="container-fluid">
-        <div class="section-header">
+        <div class="section-header" id="contactSecHeader">
           <h3>Contact Us</h3>
+          <p style="text-align:center; color:#555;">Get in touch with us for more information</p>
+          <div class="text-center"><a href="#" class="btn btn-outline-success btn-sm mt-3" style="display:none;" id="contactReadMore">Read more...</a></div>
         </div>
 
         <div class="row wow fadeInUp">
@@ -1198,8 +1195,89 @@
       }
     });
 
+    // ── Load Dynamic Sliders from MongoDB ──────────
+    function loadSliders() {
+      fetch('/api/sliders')
+        .then(function(res) { return res.json(); })
+        .then(function(sliders) {
+          if (sliders && sliders.length > 0) {
+            var indicators = document.getElementById('sliderIndicators');
+            var inner = document.getElementById('sliderInner');
+            var indHtml = '';
+            var innerHtml = '';
+            
+            sliders.forEach(function(item, idx) {
+              var activeClass = idx === 0 ? 'active' : '';
+              indHtml += '<li data-target="#demo" data-slide-to="'+idx+'" class="'+activeClass+'"></li>';
+              
+              innerHtml += '<div class="carousel-item '+activeClass+'">';
+              if (item.mediaType === 'video') {
+                innerHtml += '<video src="'+item.mediaUrl+'" autoplay loop muted playsinline style="width:100%; height:100vh; object-fit:cover;"></video>';
+              } else {
+                innerHtml += '<img src="'+item.mediaUrl+'" alt="AL BAYAN" class="img-fluid">';
+              }
+              innerHtml += '</div>';
+            });
+            
+            indicators.innerHTML = indHtml;
+            inner.innerHTML = innerHtml;
+          }
+        })
+        .catch(function(err) { console.error('Slider fetch error', err); });
+    }
+
+    // ── Load Dynamic Sections from MongoDB ─────────
+    function loadSections() {
+      fetch('/api/sections')
+        .then(function(res) { return res.json(); })
+        .then(function(sections) {
+          if (sections && sections.length > 0) {
+            var map = {
+              'latestNews': 'newsSecHeader',
+              'gallery': 'gallerySecHeader',
+              'admission': 'admissionSecHeader',
+              'aboutUs': 'aboutSecHeader',
+              'contact': 'contactSecHeader'
+            };
+            var rmMap = {
+              'latestNews': 'newsReadMore',
+              'gallery': 'galleryReadMore',
+              'admission': 'admissionReadMore',
+              'aboutUs': 'aboutReadMore',
+              'contact': 'contactReadMore'
+            };
+            
+            sections.forEach(function(sec) {
+              var headerId = map[sec.sectionId];
+              var rmId = rmMap[sec.sectionId];
+              
+              if (headerId) {
+                var headerDiv = document.getElementById(headerId);
+                if (headerDiv) {
+                  var titleEl = headerDiv.querySelector('h3, .section-title');
+                  var pEl = headerDiv.querySelector('p');
+                  if (titleEl && sec.title) titleEl.textContent = sec.title;
+                  if (pEl && sec.description) pEl.textContent = sec.description;
+                }
+              }
+              
+              if (rmId) {
+                var rmBtn = document.getElementById(rmId);
+                if (rmBtn && sec.readMoreLink && sec.readMoreLink !== '#') {
+                  rmBtn.href = sec.readMoreLink;
+                  rmBtn.style.display = 'inline-block';
+                }
+              }
+            });
+          }
+        })
+        .catch(function(err) { console.error('Section fetch error', err); });
+    }
+
     // ── Initialize ─────────────────────────────────
     document.addEventListener('DOMContentLoaded', function() {
+      loadSliders();
+      loadSections();
       loadNews();
       loadGallery();
     });

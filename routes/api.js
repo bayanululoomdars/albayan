@@ -4,6 +4,8 @@ const News = require('../models/News');
 const GalleryItem = require('../models/GalleryItem');
 const Contact = require('../models/Contact');
 const Subscriber = require('../models/Subscriber');
+const Slider = require('../models/Slider');
+const SectionContent = require('../models/SectionContent');
 const { upload, uploadLocal, isCloudinaryConfigured, cloudinary } = require('../config/cloudinary');
 
 // ── Helper: get the right upload middleware ────────────────
@@ -202,6 +204,94 @@ router.delete('/gallery/:id', async (req, res) => {
     res.json({ success: true, message: 'Gallery item deleted' });
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+});
+
+// ══════════════════════════════════════════════════════════
+//  SLIDERS
+// ══════════════════════════════════════════════════════════
+
+// GET /api/sliders — Get all sliders
+router.get('/sliders', async (req, res) => {
+  try {
+    const items = await Slider.find().sort({ createdAt: -1 });
+    res.json(items);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// POST /api/sliders — Upload a slider
+router.post('/sliders', (req, res) => {
+  const uploader = getUploader();
+  uploader.single('media')(req, res, async (uploadErr) => {
+    if (uploadErr) {
+      console.error('Upload error:', uploadErr);
+      return res.status(500).json({ success: false, message: 'Media upload failed' });
+    }
+    try {
+      const { title, mediaType } = req.body;
+      if (!req.file) {
+        return res.status(400).json({ success: false, message: 'Media file is required' });
+      }
+      
+      const sliderData = {
+        title: title || '',
+        mediaType: mediaType || 'image',
+        mediaUrl: isCloudinaryConfigured() ? req.file.path : '/img/uploads/' + req.file.filename,
+        cloudinaryId: req.file.filename || '',
+      };
+      const slider = new Slider(sliderData);
+      await slider.save();
+      res.json({ success: true, message: 'Slider added!', data: slider });
+    } catch (err) {
+      console.error('Slider save error:', err);
+      res.status(500).json({ success: false, message: 'Failed to add slider' });
+    }
+  });
+});
+
+// DELETE /api/sliders/:id — Delete a slider
+router.delete('/sliders/:id', async (req, res) => {
+  try {
+    const item = await Slider.findById(req.params.id);
+    if (!item) return res.status(404).json({ message: 'Slider not found' });
+    if (item.cloudinaryId && isCloudinaryConfigured()) {
+      try { await cloudinary.uploader.destroy(item.cloudinaryId); } catch (e) { /* ignore */ }
+    }
+    await Slider.findByIdAndDelete(req.params.id);
+    res.json({ success: true, message: 'Slider deleted' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// ══════════════════════════════════════════════════════════
+//  SECTION CONTENTS
+// ══════════════════════════════════════════════════════════
+
+// GET /api/sections — Get all sections
+router.get('/sections', async (req, res) => {
+  try {
+    const sections = await SectionContent.find();
+    res.json(sections);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// PUT /api/sections/:id — Update a section
+router.put('/sections/:id', async (req, res) => {
+  try {
+    const { title, description, readMoreLink } = req.body;
+    const section = await SectionContent.findOneAndUpdate(
+      { sectionId: req.params.id },
+      { title, description, readMoreLink, updatedAt: Date.now() },
+      { new: true, upsert: true }
+    );
+    res.json({ success: true, data: section });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
   }
 });
 

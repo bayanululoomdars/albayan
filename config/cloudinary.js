@@ -14,7 +14,8 @@ const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: 'albayan',
-    allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'],
+    allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'mp4', 'webm'],
+    resource_type: 'auto',
     transformation: [{ width: 1200, quality: 'auto' }],
   },
 });
