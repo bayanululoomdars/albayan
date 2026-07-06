@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "dev": "node server.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "deploy": "npx gh-pages -d public"
   },
   "dependencies": {
     "cloudinary": "^1.21.0",
