@@ -1,0 +1,566 @@
+:root {
+  --primary: #0a4d2e;
+  --primary-light: #0f6b3f;
+  --primary-dark: #063a22;
+  --accent: #d4af37;
+  --accent-light: #e8c84a;
+  --bg-dark: #0a1628;
+  --bg-card: rgba(255,255,255,0.03);
+  --text-light: #f0f0f0;
+  --glass-bg: rgba(10, 22, 40, 0.85);
+  --glass-border: rgba(212, 175, 55, 0.15);
+  --shadow-gold: 0 4px 30px rgba(212, 175, 55, 0.1);
+}
+
+/* ── MODERN NAVBAR ────────────────────────────── */
+#header {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%) !important;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.3) !important;
+  height: auto !important;
+  padding: 0 !important;
+  border-bottom: 2px solid var(--accent);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 9999;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#header.header-scrolled {
+  padding: 0 !important;
+  background: linear-gradient(135deg, rgba(6,58,34,0.98), rgba(10,77,46,0.98)) !important;
+  backdrop-filter: blur(20px);
+}
+
+.navbar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 20px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.navbar-logo img {
+  height: 52px;
+  width: auto;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+  transition: transform 0.3s;
+}
+
+.navbar-logo:hover img {
+  transform: scale(1.05);
+}
+
+.navbar-logo .logo-text {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: var(--accent);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.navbar-logo .logo-text small {
+  display: block;
+  font-size: 0.6rem;
+  color: rgba(255,255,255,0.7);
+  font-weight: 400;
+  letter-spacing: 2px;
+}
+
+/* Nav Links */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links li a {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.85);
+  text-decoration: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  position: relative;
+  letter-spacing: 0.3px;
+}
+
+.nav-links li a:hover,
+.nav-links li a.active {
+  color: var(--accent);
+  background: rgba(212, 175, 55, 0.1);
+}
+
+.nav-links li a::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--accent);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+  border-radius: 2px;
+}
+
+.nav-links li a:hover::after,
+.nav-links li a.active::after {
+  width: 60%;
+}
+
+/* Admission Button - Special Highlight */
+.nav-links li .nav-btn-admission {
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  color: var(--primary-dark) !important;
+  font-weight: 700;
+  border-radius: 25px;
+  padding: 8px 22px;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+  transition: all 0.3s ease;
+}
+
+.nav-links li .nav-btn-admission:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(212, 175, 55, 0.5);
+  background: linear-gradient(135deg, var(--accent-light), var(--accent));
+}
+
+.nav-links li .nav-btn-admission::after {
+  display: none;
+}
+
+/* Mobile Menu Toggle */
+.mobile-toggle {
+  display: none;
+  background: none;
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  font-size: 1.4rem;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.mobile-toggle:hover {
+  background: var(--accent);
+  color: var(--primary-dark);
+}
+
+@media (max-width: 991px) {
+  .mobile-toggle { display: block; }
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: linear-gradient(180deg, var(--primary-dark), var(--primary));
+    flex-direction: column;
+    padding: 20px;
+    border-top: 1px solid var(--glass-border);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    gap: 4px;
+  }
+  .nav-links.show { display: flex; }
+  .nav-links li { width: 100%; }
+  .nav-links li a {
+    display: block;
+    padding: 12px 20px;
+    border-radius: 10px;
+  }
+}
+
+/* ── SECTION TITLES ────────────────────────────── */
+.section-header h3,
+.section-header .section-title {
+  font-family: 'Outfit', sans-serif !important;
+  font-weight: 700;
+  color: var(--primary-dark);
+  position: relative;
+  padding-bottom: 15px;
+}
+
+.section-header h3::after,
+.section-header .section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--primary));
+  border-radius: 3px;
+}
+
+/* ── ADMISSION SECTION ─────────────────────────── */
+#admission {
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  padding: 80px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+#admission::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(212,175,55,0.1), transparent 70%);
+  border-radius: 50%;
+}
+
+#admission .section-header h3 {
+  color: var(--accent) !important;
+}
+
+#admission .section-header h3::after {
+  background: linear-gradient(90deg, var(--accent), var(--accent-light)) !important;
+}
+
+#admission .section-header p {
+  color: rgba(255,255,255,0.8);
+}
+
+.admission-card {
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(212,175,55,0.2);
+  border-radius: 16px;
+  padding: 30px;
+  text-align: center;
+  transition: all 0.4s ease;
+  margin-bottom: 20px;
+}
+
+.admission-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  border-color: var(--accent);
+}
+
+.admission-card .card-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 1.6rem;
+  color: var(--primary-dark);
+}
+
+.admission-card h4 {
+  color: #fff;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.admission-card p {
+  color: rgba(255,255,255,0.7);
+  font-size: 0.9rem;
+  margin-bottom: 0;
+}
+
+.btn-admission {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  color: var(--primary-dark);
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 14px 40px;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: all 0.4s ease;
+  box-shadow: 0 8px 25px rgba(212,175,55,0.3);
+  margin-top: 30px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-admission:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(212,175,55,0.5);
+  color: var(--primary-dark);
+  text-decoration: none;
+}
+
+/* ── TOAST NOTIFICATIONS ───────────────────────── */
+.toast-container {
+  position: fixed;
+  top: 90px;
+  right: 20px;
+  z-index: 99999;
+}
+
+.toast-msg {
+  background: var(--primary);
+  color: #fff;
+  padding: 14px 24px;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  margin-bottom: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  border-left: 4px solid var(--accent);
+  animation: slideIn 0.4s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.toast-msg.error {
+  border-left-color: #e74c3c;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* ── DYNAMIC NEWS CARDS ────────────────────────── */
+.news-card-dynamic {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+  margin-bottom: 20px;
+}
+
+.news-card-dynamic:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+}
+
+.news-card-dynamic img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.news-card-dynamic .card-body {
+  padding: 20px;
+}
+
+.news-card-dynamic .card-body h4 {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  color: var(--primary-dark);
+  font-size: 1.1rem;
+}
+
+.news-card-dynamic .card-body p {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.news-card-dynamic .card-date {
+  font-size: 0.75rem;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* ── GALLERY DYNAMIC ───────────────────────────── */
+.gallery-item-dynamic {
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.gallery-item-dynamic img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  transition: transform 0.4s;
+}
+
+.gallery-item-dynamic:hover img {
+  transform: scale(1.05);
+}
+
+.gallery-item-dynamic .overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0,0,0,0.7));
+  padding: 20px;
+  transform: translateY(100%);
+  transition: transform 0.3s;
+}
+
+.gallery-item-dynamic:hover .overlay {
+  transform: translateY(0);
+}
+
+.gallery-item-dynamic .overlay h5 {
+  color: #fff;
+  margin: 0;
+  font-family: 'Outfit', sans-serif;
+}
+
+.gallery-item-dynamic .overlay span {
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* ── FOOTER MODERNIZE ──────────────────────────── */
+#footer {
+  font-family: 'Inter', sans-serif;
+}
+
+.footer-top {
+  background: var(--primary-dark) !important;
+  color: rgba(255,255,255,0.8);
+}
+
+.footer-top h3, .footer-top h4 {
+  color: var(--accent) !important;
+  font-family: 'Outfit', sans-serif;
+}
+
+#footer .copyright {
+  background: #031a0e;
+  color: rgba(255,255,255,0.5);
+}
+
+#footer .credits a {
+  color: var(--accent);
+}
+
+/* ── CUSTOM PAGE HERO BANNER ────────────────────── */
+.page-hero {
+  background: linear-gradient(rgba(6, 58, 34, 0.9), rgba(10, 77, 46, 0.9)), url('../img/palli.jpg') no-repeat center center;
+  background-size: cover;
+  padding: 120px 0 60px;
+  text-align: center;
+  border-bottom: 2px solid var(--accent);
+  color: #fff;
+}
+
+.page-hero h1 {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.page-hero p {
+  color: rgba(255,255,255,0.8);
+  font-family: 'Inter', sans-serif;
+}
+
+/* ── ADMISSION FORM STYLING ───────────────────── */
+.admission-form-wrapper {
+  background: #fff;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  border: 1px solid rgba(10, 77, 46, 0.1);
+}
+
+.form-title {
+  font-family: 'Outfit', sans-serif;
+  color: var(--primary-dark);
+  font-weight: 700;
+  margin-bottom: 30px;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 10px;
+}
+
+.form-group label {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  color: var(--primary-dark);
+  margin-bottom: 8px;
+}
+
+.form-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 0.2rem rgba(10, 77, 46, 0.25);
+}
+
+/* ── ABOUT PAGE SPECIFIC ─────────────────────── */
+.about-section {
+  padding: 60px 0;
+}
+
+.about-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.03);
+  border-left: 5px solid var(--primary);
+}
+
+.about-card.accent-border {
+  border-left-color: var(--accent);
+}
+
+.about-card h3 {
+  font-family: 'Outfit', sans-serif;
+  color: var(--primary-dark);
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.about-card p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+.biography-block {
+  background: #fdfdfd;
+  border: 1px solid #eee;
+  border-radius: 16px;
+  padding: 35px;
+  margin-bottom: 40px;
+}
+
+.biography-title {
+  font-family: 'Outfit', sans-serif;
+  color: var(--primary-dark);
+  font-weight: 750;
+  font-size: 1.4rem;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 15px;
+  margin-bottom: 25px;
+}
+
+.biography-title span {
+  color: var(--accent);
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-top: 5px;
+}

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Admission Application | Bayanul Uloom Dars | Muttichira</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta content="AL BAYAN, Bayanul Uloom, Dars, Muttichira, Admission" name="keywords">
+  <meta content="Apply online for admission to Muttichira Bayanul Uloom Dars" name="description">
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="img/favicon.png">
+  <link rel="apple-touch-icon" href="img/favicon.png">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- CSS Files -->
+  <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="lib/animate/animate.min.css" rel="stylesheet">
+  <link href="lib/ionicons/css/ionicons.min.css" rel="stylesheet">
+  
+  <!-- Main Stylesheet Files -->
+  <link href="css/style.css" rel="stylesheet">
+  <link href="css/custom.css" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Modern Header / Navbar -->
+  <header id="header" class="fixed-top">
+    <div class="navbar-container">
+      <a href="/home" class="navbar-logo">
+        <img src="img/new_logo.png" alt="BAYANUL ULOOM DARS Logo">
+        <div class="logo-text">
+          BAYANUL ULOOM DARS
+          <small>MUTTICHIRA</small>
+        </div>
+      </a>
+
+      <button class="mobile-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')">
+        <i class="fa fa-bars"></i>
+      </button>
+
+      <ul class="nav-links">
+        <li><a href="/home">Home</a></li>
+        <li><a href="/latest-news">Latest News</a></li>
+        <li><a href="/gallery">Gallery</a></li>
+        <li><a href="/admission" class="active nav-btn-admission">Admission</a></li>
+        <li><a href="/about">About Us</a></li>
+        <li><a href="/contact">Contact Us</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Page Hero Banner -->
+  <section class="page-hero">
+    <div class="container">
+      <h1>Admission Panel</h1>
+      <p>Fill out the official student biodata form below to apply for admission</p>
+    </div>
+  </section>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Admission Content -->
+  <section class="admission-section py-5 bg-light">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-10">
+          
+          <div class="admission-form-wrapper shadow-sm bg-white rounded p-4 p-md-5">
+            <div class="text-center mb-4">
+              <h2 class="form-title">സ്റ്റുഡന്റ്സ് ബയോഡാറ്റ <span class="d-block text-muted small mt-2 font-weight-normal" style="font-family: 'Inter', sans-serif;">STUDENT BIODATA APPLICATION FORM</span></h2>
+              <p class="text-success font-weight-bold">മുട്ടിച്ചിറ ബായാനുൽ ഉലൂം ദർസ് (Bayanul Uloom Dars, Muttichira)</p>
+              <p class="small text-muted">ശുഹദാ മസ്ജിദ് മുട്ടിച്ചിറ, തലപ്പാറ, PIN: 676311 (Shuhada Masjid Muttichira, Thalappara)</p>
+            </div>
+
+            <form id="admissionForm" enctype="multipart/form-data">
+              
+              <!-- SECTION 1: PERSONAL INFORMATION -->
+              <h5 class="text-success border-bottom pb-2 mb-4 font-weight-bold" style="font-family: 'Outfit', sans-serif;"><i class="fa fa-user mr-2"></i> Personal Details / വ്യക്തിഗത വിവരങ്ങൾ</h5>
+              
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="studentName">Student Name / പേര് <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="name" id="studentName" placeholder="Full Name" required>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="studentDob">Date of Birth / ജനനതീയതി <span class="text-danger">*</span></label>
+                  <input type="date" class="form-control" name="dob" id="studentDob" required>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="fatherName">Father's Name / പിതാവിന്റെ പേര് <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="fatherName" id="fatherName" placeholder="Father's Name" required>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="motherName">Mother's Name / മാതാവിന്റെ പേര് <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="motherName" id="motherName" placeholder="Mother's Name" required>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="studentPhone">Student Phone / ഫോൺ നമ്പർ <span class="text-danger">*</span></label>
+                  <input type="tel" class="form-control" name="phone" id="studentPhone" placeholder="Mobile Number" required>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="bloodGroup">Blood Group / രക്ത ഗ്രൂപ്പ് <span class="text-danger">*</span></label>
+                  <select class="form-control" name="bloodGroup" id="bloodGroup" required>
+                    <option value="">Select Blood Group</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- SECTION 2: ADDRESS -->
+              <h5 class="text-success border-bottom pb-2 mb-4 mt-5 font-weight-bold" style="font-family: 'Outfit', sans-serif;"><i class="fa fa-home mr-2"></i> Address Details / വിലാസം</h5>
+
+              <div class="form-row">
+                <div class="form-group col-md-8">
+                  <label for="houseName">House Name / വീട്ടു പേര് <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="houseName" id="houseName" placeholder="House Name" required>
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="homePhone">Home Phone / വീട്ടിലെ ഫോൺ നമ്പർ</label>
+                  <input type="tel" class="form-control" name="homePhone" id="homePhone" placeholder="Landline or Alternate">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="place">Place / സ്ഥലം <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="place" id="place" placeholder="City / Town" required>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="postOffice">Post Office / പോസ്റ്റ് <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="postOffice" id="postOffice" placeholder="Post Office Name" required>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="district">District / ജില്ല <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="district" id="district" placeholder="District Name" required>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="pincode">Pincode / പിൻകോഡ് <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="pincode" id="pincode" placeholder="6-Digit Postal Code" required>
+                </div>
+              </div>
+
+              <!-- SECTION 3: EDUCATION & GUARDIAN -->
+              <h5 class="text-success border-bottom pb-2 mb-4 mt-5 font-weight-bold" style="font-family: 'Outfit', sans-serif;"><i class="fa fa-graduation-cap mr-2"></i> Education &amp; Guardian / വിദ്യാഭ്യാസം, രക്ഷിതാവ്</h5>
+
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="eduReligious">Religious Education / വിദ്യാഭ്യാസം: മതം <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="educationReligious" id="eduReligious" placeholder="Madrassa / Dars Qualification" required>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="eduSecular">Secular Education / വിദ്യാഭ്യാസം: ഭൗതികം <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="educationSecular" id="eduSecular" placeholder="School / College Qualification" required>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="guardianName">Guardian Name / രക്ഷിതാവിന്റെ പേര് <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="guardianName" id="guardianName" placeholder="Guardian's Full Name" required>
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="relationship">Relationship / കുട്ടിയുമായുള്ള ബന്ധം <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="relationship" id="relationship" placeholder="Father/Uncle/Brother etc." required>
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="guardianPhone">Guardian Phone / ഫോൺ നമ്പർ <span class="text-danger">*</span></label>
+                  <input type="tel" class="form-control" name="guardianPhone" id="guardianPhone" placeholder="Guardian Phone" required>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-md-12">
+                  <label for="photoFile">Upload Photo / ഫോട്ടോ <span class="text-muted">(Passport size image)</span></label>
+                  <div class="custom-file">
+                    <input type="file" class="custom-file-input" name="photo" id="photoFile" accept="image/*">
+                    <label class="custom-file-label" for="photoFile">Choose image file...</label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- DECLARATION & SUBMIT -->
+              <div class="form-group mt-4">
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" id="declarationCheck" required>
+                  <label class="custom-control-label small text-muted" for="declarationCheck" style="line-height: 1.5;">
+                    മേൽ വിവരങ്ങൾ എനിക്ക് ബോധ്യമുള്ളതും സത്യസന്ധവുമാണെന്ന് ബോധ്യപ്പെടുത്തുന്നു. (I hereby declare that the above information is true and correct to the best of my knowledge.)
+                  </label>
+                </div>
+              </div>
+
+              <div class="text-center mt-5">
+                <button type="submit" class="btn btn-success btn-lg px-5 py-3 font-weight-bold" id="admissionSubmitBtn" style="border-radius: 50px;">
+                  <i class="fa fa-check-circle mr-2"></i> Submit Application / അപേക്ഷ സമർപ്പിക്കുക
+                </button>
+              </div>
+
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modern Footer -->
+  <footer id="footer">
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4 col-md-6 footer-info">
+            <h3>BAYANUL ULOOM DARS</h3>
+            <p>Bayanul Uloom Sahithya Samajam is a platform for the literary and non literary activities of students. All extra curricular activities conducted by the Bayanul Uloom Dars are under the auspicious of Sahithya Samajam. It aims the Islamic literary and artistic development of the students.</p>
+          </div>
+
+          <div class="col-lg-2 col-md-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><a href="/home">Home</a></li>
+              <li><a href="/about">About us</a></li>
+              <li><a href="/latest-news">Latest News</a></li>
+              <li><a href="/admission">Admission</a></li>
+              <li><a href="/contact">Contact Us</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-3 col-md-6 footer-contact">
+            <h4>Contact Us</h4>
+            <p>
+              Thalappara <br>
+              Moonniyur P.O, PIN: 676311<br>
+              Kerala, India <br>
+              <strong>Phone:</strong> +91 9526 919 218<br>
+              <strong>Email:</strong> darsbayanululoom@gmail.com<br>
+            </p>
+            <div class="social-links">
+              <a href="https://wa.me/+919526919218/" class="twitter"><i class="fa fa-whatsapp"></i></a>
+              <a href="https://www.facebook.com/muttichiradars/" class="facebook"><i class="fa fa-facebook"></i></a>
+              <a href="https://www.instagram.com/muttichira_dars/" class="instagram"><i class="fa fa-instagram"></i></a>
+              <a href="https://www.youtube.com/channel/UCnfgm7rNEqGDN68loux5-JQ" class="google-plus"><i class="fa fa-youtube"></i></a>
+              <a href="tel:+919526919218" class="linkedin"><i class="fa fa-phone"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6 footer-newsletter">
+            <h4>Our Newsletter</h4>
+            <p>Subscribe to get the latest updates from Bayanul Uloom Dars.</p>
+            <form id="newsletterForm">
+              <input type="email" name="email" id="newsletterEmail" placeholder="Your email" required>
+              <input type="submit" value="Subscribe">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="copyright">
+        &copy; Copyright <strong>BAYANUL ULOOM DARS</strong>. All Rights Reserved
+      </div>
+      <div class="credits">
+        Designed by <a href="/about">BAYANUL ULOOM DARS</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript Libraries -->
+  <script src="lib/jquery/jquery.min.js"></script>
+  <script src="lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="lib/mobile-nav/mobile-nav.js"></script>
+
+  <script>
+    // Show custom file upload name
+    document.querySelector('.custom-file-input').addEventListener('change', function(e) {
+      var fileName = document.getElementById("photoFile").files[0].name;
+      var nextSibling = e.target.nextElementSibling;
+      nextSibling.innerText = fileName;
+    });
+
+    // Toast Notification helper
+    function showToast(message, isError) {
+      var container = document.getElementById('toastContainer');
+      if (!container) return;
+      var toast = document.createElement('div');
+      toast.className = 'toast-msg' + (isError ? ' error' : '');
+      toast.innerHTML = '<i class="fa ' + (isError ? 'fa-exclamation-circle text-danger' : 'fa-check-circle text-warning') + '"></i> ' + message;
+      container.appendChild(toast);
+      setTimeout(function() {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(100%)';
+        toast.style.transition = 'all 0.5s ease';
+        setTimeout(function() { toast.remove(); }, 500);
+      }, 4000);
+    }
+
+    // Admission form submit
+    document.getElementById('admissionForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var submitBtn = document.getElementById('admissionSubmitBtn');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin mr-2"></i> Submitting...';
+
+      var formData = new FormData(this);
+
+      fetch('/api/admission', {
+        method: 'POST',
+        body: formData
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(resData) {
+        if (resData.success) {
+          showToast('Biodata application submitted successfully!', false);
+          document.getElementById('admissionForm').reset();
+          document.querySelector('.custom-file-label').innerText = 'Choose image file...';
+        } else {
+          showToast(resData.message || 'Failed to submit application.', true);
+        }
+      })
+      .catch(function(err) {
+        console.error(err);
+        showToast('Error connecting to server. Please try again.', true);
+      })
+      .finally(function() {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fa fa-check-circle mr-2"></i> Submit Application / അപേക്ഷ സമർപ്പിക്കുക';
+      });
+    });
+  </script>
+
+</body>
+</html>

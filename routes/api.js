@@ -6,6 +6,7 @@ const Contact = require('../models/Contact');
 const Subscriber = require('../models/Subscriber');
 const Slider = require('../models/Slider');
 const SectionContent = require('../models/SectionContent');
+const Admission = require('../models/Admission');
 const { upload, uploadLocal, isCloudinaryConfigured, cloudinary } = require('../config/cloudinary');
 
 // ── Helper: get the right upload middleware ────────────────
@@ -298,6 +299,82 @@ router.put('/sections/:id', async (req, res) => {
 // ══════════════════════════════════════════════════════════
 //  ADMIN AUTH (simple password check)
 // ══════════════════════════════════════════════════════════
+
+// ══════════════════════════════════════════════════════════
+//  ADMISSIONS
+// ══════════════════════════════════════════════════════════
+
+// GET /api/admissions — Get all admissions (admin)
+router.get('/admissions', async (req, res) => {
+  try {
+    const admissions = await Admission.find().sort({ createdAt: -1 });
+    res.json(admissions);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// POST /api/admission — Submit a new admission application
+router.post('/admission', (req, res) => {
+  const uploader = getUploader();
+  uploader.single('photo')(req, res, async (uploadErr) => {
+    if (uploadErr) {
+      console.error('Photo upload error:', uploadErr);
+      return res.status(500).json({ success: false, message: 'Photo upload failed' });
+    }
+    try {
+      const {
+        name, fatherName, phone, motherName, houseName, homePhone,
+        place, postOffice, district, pincode, dob, bloodGroup,
+        educationReligious, educationSecular, guardianName, relationship, guardianPhone
+      } = req.body;
+
+      if (!name || !fatherName || !phone || !motherName || !houseName ||
+          !place || !postOffice || !district || !pincode || !dob || !bloodGroup ||
+          !educationReligious || !educationSecular || !guardianName || !relationship || !guardianPhone) {
+        return res.status(400).json({ success: false, message: 'All required fields must be completed' });
+      }
+
+      const admissionData = {
+        name, fatherName, phone, motherName, houseName, homePhone,
+        place, postOffice, district, pincode, dob, bloodGroup,
+        educationReligious, educationSecular, guardianName, relationship, guardianPhone
+      };
+
+      if (req.file) {
+        admissionData.imageUrl = isCloudinaryConfigured() ? req.file.path : '/img/uploads/' + req.file.filename;
+      }
+
+      const admission = new Admission(admissionData);
+      await admission.save();
+      res.json({ success: true, message: 'Admission application submitted successfully!' });
+    } catch (err) {
+      console.error('Admission save error:', err);
+      res.status(500).json({ success: false, message: 'Failed to submit admission application' });
+    }
+  });
+});
+
+// DELETE /api/admissions/:id — Delete an admission application
+router.delete('/admissions/:id', async (req, res) => {
+  try {
+    const admission = await Admission.findById(req.params.id);
+    if (!admission) return res.status(404).json({ message: 'Admission not found' });
+    
+    // Attempt deleting image if exists on Cloudinary
+    if (admission.imageUrl && isCloudinaryConfigured()) {
+      try {
+        const publicId = admission.imageUrl.split('/').pop().split('.')[0];
+        await cloudinary.uploader.destroy(publicId);
+      } catch (e) { /* ignore */ }
+    }
+    
+    await Admission.findByIdAndDelete(req.params.id);
+    res.json({ success: true, message: 'Admission deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
 router.post('/admin/login', (req, res) => {
   const { password } = req.body;

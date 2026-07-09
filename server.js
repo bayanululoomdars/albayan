@@ -17,9 +17,37 @@ app.use(express.static(path.join(__dirname, 'public')));
 // ── API Routes ─────────────────────────────────────────────
 app.use('/api', apiRoutes);
 
-// ── Fallback: serve index.html ─────────────────────────────
+// ── Page Routes ─────────────────────────────────────────────
 app.get('/', (req, res) => {
+  res.redirect('/home');
+});
+
+app.get('/home', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.get(['/latest-news', '/lastest-news', '/lastest news', '/latestnews'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'news.html'));
+});
+
+app.get('/gallery', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'gallery.html'));
+});
+
+app.get('/admission', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'admission.html'));
+});
+
+app.get(['/about', '/about-us', '/about us', '/about  us'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'about.html'));
+});
+
+app.get(['/contact', '/contact-us', '/contact us'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'contact.html'));
+});
+
+app.get('/admin', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
 });
 
 // ── Connect to MongoDB & Start Server ──────────────────────

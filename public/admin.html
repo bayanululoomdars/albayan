@@ -332,6 +332,59 @@
       .data-table { font-size: 0.75rem; }
       .data-table th, .data-table td { padding: 8px; }
     }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 10000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.6);
+      backdrop-filter: blur(5px);
+    }
+    .modal-content {
+      background-color: var(--bg-card);
+      margin: 5% auto;
+      padding: 30px;
+      border: 1px solid var(--border);
+      width: 90%;
+      max-width: 750px;
+      border-radius: 16px;
+      color: var(--text);
+      position: relative;
+    }
+    .modal-close {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      font-size: 1.5rem;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+    .modal-close:hover {
+      color: var(--text);
+    }
+    .modal-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    .modal-grid div {
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding-bottom: 8px;
+    }
+    .modal-grid label {
+      display: block;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
   </style>
 </head>
 <body>
@@ -362,6 +415,7 @@
 
     <div class="tabs">
       <button class="tab-btn active" onclick="switchTab('overview')"><i class="fa fa-dashboard"></i> Overview</button>
+      <button class="tab-btn" onclick="switchTab('admissions')"><i class="fa fa-graduation-cap"></i> Admissions</button>
       <button class="tab-btn" onclick="switchTab('news')"><i class="fa fa-newspaper-o"></i> News</button>
       <button class="tab-btn" onclick="switchTab('gallery')"><i class="fa fa-image"></i> Gallery</button>
       <button class="tab-btn" onclick="switchTab('contacts')"><i class="fa fa-envelope"></i> Messages</button>
@@ -373,6 +427,10 @@
     <!-- OVERVIEW TAB -->
     <div class="tab-content active" id="tab-overview">
       <div class="stats-row" id="statsRow">
+        <div class="stat-card">
+          <div class="stat-number" id="statAdmissions">0</div>
+          <div class="stat-label">Applications</div>
+        </div>
         <div class="stat-card">
           <div class="stat-number" id="statNews">0</div>
           <div class="stat-label">News Articles</div>
@@ -388,6 +446,29 @@
         <div class="stat-card">
           <div class="stat-number" id="statSubscribers">0</div>
           <div class="stat-label">Subscribers</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADMISSIONS TAB -->
+    <div class="tab-content" id="tab-admissions">
+      <div class="card">
+        <h3><i class="fa fa-graduation-cap"></i> Admission Applications / പ്രവേശന അപേക്ഷകൾ</h3>
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Photo</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Place</th>
+                <th>Religious Ed.</th>
+                <th>Secular Ed.</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admissionsTableBody"></tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -552,6 +633,15 @@
     </div>
   </div>
 
+  <!-- ADMISSION DETAIL MODAL -->
+  <div class="modal" id="admissionModal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeAdmissionModal()">&times;</span>
+      <h3 style="border-bottom: 2px solid var(--accent); padding-bottom: 10px; margin-bottom: 20px; font-family: 'Outfit', sans-serif;"><i class="fa fa-graduation-cap text-success mr-2"></i> Biodata Details / പൂർണ്ണ വിവരങ്ങൾ</h3>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
   <script>
     // ── LOGIN / LOGOUT ─────────────────────────────
     function doLogin() {
@@ -599,12 +689,87 @@
 
     // ── LOAD ALL DATA ──────────────────────────────
     function loadAll() {
+      loadAdmissions();
       loadNewsAdmin();
       loadGalleryAdmin();
       loadContacts();
       loadSubscribers();
       loadSlidersAdmin();
       loadSectionEditor();
+    }
+
+    // ── ADMISSIONS ─────────────────────────────────
+    var currentAdmissions = [];
+    function loadAdmissions() {
+      fetch('/api/admissions')
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          currentAdmissions = data;
+          document.getElementById('statAdmissions').textContent = data.length;
+          var html = '';
+          data.forEach(function(item) {
+            var photoHtml = item.imageUrl ? '<img src="' + item.imageUrl + '" style="width:40px;height:40px;object-fit:cover;border-radius:50%;">' : '-';
+            html += '<tr>' +
+              '<td>' + photoHtml + '</td>' +
+              '<td>' + item.name + '</td>' +
+              '<td>' + item.phone + '</td>' +
+              '<td>' + item.place + '</td>' +
+              '<td>' + item.educationReligious + '</td>' +
+              '<td>' + item.educationSecular + '</td>' +
+              '<td>' +
+              '  <button class="btn btn-sm" style="background:var(--accent);color:#000;margin-right:5px;" onclick="viewAdmission(\'' + item._id + '\')"><i class="fa fa-eye"></i> View</button>' +
+              '  <button class="btn btn-danger btn-sm" onclick="deleteItem(\'admissions\',\'' + item._id + '\')"><i class="fa fa-trash"></i></button>' +
+              '</td>' +
+              '</tr>';
+          });
+          document.getElementById('admissionsTableBody').innerHTML = html || '<tr><td colspan="7" style="text-align:center;color:var(--text-muted)">No admission applications yet</td></tr>';
+        });
+    }
+
+    function viewAdmission(id) {
+      var item = currentAdmissions.find(function(a) { return a._id === id; });
+      if (!item) return;
+      var html = '<div style="display:flex; gap:20px; align-items:center; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:20px; margin-bottom:20px;">';
+      if (item.imageUrl) {
+        html += '  <img src="' + item.imageUrl + '" style="width:120px; height:120px; object-fit:cover; border-radius:12px; border:2px solid var(--accent);">';
+      }
+      html += '  <div>';
+      html += '    <h3 style="margin:0; font-family:\'Outfit\',sans-serif; color:var(--accent);">' + item.name + '</h3>';
+      html += '    <p style="margin:5px 0 0; color:var(--text-muted);"><i class="fa fa-calendar"></i> DOB: ' + item.dob + ' | Blood: ' + item.bloodGroup + '</p>';
+      html += '  </div>';
+      html += '</div>';
+      
+      html += '<div class="modal-grid">';
+      html += '  <div><label>Father\'s Name / പിതാവ്</label><span>' + item.fatherName + '</span></div>';
+      html += '  <div><label>Mother\'s Name / മാതാവ്</label><span>' + item.motherName + '</span></div>';
+      html += '  <div><label>Phone / ഫോൺ</label><span>' + item.phone + '</span></div>';
+      html += '  <div><label>Home Phone / വീട്ടിലെ ഫോൺ</label><span>' + (item.homePhone || '-') + '</span></div>';
+      html += '  <div><label>House Name / വീട്ടു പേര്</label><span>' + item.houseName + '</span></div>';
+      html += '  <div><label>Place / സ്ഥലം</label><span>' + item.place + '</span></div>';
+      html += '  <div><label>Post Office / പോസ്റ്റ്</label><span>' + item.postOffice + '</span></div>';
+      html += '  <div><label>District / ജില്ല</label><span>' + item.district + '</span></div>';
+      html += '  <div><label>Pincode / പിൻകോഡ്</label><span>' + item.pincode + '</span></div>';
+      html += '  <div><label>Religious Ed. / മതം</label><span>' + item.educationReligious + '</span></div>';
+      html += '  <div><label>Secular Ed. / ഭൗതികം</label><span>' + item.educationSecular + '</span></div>';
+      html += '  <div><label>Guardian / രക്ഷിതാവ്</label><span>' + item.guardianName + ' (' + item.relationship + ')</span></div>';
+      html += '  <div><label>Guardian Phone / ഫോൺ</label><span>' + item.guardianPhone + '</span></div>';
+      html += '  <div><label>Application Date</label><span>' + new Date(item.createdAt).toLocaleString('en-IN') + '</span></div>';
+      html += '</div>';
+
+      document.getElementById('modalBody').innerHTML = html;
+      document.getElementById('admissionModal').style.display = 'block';
+    }
+
+    function closeAdmissionModal() {
+      document.getElementById('admissionModal').style.display = 'none';
+    }
+
+    // Close modal when clicking outside content
+    window.onclick = function(event) {
+      var modal = document.getElementById('admissionModal');
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
     }
 
     // ── NEWS ───────────────────────────────────────
