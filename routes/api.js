@@ -16,6 +16,10 @@ const { upload, uploadLocal, isCloudinaryConfigured, cloudinary } = require('../
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '1014169622543-placeholder.apps.googleusercontent.com';
 const client = new OAuth2Client(CLIENT_ID);
 
+// GET /api/auth/google/client-id
+router.get('/auth/google/client-id', (req, res) => {
+  res.json({ clientId: CLIENT_ID });
+});
 
 // ── Helper: get the right upload middleware ────────────────
 function getUploader() {
@@ -389,7 +393,17 @@ router.put('/sections/:id', async (req, res) => {
     );
     res.json({ success: true, data: section });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// DELETE /api/sections/:id — Delete a section
+router.delete('/sections/:id', async (req, res) => {
+  try {
+    await SectionContent.findOneAndDelete({ sectionId: req.params.id });
+    res.json({ success: true, message: 'Section hidden successfully' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 });
 
@@ -442,45 +456,98 @@ router.get('/admissions', async (req, res) => {
   }
 });
 
-// POST /api/admission — Submit a new admission application
-router.post('/admission', (req, res) => {
-  const uploader = getUploader();
-  uploader.single('photo')(req, res, async (uploadErr) => {
-    if (uploadErr) {
-      console.error('Photo upload error:', uploadErr);
-      return res.status(500).json({ success: false, message: 'Photo upload failed' });
+// POST /api/admission — Submit simplified admission (5 fields only)
+router.post('/admission', async (req, res) => {
+  try {
+    const { name, dob, fatherName, motherName, phone } = req.body;
+    if (!name || !fatherName || !motherName || !phone) {
+      return res.status(400).json({ success: false, message: 'Name, Father Name, Mother Name, and Phone are required' });
     }
+    const admission = new Admission({ name, dob: dob || '', fatherName, motherName, phone });
+    await admission.save();
+    res.json({ success: true, message: 'Admission application submitted successfully!' });
+  } catch (err) {
+    console.error('Admission save error:', err);
+    res.status(500).json({ success: false, message: 'Failed to submit admission application' });
+  }
+});
+
+// GET /api/settings/poster — Get admission poster URL
+router.get('/settings/poster', async (req, res) => {
+  try {
+    let setting = await Settings.findOne({ key: 'admissionPosterUrl' });
+    res.json({ posterUrl: setting ? setting.value : null });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// POST /api/settings/poster — Upload admission poster
+router.post('/settings/poster', (req, res) => {
+  const uploader = getUploader();
+  uploader.single('poster')(req, res, async (uploadErr) => {
+    if (uploadErr) return res.status(500).json({ success: false, message: 'Poster upload failed' });
     try {
-      const {
-        name, fatherName, phone, motherName, houseName, homePhone,
-        place, postOffice, district, pincode, dob, bloodGroup,
-        educationReligious, educationSecular, guardianName, relationship, guardianPhone
-      } = req.body;
-
-      if (!name || !fatherName || !phone || !motherName || !houseName ||
-          !place || !postOffice || !district || !pincode || !dob || !bloodGroup ||
-          !educationReligious || !educationSecular || !guardianName || !relationship || !guardianPhone) {
-        return res.status(400).json({ success: false, message: 'All required fields must be completed' });
+      if (!req.file) return res.status(400).json({ success: false, message: 'No file uploaded' });
+      const posterUrl = isCloudinaryConfigured() ? req.file.path : '/img/uploads/' + req.file.filename;
+      let setting = await Settings.findOne({ key: 'admissionPosterUrl' });
+      if (!setting) {
+        setting = new Settings({ key: 'admissionPosterUrl', value: posterUrl });
+      } else {
+        setting.value = posterUrl;
       }
-
-      const admissionData = {
-        name, fatherName, phone, motherName, houseName, homePhone,
-        place, postOffice, district, pincode, dob, bloodGroup,
-        educationReligious, educationSecular, guardianName, relationship, guardianPhone
-      };
-
-      if (req.file) {
-        admissionData.imageUrl = isCloudinaryConfigured() ? req.file.path : '/img/uploads/' + req.file.filename;
-      }
-
-      const admission = new Admission(admissionData);
-      await admission.save();
-      res.json({ success: true, message: 'Admission application submitted successfully!' });
+      await setting.save();
+      res.json({ success: true, posterUrl });
     } catch (err) {
-      console.error('Admission save error:', err);
-      res.status(500).json({ success: false, message: 'Failed to submit admission application' });
+      res.status(500).json({ success: false, message: err.message });
     }
   });
+});
+
+// GET /api/settings/gallery-categories — Get custom categories
+router.get('/settings/gallery-categories', async (req, res) => {
+  try {
+    let setting = await Settings.findOne({ key: 'galleryCategories' });
+    if (!setting) {
+      setting = new Settings({ key: 'galleryCategories', value: ['Programme', 'Collections', 'Design'] });
+      await setting.save();
+    }
+    res.json({ categories: setting.value });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// POST /api/settings/gallery-categories — Add a category
+router.post('/settings/gallery-categories', async (req, res) => {
+  try {
+    const { category } = req.body;
+    if (!category) return res.status(400).json({ success: false, message: 'Category name required' });
+    let setting = await Settings.findOne({ key: 'galleryCategories' });
+    if (!setting) {
+      setting = new Settings({ key: 'galleryCategories', value: ['Programme', 'Collections', 'Design'] });
+    }
+    if (!setting.value.includes(category)) setting.value.push(category);
+    setting.markModified('value');
+    await setting.save();
+    res.json({ success: true, categories: setting.value });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// DELETE /api/settings/gallery-categories/:name — Remove a category
+router.delete('/settings/gallery-categories/:name', async (req, res) => {
+  try {
+    let setting = await Settings.findOne({ key: 'galleryCategories' });
+    if (!setting) return res.status(404).json({ message: 'Not found' });
+    setting.value = setting.value.filter(c => c !== req.params.name);
+    setting.markModified('value');
+    await setting.save();
+    res.json({ success: true, categories: setting.value });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
 // DELETE /api/admissions/:id — Delete an admission application
@@ -511,6 +578,38 @@ router.post('/admin/login', (req, res) => {
   } else {
     res.status(401).json({ success: false, message: 'Invalid password' });
   }
+});
+
+// GET /api/settings/burda — Get Burda Team image URL
+router.get('/settings/burda', async (req, res) => {
+  try {
+    let setting = await Settings.findOne({ key: 'burdaTeamImageUrl' });
+    res.json({ imageUrl: setting ? setting.value : null });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// POST /api/settings/burda — Upload Burda Team image
+router.post('/settings/burda', (req, res) => {
+  const uploader = getUploader();
+  uploader.single('burda')(req, res, async (uploadErr) => {
+    if (uploadErr) return res.status(500).json({ success: false, message: 'Upload failed' });
+    try {
+      if (!req.file) return res.status(400).json({ success: false, message: 'No file uploaded' });
+      const imageUrl = isCloudinaryConfigured() ? req.file.path : '/img/uploads/' + req.file.filename;
+      let setting = await Settings.findOne({ key: 'burdaTeamImageUrl' });
+      if (!setting) {
+        setting = new Settings({ key: 'burdaTeamImageUrl', value: imageUrl });
+      } else {
+        setting.value = imageUrl;
+      }
+      await setting.save();
+      res.json({ success: true, imageUrl });
+    } catch (err) {
+      res.status(500).json({ success: false, message: err.message });
+    }
+  });
 });
 
 module.exports = router;

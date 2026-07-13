@@ -66,19 +66,20 @@
         <li><a href="/admission" class="nav-btn-admission">Admission</a></li>
         <li><a href="/about">About Us</a></li>
         <li><a href="/contact">Contact Us</a></li>
-        <li id="authContainer">
-          <div id="g_id_onload"
-             data-client_id="1014169622543-placeholder.apps.googleusercontent.com"
-             data-context="signin"
-             data-ux_mode="popup"
-             data-callback="handleCredentialResponse"
-             data-auto_prompt="false">
-          </div>
-          <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="outline" data-text="signin_with" data-size="medium" data-logo_alignment="left"></div>
-        </li>
+        <li id="authContainer" style="display:flex; align-items:center; color:#fff; font-size:0.9rem; padding-left:10px;"></li>
       </ul>
     </div>
   </header>
+
+  <!-- Login Modal Popup -->
+  <div id="loginPopupModal" style="display:none; position:fixed; inset:0; z-index:10000; background:rgba(0,0,0,0.6); align-items:center; justify-content:center;" onclick="if(event.target===this)this.style.display='none';">
+    <div style="background:#fff; border-radius:16px; padding:30px; max-width:360px; width:100%; text-align:center; box-shadow:0 10px 40px rgba(0,0,0,0.25);">
+      <h5 style="color:#0a3d1f; font-weight:700; margin-bottom:15px; font-family:'Outfit',sans-serif;">Authentication Required</h5>
+      <p style="font-size:0.9rem; color:#555; margin-bottom:20px;">Please sign in with your Google account to like and comment on our gallery items.</p>
+      <div id="googleBtnContainer" style="display:inline-block; margin-bottom:10px;"></div>
+      <button onclick="document.getElementById('loginPopupModal').style.display='none';" class="btn btn-outline-secondary btn-sm w-100" style="margin-top:10px; border-radius:8px;">Cancel</button>
+    </div>
+  </div>
 
   <!-- Page Hero Banner -->
   <section class="page-hero">
@@ -299,6 +300,37 @@
 
   <script>
     let currentUser = null;
+    let googleClientId = '';
+
+    // Initialize dynamic login from backend
+    fetch('/api/auth/google/client-id')
+      .then(res => res.json())
+      .then(data => {
+        googleClientId = data.clientId;
+        // Init Google auth client
+        google.accounts.id.initialize({
+          client_id: googleClientId,
+          callback: handleCredentialResponse
+        });
+        
+        // Render login button inside modal
+        google.accounts.id.renderButton(
+          document.getElementById('googleBtnContainer'),
+          { theme: 'outline', size: 'large', text: 'signin_with' }
+        );
+
+        // Check if user is already logged in (session/cookie-based simulation)
+        var savedUser = sessionStorage.getItem('bud_user');
+        if (savedUser) {
+           currentUser = JSON.parse(savedUser);
+           showUserInNavbar();
+        }
+      });
+
+    function showUserInNavbar() {
+      var authLi = document.getElementById('authContainer');
+      authLi.innerHTML = '<span style="color:#fff; font-size:0.9rem; display:flex; align-items:center; gap:6px;"><img src="' + currentUser.picture + '" style="width:24px; border-radius:50%;">' + currentUser.name.split(' ')[0] + ' <button onclick="logout()" style="background:none;border:none;color:var(--accent);font-size:0.8rem;cursor:pointer;padding:0;">Logout</button></span>';
+    }
 
     // Google Auth Callback
     function handleCredentialResponse(response) {
@@ -311,8 +343,9 @@
       .then(data => {
         if (data.success) {
           currentUser = data.user;
-          var authLi = document.getElementById('authContainer');
-          authLi.innerHTML = '<span style="color:#fff; font-size:0.9rem;"><img src="' + currentUser.picture + '" style="width:24px; border-radius:50%; margin-right:5px;">' + currentUser.name + ' <button onclick="logout()" style="background:none;border:none;color:var(--accent);font-size:0.8rem;cursor:pointer;">Logout</button></span>';
+          sessionStorage.setItem('bud_user', JSON.stringify(data.user));
+          showUserInNavbar();
+          document.getElementById('loginPopupModal').style.display = 'none';
         }
       })
       .catch(err => console.error('Auth error', err));
@@ -320,12 +353,21 @@
 
     function logout() {
       currentUser = null;
+      sessionStorage.removeItem('bud_user');
       location.reload();
+    }
+
+    function triggerLoginPopup() {
+      document.getElementById('loginPopupModal').style.display = 'flex';
+      google.accounts.id.prompt(); // also trigger native prompt overlay
     }
 
     // Like Item
     window.toggleLike = function(id) {
-      if (!currentUser) return alert('Please login to like');
+      if (!currentUser) {
+         triggerLoginPopup();
+         return;
+      }
       fetch('/api/gallery/' + id + '/like', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -346,7 +388,10 @@
 
     // Add Comment
     window.addComment = function(id) {
-      if (!currentUser) return alert('Please login to comment');
+      if (!currentUser) {
+         triggerLoginPopup();
+         return;
+      }
       var input = document.getElementById('comment-input-' + id);
       var text = input.value.trim();
       if (!text) return;

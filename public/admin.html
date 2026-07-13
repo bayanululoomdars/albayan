@@ -452,27 +452,45 @@
 
     <!-- ADMISSIONS TAB -->
     <div class="tab-content" id="tab-admissions">
-      <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
+      <div class="card" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
          <h3 style="border-bottom:none; margin-bottom:0;"><i class="fa fa-cogs"></i> Admission Settings</h3>
-         <div>
-            <label class="switch" style="display:flex; align-items:center; cursor:pointer;">
-               <span style="margin-right:10px; font-weight:bold;">Admissions Open</span>
-               <input type="checkbox" id="admissionToggle" onchange="toggleAdmission(this.checked)" style="width:auto;">
+         <div style="display:flex; align-items:center; gap:20px; flex-wrap:wrap;">
+            <label style="display:flex; align-items:center; cursor:pointer; gap:10px; font-weight:bold;">
+               Admissions Open
+               <input type="checkbox" id="admissionToggle" onchange="toggleAdmission(this.checked)" style="width:auto; cursor:pointer;">
             </label>
          </div>
       </div>
+
+      <!-- Admission Poster Upload -->
+      <div class="card">
+        <h3><i class="fa fa-image"></i> Admission Poster</h3>
+        <div style="display:flex; align-items:flex-start; gap:20px; flex-wrap:wrap;">
+          <img id="currentPosterPreview" src="" alt="Poster Preview" style="width:150px; border-radius:10px; display:none; border:2px solid var(--accent);">
+          <div style="flex:1;">
+            <form id="posterUploadForm" enctype="multipart/form-data">
+              <div class="form-group">
+                <label>Upload Admission Poster Image</label>
+                <input type="file" id="posterFile" accept="image/*" required>
+              </div>
+              <button type="submit" class="btn" style="max-width:200px;"><i class="fa fa-upload"></i> Upload Poster</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
       <div class="card">
         <h3><i class="fa fa-graduation-cap"></i> Admission Applications / പ്രവേശന അപേക്ഷകൾ</h3>
         <div style="overflow-x:auto;">
           <table class="data-table">
             <thead>
               <tr>
-                <th>Photo</th>
                 <th>Name</th>
+                <th>Father</th>
+                <th>Mother</th>
                 <th>Phone</th>
-                <th>Place</th>
-                <th>Religious Ed.</th>
-                <th>Secular Ed.</th>
+                <th>DOB</th>
+                <th>Applied</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -647,7 +665,10 @@
             <label>Read More Link</label>
             <input type="text" id="sectionLink" placeholder="e.g., https://example.com or #about" required>
           </div>
-          <button type="submit" class="btn" style="max-width:200px;"><i class="fa fa-save"></i> Save Section</button>
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:20px;">
+            <button type="submit" class="btn" style="max-width:200px; margin:0;"><i class="fa fa-save"></i> Save Section</button>
+            <button type="button" class="btn" style="max-width:250px; background:#dc3545; margin:0;" onclick="deleteHomepageSection()"><i class="fa fa-eye-slash"></i> Hide / Delete Section</button>
+          </div>
         </form>
       </div>
     </div>
@@ -1045,6 +1066,23 @@
         }
       });
     });
+
+    function deleteHomepageSection() {
+      const selectedId = document.getElementById('sectionSelector').value;
+      if (!confirm('Are you sure you want to hide/delete this section from the homepage?')) return;
+      fetch('/api/sections/' + selectedId, {
+        method: 'DELETE'
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(res) {
+        if (res.success) {
+          alert('Section hidden successfully!');
+          loadSectionEditor();
+        } else {
+          alert(res.message);
+        }
+      });
+    }
   </script>
 </body>
 </html>

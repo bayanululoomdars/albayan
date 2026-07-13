@@ -68,44 +68,8 @@
   <section class="news-section py-5 bg-light">
     <div class="container">
       
-      <!-- Static News (loaded instantly) -->
-      <div class="row" id="staticNews">
-        <div class="col-md-6 col-lg-4 mb-4">
-          <div class="news-card-dynamic shadow-sm h-100 bg-white">
-            <img src="img/ANUSMARANA POSTER.jpg" alt="അനുസ്മരണ സമ്മേളനം">
-            <div class="card-body">
-              <div class="card-date mb-2"><i class="fa fa-calendar mr-1"></i> Special Event</div>
-              <h4 class="font-weight-bold" style="font-family: 'Apple cards Anugraha', sans-serif;">അനുസ്മരണ സമ്മേളനം</h4>
-              <p class="description small">മുട്ടിച്ചിറ ബായാനുല്‍ ഉലൂം ദര്‍സ് മുദരിസും വിദ്യാര്‍ത്ഥിയുമായ സുഹൈല്‍ ബാഖവിയുടെയും വിദ്യാര്‍ത്ഥികളായിരുന്ന ഫര്‍സാദ് മുസ്ലിയാരുടെയും മുസ്ഥഫ മുസ്ലിയാരുടെയും അനുസ്മരണ സമ്മേളനം</p>
-            </div>
-          </div>
-        </div>
-        
-        <div class="col-md-6 col-lg-4 mb-4">
-          <div class="news-card-dynamic shadow-sm h-100 bg-white">
-            <img src="img/fest.jpg" alt="ജാമിഅഃ ദർസ് ഫെസ്റ്റ്">
-            <div class="card-body">
-              <div class="card-date mb-2"><i class="fa fa-trophy mr-1"></i> Achievement</div>
-              <h4 class="font-weight-bold" style="font-family: 'Apple cards Anugraha', sans-serif;">ജാമിഅഃ ദർസ് ഫെസ്റ്റ്</h4>
-              <p class="description small">ജാമിഅ: നൂരിയ്യ 2022 സംസ്ഥാന തല ദർസ് ഫെസ്റ്റിൽ <strong>Second Runner Up</strong> നേടി മുട്ടിച്ചിറ ദർസ്</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6 col-lg-4 mb-4">
-          <div class="news-card-dynamic shadow-sm h-100 bg-white">
-            <img src="img/maxresdefault.jpg" alt="മീലാദ് മെഹ്റജാൻ റബീഅ് ഫെസ്റ്റ്">
-            <div class="card-body">
-              <div class="card-date mb-2"><i class="fa fa-star mr-1"></i> Festival</div>
-              <h4 class="font-weight-bold" style="font-family: 'Apple cards Anugraha', sans-serif;">മീലാദ് മെഹ്റജാൻ റബീഅ് ഫെസ്റ്റ്</h4>
-              <p class="description small">നബിദിനത്തോടനുബധിച്ച് നടത്തിയ റബീഅ് ഫെസ്റ്റ് മത്സരത്തില്‍ ചാമ്പ്യമാര്‍ കോര്‍ദോവഃ</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <!-- Dynamic News from MongoDB (loaded via api) -->
-      <div class="row" id="dynamicNews" style="display:none;"></div>
+      <div class="row" id="dynamicNews"></div>
       
     </div>
   </section>
@@ -197,15 +161,13 @@
               html += '    </div>';
               html += '  </div>';
               html += '</div>';
-            });
-            document.getElementById('staticNews').style.display = 'none';
             var dynamicDiv = document.getElementById('dynamicNews');
             dynamicDiv.innerHTML = html;
             dynamicDiv.style.display = 'flex';
           }
         })
         .catch(function(err) {
-          console.warn('News loading issue: using static fallback cards', err);
+          console.warn('News loading issue:', err);
         });
     }
 
