@@ -1135,7 +1135,7 @@
               '<td>' + appliedDate + '</td>' +
               '<td style="white-space:nowrap;">' +
               '  <button class="btn btn-sm" style="background:var(--accent);color:#000;margin-right:5px;" onclick="viewAdmission(\'' + item._id + '\')"><i class="fa fa-eye"></i> View</button>' +
-              '  <button class="btn btn-sm" style="background:#1a6b3a;color:#fff;margin-right:5px;" onclick="downloadAdmissionPDF(\'' + item._id + '\')"><i class="fa fa-file-pdf-o"></i> PDF</button>' +
+              '  <button class="btn btn-sm" style="background:#1a6b3a;color:#fff;margin-right:5px;" onclick="printAdmission(\'' + item._id + '\')"><i class="fa fa-print"></i> Print</button>' +
               '  <button class="btn btn-danger btn-sm" onclick="deleteItem(\'admissions\',\'' + item._id + '\')"><i class="fa fa-trash"></i></button>' +
               '</td>' +
               '</tr>';
@@ -1148,7 +1148,7 @@
       var item = currentAdmissions.find(function(a) { return a._id === id; });
       if (!item) return;
 
-      // Populate print template
+      // Populate print template (kept for backward compatibility)
       document.getElementById('pdf_name').innerText = item.name || '';
       document.getElementById('pdf_fatherName').innerText = item.fatherName || '';
       document.getElementById('pdf_phone').innerText = item.phone || '';
@@ -1193,8 +1193,64 @@
         jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
       };
 
-      // Generate PDF
+      // Generate PDF (kept for backward compatibility)
       html2pdf().set(opt).from(element).save();
+    }
+
+    // New Print function – uses the same hidden template and triggers browser print dialog
+    function printAdmission(id) {
+      var item = currentAdmissions.find(function(a) { return a._id === id; });
+      if (!item) return;
+
+      // Populate the same hidden template used for PDF
+      document.getElementById('pdf_name').innerText = item.name || '';
+      document.getElementById('pdf_fatherName').innerText = item.fatherName || '';
+      document.getElementById('pdf_phone').innerText = item.phone || '';
+      document.getElementById('pdf_motherName').innerText = item.motherName || '';
+      document.getElementById('pdf_dob').innerText = item.dob || '';
+      document.getElementById('pdf_houseName').innerText = item.houseName || '______________________';
+      document.getElementById('pdf_homePhone').innerText = item.homePhone || '______________________';
+      document.getElementById('pdf_place').innerText = item.place || '______________________';
+      document.getElementById('pdf_postOffice').innerText = item.postOffice || '______________________';
+      document.getElementById('pdf_district').innerText = item.district || '______________________';
+      document.getElementById('pdf_pincode').innerText = item.pincode || '______________________';
+      document.getElementById('pdf_bloodGroup').innerText = item.bloodGroup || '______________________';
+      document.getElementById('pdf_eduRel').innerText = item.educationReligious || '______________________';
+      document.getElementById('pdf_eduSec').innerText = item.educationSecular || '______________________';
+      document.getElementById('pdf_guardianName').innerText = item.guardianName || '______________________';
+      document.getElementById('pdf_relationship').innerText = item.relationship || '______________________';
+      document.getElementById('pdf_guardianPhone').innerText = item.guardianPhone || '______________________';
+      document.getElementById('pdf_date').innerText = new Date(item.createdAt).toLocaleDateString('en-IN');
+      document.getElementById('pdf_signature').innerText = item.name.split(' ')[0] || '';
+
+      // Photo handling
+      var photoLabel = document.getElementById('pdfPhotoLabel');
+      var photoImg = document.getElementById('pdfPhotoImg');
+      if (item.imageUrl) {
+        photoLabel.style.display = 'none';
+        photoImg.src = item.imageUrl;
+        photoImg.style.display = 'block';
+      } else {
+        photoLabel.style.display = 'block';
+        photoImg.style.display = 'none';
+        photoImg.src = '';
+      }
+
+      // Open print dialog – the hidden template is now filled, so we can print it
+      var printWindow = window.open('', '_blank');
+      printWindow.document.write('<html><head><title>Print Admission</title>');
+      printWindow.document.write('<style>body{margin:0;padding:0;font-family:Arial,Helvetica,sans-serif;}</style>');
+      printWindow.document.write('</head><body>');
+      printWindow.document.write(document.getElementById('pdfPrintTemplate').outerHTML);
+      printWindow.document.write('</body></html>');
+      printWindow.document.close();
+      printWindow.focus();
+      // Wait for content to load before printing
+      printWindow.onload = function() {
+        printWindow.print();
+        // Close after printing
+        setTimeout(function(){ printWindow.close(); }, 500);
+      };
     }
 
     function viewAdmission(id) {
