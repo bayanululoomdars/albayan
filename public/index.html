@@ -78,20 +78,6 @@
     </div>
   </header><!-- #header -->
 
-  <!-- News Ticker Bar -->
-  <div id="newsTicker" style="display:none; background: linear-gradient(90deg, #0a3d1f, #1a6b3a); color:#fff; padding:8px 0; position:fixed; top:70px; left:0; right:0; z-index:999; overflow:hidden; border-bottom:2px solid #f7c948;">
-    <div style="display:flex; align-items:center; gap:0;">
-      <span style="background:#f7c948; color:#000; font-weight:700; padding:4px 14px; font-size:0.82rem; white-space:nowrap; font-family:'Outfit',sans-serif; letter-spacing:0.5px;"><i class="fa fa-bell" style="margin-right:5px;"></i>NEWS</span>
-      <div style="overflow:hidden; flex:1;">
-        <div id="tickerContent" style="display:inline-block; white-space:nowrap; animation:ticker 30s linear infinite; font-size:0.88rem; padding-left:100%;"></div>
-      </div>
-    </div>
-  </div>
-  <style>
-    @keyframes ticker { 0% { transform:translateX(0); } 100% { transform:translateX(-100%); } }
-    body.has-ticker #main, body.has-ticker #intro { margin-top: 36px; }
-  </style>
-
   <!-- Toast Notification Container -->
   <div class="toast-container" id="toastContainer"></div>
 
@@ -698,16 +684,7 @@
         .then(function(res) { return res.json(); })
         .then(function(news) {
           if (news.length > 0) {
-            // Show ticker bar
-            var ticker = document.getElementById('newsTicker');
-            var tickerContent = document.getElementById('tickerContent');
-            var tickerText = '';
-            news.forEach(function(item, i) {
-              tickerText += (i > 0 ? '\u2003\u2003✶\u2003\u2003' : '') + item.title;
-            });
-            tickerContent.textContent = tickerText;
-            ticker.style.display = 'block';
-            document.body.classList.add('has-ticker');
+            // Ticker bar hidden intentionally
 
             // Show dynamic cards (hide static)
             var container = document.getElementById('dynamicNews');
