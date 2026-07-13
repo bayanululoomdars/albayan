@@ -93,7 +93,7 @@
       <div class="carousel-inner" id="sliderInner">
         <!-- Default static image -->
         <div class="carousel-item active">
-          <img src="img/palli.jpg" alt="Muttichira Juma Masjid" class="img-fluid">
+          <img src="img/palli.jpg" alt="Muttichira Juma Masjid" class="img-fluid" style="width:100%; height:100vh; object-fit:cover;">
         </div>
       </div>
       <a class="carousel-control-prev" href="#demo" data-slide="prev">
@@ -376,25 +376,32 @@
       </div>
     </section>
 
-    <!-- Admission Section (Split Layout + Modal) -->
-    <section id="admission" style="background:#f8fff8; padding: 60px 0;">
+    <!--==========================
+      Admission Section
+    ============================-->
+    <section id="admission">
       <div class="container">
         <header class="section-header" id="admissionSecHeader">
           <h3>Admission</h3>
-          <p>Join Muttichira Bayanul Uloom Dars and begin your journey in Islamic education</p>
+          <p>Join our institution for quality Islamic education</p>
         </header>
         <div class="row align-items-center" style="margin-top:30px;">
-          <!-- Left: Poster -->
-
+          <!-- Left: Poster Image (admin-uploaded) -->
+          <div class="col-lg-5 col-md-12 mb-4 mb-lg-0 text-center">
+            <a href="/admission" style="display:inline-block; position:relative;">
+              <img id="admissionPosterImg" src="img/new_logo.png" alt="Admission Poster" style="width:100%; max-width:380px; border-radius:16px; box-shadow:0 8px 40px rgba(0,80,30,0.18); border:3px solid #1a6b3a; transition:transform 0.3s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+              <div style="position:absolute; bottom:16px; left:50%; transform:translateX(-50%); background:rgba(26,107,58,0.95); color:#fff; padding:8px 22px; border-radius:30px; font-size:0.9rem; font-weight:600; white-space:nowrap;"><i class="fa fa-edit" style="margin-right:6px;"></i>Apply Now</div>
+            </a>
+          </div>
           <!-- Right: Details -->
           <div class="col-lg-7 col-md-12 text-center text-lg-left">
-            <h2 style="font-family:'Outfit',sans-serif; font-weight:800; font-size:2.2rem; line-height:1.5; color:#000; margin-bottom:30px; padding-left:15px; font-weight:700;">
+            <h2 style="font-family:'Outfit',sans-serif; font-weight:700; font-size:2.2rem; line-height:1.5; color:#fff; margin-bottom:30px; padding-left:15px;">
               2026 പുതിയ അധ്യയന വർഷത്തേക്കുള്ള അഡ്മിഷൻ തുടരുന്നു...
             </h2>
             <div style="margin-top:40px; padding-left:15px;">
-              <button onclick="openAdmissionModal()" class="btn-admission" style="background:#ffff00; color:#000; border:none; padding:15px 35px; border-radius:50px; font-family:'Outfit',sans-serif; font-size:1.1rem; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; cursor:pointer; box-shadow:0 6px 20px rgba(255,255,0,0.4); transition:all 0.3s; display:inline-block;" onmouseover="this.style.transform='scale(1.05)';this.style.boxShadow='0 10px 25px rgba(255,255,0,0.6)'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 6px 20px rgba(255,255,0,0.4)'">
-                APPLY FOR ADMISSION
-              </button>
+              <a href="/admission" class="btn-admission" style="display:inline-flex; align-items:center; gap:8px;">
+                <i class="fa fa-edit"></i> Apply for Admission
+              </a>
             </div>
           </div>
         </div>
@@ -842,7 +849,7 @@
               if (item.mediaType === 'video') {
                 innerHtml += '<video src="'+item.mediaUrl+'" autoplay loop muted playsinline style="width:100%; height:100vh; object-fit:cover;"></video>';
               } else {
-                innerHtml += '<img src="'+item.mediaUrl+'" alt="AL BAYAN" class="img-fluid">';
+                innerHtml += '<img src="'+item.mediaUrl+'" alt="AL BAYAN" class="img-fluid" style="width:100%; height:100vh; object-fit:cover;">';
               }
               innerHtml += '</div>';
             });
@@ -1060,7 +1067,8 @@
 
       // Load admission poster
       fetch('/api/settings/poster').then(r=>r.json()).then(d=>{
-        if (d.posterUrl) document.getElementById('admissionPosterImg').src = d.posterUrl;
+        var posterEl = document.getElementById('admissionPosterImg');
+        if (d.posterUrl && posterEl) posterEl.src = d.posterUrl;
       }).catch(()=>{});
 
       // Load Burda Team image
