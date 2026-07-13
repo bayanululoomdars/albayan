@@ -6,6 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta content="AL BAYAN, Bayanul Uloom, Dars, Muttichira, Gallery" name="keywords">
   <meta content="Explore the media gallery of Muttichira Bayanul Uloom Dars" name="description">
+  <meta property="og:title" content="Gallery | Bayanul Uloom Dars" />
+  <meta property="og:description" content="Explore the media gallery of Muttichira Bayanul Uloom Dars" />
+  <meta property="og:image" content="img/new_logo.png" />
 
   <!-- Favicons -->
   <link rel="icon" type="image/png" sizes="32x32" href="img/favicon.png">
@@ -25,6 +28,19 @@
   <!-- Main Stylesheet Files -->
   <link href="css/style.css" rel="stylesheet">
   <link href="css/custom.css" rel="stylesheet">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <style>
+    .gallery-actions { display: flex; gap: 10px; margin-top: 10px; }
+    .gallery-actions button { background: none; border: none; color: #fff; font-size: 1.1rem; cursor: pointer; transition: color 0.3s; }
+    .gallery-actions button:hover { color: var(--accent); }
+    .comments-section { display: none; margin-top: 15px; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 8px; max-height: 150px; overflow-y: auto; text-align: left; }
+    .comments-section.open { display: block; }
+    .comment-item { border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px; margin-bottom: 5px; font-size: 0.85rem; color: #eee; }
+    .comment-item strong { color: var(--accent); }
+    .comment-input-group { display: flex; gap: 5px; margin-top: 10px; }
+    .comment-input-group input { flex: 1; padding: 4px 8px; border-radius: 4px; border: none; font-size: 0.85rem; }
+    .comment-input-group button { background: var(--accent); color: #000; border: none; border-radius: 4px; padding: 4px 10px; cursor: pointer; font-size: 0.85rem; font-weight: bold; }
+  </style>
 </head>
 <body>
 
@@ -50,6 +66,16 @@
         <li><a href="/admission" class="nav-btn-admission">Admission</a></li>
         <li><a href="/about">About Us</a></li>
         <li><a href="/contact">Contact Us</a></li>
+        <li id="authContainer">
+          <div id="g_id_onload"
+             data-client_id="1014169622543-placeholder.apps.googleusercontent.com"
+             data-context="signin"
+             data-ux_mode="popup"
+             data-callback="handleCredentialResponse"
+             data-auto_prompt="false">
+          </div>
+          <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="outline" data-text="signin_with" data-size="medium" data-logo_alignment="left"></div>
+        </li>
       </ul>
     </div>
   </header>
@@ -272,6 +298,98 @@
   <script src="lib/lightbox/js/lightbox.min.js"></script>
 
   <script>
+    let currentUser = null;
+
+    // Google Auth Callback
+    function handleCredentialResponse(response) {
+      fetch('/api/auth/google', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: response.credential })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          currentUser = data.user;
+          var authLi = document.getElementById('authContainer');
+          authLi.innerHTML = '<span style="color:#fff; font-size:0.9rem;"><img src="' + currentUser.picture + '" style="width:24px; border-radius:50%; margin-right:5px;">' + currentUser.name + ' <button onclick="logout()" style="background:none;border:none;color:var(--accent);font-size:0.8rem;cursor:pointer;">Logout</button></span>';
+        }
+      })
+      .catch(err => console.error('Auth error', err));
+    }
+
+    function logout() {
+      currentUser = null;
+      location.reload();
+    }
+
+    // Like Item
+    window.toggleLike = function(id) {
+      if (!currentUser) return alert('Please login to like');
+      fetch('/api/gallery/' + id + '/like', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: currentUser._id })
+      })
+      .then(r => r.json())
+      .then(res => {
+        if(res.success) {
+           document.getElementById('like-count-' + id).innerText = res.likes;
+        }
+      });
+    };
+
+    // Toggle Comment Section
+    window.toggleCommentSection = function(id) {
+      document.getElementById('comments-' + id).classList.toggle('open');
+    };
+
+    // Add Comment
+    window.addComment = function(id) {
+      if (!currentUser) return alert('Please login to comment');
+      var input = document.getElementById('comment-input-' + id);
+      var text = input.value.trim();
+      if (!text) return;
+
+      fetch('/api/gallery/' + id + '/comment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: currentUser._id, text: text })
+      })
+      .then(r => r.json())
+      .then(res => {
+        if(res.success) {
+           input.value = '';
+           // Rerender comments
+           renderComments(id, res.comments);
+           document.getElementById('comment-count-' + id).innerText = res.comments.length;
+        }
+      });
+    };
+
+    function renderComments(id, comments) {
+      var list = document.getElementById('comment-list-' + id);
+      var html = '';
+      comments.forEach(c => {
+         var name = c.user ? c.user.name : 'Unknown';
+         html += '<div class="comment-item"><strong>' + name + ':</strong> ' + c.text + '</div>';
+      });
+      list.innerHTML = html;
+    }
+
+    // Share Item
+    window.shareItem = function(id, title) {
+      if (navigator.share) {
+        navigator.share({
+          title: title,
+          text: 'Check out this from Bayanul Uloom Dars!',
+          url: window.location.href
+        }).catch(console.error);
+      } else {
+        alert('Sharing is not supported on this browser.');
+      }
+    };
+
     // Load Dynamic Gallery from MongoDB
     function loadGallery() {
       fetch('/api/gallery')
@@ -284,20 +402,59 @@
               if (item.category === 'Design') catClass = 'filter-web';
               else if (item.category === 'Collections') catClass = 'filter-card';
               
+              var mediaHtml = '';
+              if (item.mediaType === 'video') {
+                if (item.imageUrl.includes('youtube.com') || item.imageUrl.includes('youtu.be')) {
+                  mediaHtml = '<div class="video-placeholder" style="background:#000; height:250px; display:flex; align-items:center; justify-content:center;"><i class="fa fa-youtube-play" style="color:red; font-size:60px;"></i></div>';
+                  // Adding hidden link to video so lightbox doesn't try to open as image if configured wrong, but lightbox has iframe support too.
+                } else {
+                  mediaHtml = '<video src="' + item.imageUrl + '" style="width: 100%; height: 250px; object-fit: cover;" controls></video>';
+                }
+              } else {
+                mediaHtml = '<img src="' + item.imageUrl + '" class="img-fluid" style="height:250px; width:100%; object-fit:cover;" alt="' + item.title + '">';
+              }
+
               html += '<div class="col-lg-4 col-md-6 portfolio-item ' + catClass + '">';
-              html += '  <div class="portfolio-wrap">';
-              html += '    <img src="' + item.imageUrl + '" class="img-fluid" alt="' + item.title + '">';
-              html += '    <div class="portfolio-info">';
-              html += '      <h4><a href="#">' + item.title + '</a></h4>';
-              html += '      <p>' + item.category + '</p>';
-              html += '      <div>';
-              html += '        <a href="' + item.imageUrl + '" class="link-preview" data-lightbox="portfolio" data-title="' + item.title + '" title="Preview"><i class="ion ion-eye"></i></a>';
+              html += '  <div class="portfolio-wrap" style="position:relative; height:100%;">';
+              html += mediaHtml;
+              html += '    <div class="portfolio-info" style="display:flex; flex-direction:column; justify-content:space-between; height:100%;">';
+              html += '      <div><h4><a href="#">' + item.title + '</a></h4><p>' + item.category + '</p></div>';
+              
+              // Actions (Like, Comment, Share)
+              html += '      <div class="gallery-actions">';
+              html += '        <button onclick="toggleLike(\'' + item._id + '\')"><i class="fa fa-thumbs-up"></i> <span id="like-count-' + item._id + '" style="font-size:0.9rem;">' + (item.likes ? item.likes.length : 0) + '</span></button>';
+              html += '        <button onclick="toggleCommentSection(\'' + item._id + '\')"><i class="fa fa-comment"></i> <span id="comment-count-' + item._id + '" style="font-size:0.9rem;">' + (item.comments ? item.comments.length : 0) + '</span></button>';
+              html += '        <button onclick="shareItem(\'' + item._id + '\', \'' + item.title + '\')"><i class="fa fa-share-alt"></i></button>';
+              if (item.mediaType !== 'video') {
+                 html += '        <a href="' + item.imageUrl + '" class="link-preview ml-auto" data-lightbox="portfolio" data-title="' + item.title + '" title="Preview"><i class="ion ion-eye" style="font-size:1.5rem; color:#fff;"></i></a>';
+              } else if (item.imageUrl.includes('youtube')) {
+                 html += '        <a href="' + item.imageUrl + '" target="_blank" class="link-preview ml-auto" title="Watch"><i class="fa fa-external-link" style="font-size:1.5rem; color:#fff;"></i></a>';
+              }
               html += '      </div>';
+              
+              // Comments Section
+              html += '      <div class="comments-section" id="comments-' + item._id + '">';
+              html += '        <div class="comment-list" id="comment-list-' + item._id + '">';
+              if (item.comments) {
+                 item.comments.forEach(c => {
+                    var name = c.user ? c.user.name : 'Unknown';
+                    html += '<div class="comment-item"><strong>' + name + ':</strong> ' + c.text + '</div>';
+                 });
+              }
+              html += '        </div>';
+              html += '        <div class="comment-input-group">';
+              html += '          <input type="text" id="comment-input-' + item._id + '" placeholder="Add a comment...">';
+              html += '          <button onclick="addComment(\'' + item._id + '\')">Post</button>';
+              html += '        </div>';
+              html += '      </div>'; // end comments section
+
               html += '    </div>';
               html += '  </div>';
               html += '</div>';
             });
-            document.getElementById('staticGallery').remove(); // remove static grid
+            var staticGal = document.getElementById('staticGallery');
+            if(staticGal) staticGal.remove();
+            
             var dynamicDiv = document.getElementById('dynamicGallery');
             dynamicDiv.innerHTML = html;
             dynamicDiv.style.display = 'flex';
@@ -315,6 +472,7 @@
     }
 
     function initIsotope() {
+      if(typeof $ === 'undefined' || typeof $.fn.isotope === 'undefined') return;
       var portfolioIsotope = $('.portfolio-container').isotope({
         itemSelector: '.portfolio-item',
         layoutMode: 'fitRows'

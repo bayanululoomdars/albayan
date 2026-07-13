@@ -7,7 +7,15 @@ const Subscriber = require('../models/Subscriber');
 const Slider = require('../models/Slider');
 const SectionContent = require('../models/SectionContent');
 const Admission = require('../models/Admission');
+const User = require('../models/User');
+const Settings = require('../models/Settings');
+const { OAuth2Client } = require('google-auth-library');
 const { upload, uploadLocal, isCloudinaryConfigured, cloudinary } = require('../config/cloudinary');
+
+// Use a placeholder or real Client ID
+const CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '1014169622543-placeholder.apps.googleusercontent.com';
+const client = new OAuth2Client(CLIENT_ID);
+
 
 // ── Helper: get the right upload middleware ────────────────
 function getUploader() {
@@ -148,41 +156,74 @@ router.delete('/news/:id', async (req, res) => {
 });
 
 // ══════════════════════════════════════════════════════════
+//  AUTH
+// ══════════════════════════════════════════════════════════
+
+router.post('/auth/google', async (req, res) => {
+  try {
+    const { token } = req.body;
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: CLIENT_ID,
+    });
+    const payload = ticket.getPayload();
+    const { sub, name, email, picture } = payload;
+
+    let user = await User.findOne({ googleId: sub });
+    if (!user) {
+      user = new User({ googleId: sub, name, email, picture });
+      await user.save();
+    }
+    res.json({ success: true, user });
+  } catch (err) {
+    console.error('Google Auth error:', err);
+    res.status(401).json({ success: false, message: 'Invalid token' });
+  }
+});
+
+// ══════════════════════════════════════════════════════════
 //  GALLERY
 // ══════════════════════════════════════════════════════════
 
 // GET /api/gallery — Get all gallery items
 router.get('/gallery', async (req, res) => {
   try {
-    const items = await GalleryItem.find().sort({ createdAt: -1 });
+    const items = await GalleryItem.find().sort({ createdAt: -1 }).populate('likes', 'name').populate('comments.user', 'name picture');
     res.json(items);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
 
-// POST /api/gallery — Upload a gallery image
+// POST /api/gallery — Upload a gallery image or video
 router.post('/gallery', (req, res) => {
   const uploader = getUploader();
   uploader.single('image')(req, res, async (uploadErr) => {
     if (uploadErr) {
       console.error('Upload error:', uploadErr);
-      return res.status(500).json({ success: false, message: 'Image upload failed' });
+      return res.status(500).json({ success: false, message: 'Media upload failed' });
     }
     try {
-      const { title, category } = req.body;
+      const { title, category, mediaType, mediaUrl } = req.body;
       if (!title || !category) {
         return res.status(400).json({ success: false, message: 'Title and category are required' });
       }
-      if (!req.file) {
-        return res.status(400).json({ success: false, message: 'Image is required' });
-      }
+      
       const itemData = {
         title,
         category,
-        imageUrl: isCloudinaryConfigured() ? req.file.path : '/img/uploads/' + req.file.filename,
-        cloudinaryId: req.file.filename || '',
+        mediaType: mediaType || 'image',
       };
+
+      if (req.file) {
+        itemData.imageUrl = isCloudinaryConfigured() ? req.file.path : '/img/uploads/' + req.file.filename;
+        itemData.cloudinaryId = req.file.filename || '';
+      } else if (mediaType === 'video' && mediaUrl) {
+        itemData.imageUrl = mediaUrl; // Store external URL here
+      } else {
+         return res.status(400).json({ success: false, message: 'Image/Video file or Video URL is required' });
+      }
+
       const item = new GalleryItem(itemData);
       await item.save();
       res.json({ success: true, message: 'Gallery image added!', data: item });
@@ -207,6 +248,62 @@ router.delete('/gallery/:id', async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+
+// POST /api/gallery/:id/like — Toggle Like
+router.post('/gallery/:id/like', async (req, res) => {
+  try {
+    const { userId } = req.body;
+    if (!userId) return res.status(400).json({ success: false, message: 'User ID required' });
+    
+    const item = await GalleryItem.findById(req.params.id);
+    if (!item) return res.status(404).json({ success: false, message: 'Item not found' });
+
+    const index = item.likes.indexOf(userId);
+    if (index === -1) {
+      item.likes.push(userId); // Like
+    } else {
+      item.likes.splice(index, 1); // Dislike
+    }
+    await item.save();
+    res.json({ success: true, likes: item.likes.length });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// POST /api/gallery/:id/comment — Add Comment
+router.post('/gallery/:id/comment', async (req, res) => {
+  try {
+    const { userId, text } = req.body;
+    if (!userId || !text) return res.status(400).json({ success: false, message: 'User ID and text required' });
+
+    const item = await GalleryItem.findById(req.params.id);
+    if (!item) return res.status(404).json({ success: false, message: 'Item not found' });
+
+    item.comments.push({ user: userId, text });
+    await item.save();
+    
+    const populatedItem = await GalleryItem.findById(req.params.id).populate('comments.user', 'name picture');
+    res.json({ success: true, comments: populatedItem.comments });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// DELETE /api/gallery/:id/comment/:commentId — Delete Comment
+router.delete('/gallery/:id/comment/:commentId', async (req, res) => {
+  try {
+    const item = await GalleryItem.findById(req.params.id);
+    if (!item) return res.status(404).json({ success: false, message: 'Item not found' });
+
+    item.comments = item.comments.filter(c => c._id.toString() !== req.params.commentId);
+    await item.save();
+    res.json({ success: true, message: 'Comment deleted' });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 
 // ══════════════════════════════════════════════════════════
 //  SLIDERS
@@ -303,6 +400,37 @@ router.put('/sections/:id', async (req, res) => {
 // ══════════════════════════════════════════════════════════
 //  ADMISSIONS
 // ══════════════════════════════════════════════════════════
+
+// GET /api/settings/admission — Get admission status
+router.get('/settings/admission', async (req, res) => {
+  try {
+    let setting = await Settings.findOne({ key: 'isAdmissionOpen' });
+    if (!setting) {
+      setting = new Settings({ key: 'isAdmissionOpen', value: true });
+      await setting.save();
+    }
+    res.json({ isOpen: setting.value });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// POST /api/settings/admission — Update admission status
+router.post('/settings/admission', async (req, res) => {
+  try {
+    const { isOpen } = req.body;
+    let setting = await Settings.findOne({ key: 'isAdmissionOpen' });
+    if (!setting) {
+      setting = new Settings({ key: 'isAdmissionOpen', value: isOpen });
+    } else {
+      setting.value = isOpen;
+    }
+    await setting.save();
+    res.json({ success: true, isOpen: setting.value });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
 // GET /api/admissions — Get all admissions (admin)
 router.get('/admissions', async (req, res) => {

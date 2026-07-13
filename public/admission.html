@@ -5,7 +5,10 @@
   <title>Admission Application | Bayanul Uloom Dars | Muttichira</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta content="AL BAYAN, Bayanul Uloom, Dars, Muttichira, Admission" name="keywords">
-  <meta content="Apply online for admission to Muttichira Bayanul Uloom Dars" name="description">
+  <meta content="Apply for admission to Muttichira Bayanul Uloom Dars" name="description">
+  <meta property="og:title" content="Admission | Bayanul Uloom Dars" />
+  <meta property="og:description" content="Apply for admission to Muttichira Bayanul Uloom Dars" />
+  <meta property="og:image" content="img/new_logo.png" />
 
   <!-- Favicons -->
   <link rel="icon" type="image/png" sizes="32x32" href="img/favicon.png">
@@ -75,6 +78,12 @@
               <h2 class="form-title">സ്റ്റുഡന്റ്സ് ബയോഡാറ്റ <span class="d-block text-muted small mt-2 font-weight-normal" style="font-family: 'Inter', sans-serif;">STUDENT BIODATA APPLICATION FORM</span></h2>
               <p class="text-success font-weight-bold">മുട്ടിച്ചിറ ബായാനുൽ ഉലൂം ദർസ് (Bayanul Uloom Dars, Muttichira)</p>
               <p class="small text-muted">ശുഹദാ മസ്ജിദ് മുട്ടിച്ചിറ, തലപ്പാറ, PIN: 676311 (Shuhada Masjid Muttichira, Thalappara)</p>
+            </div>
+            
+            <div id="admissionClosedMsg" style="display:none;" class="alert alert-warning text-center p-4">
+               <i class="fa fa-exclamation-triangle fa-2x mb-3 text-warning"></i>
+               <h4>Admissions are currently closed.</h4>
+               <p>Please check back later or contact the administration for more details.</p>
             </div>
 
             <form id="admissionForm" enctype="multipart/form-data">
@@ -167,6 +176,7 @@
               <div class="form-row">
                 <div class="form-group col-md-6">
                   <label for="eduReligious">Religious Education / വിദ്യാഭ്യാസം: മതം <span class="text-danger">*</span></label>
+                  <p class="small text-muted mb-1">e.g., Madrassa 5 class passed (മദ്രസ 5 ക്ലാസ്സ് പാസായവർ)</p>
                   <input type="text" class="form-control" name="educationReligious" id="eduReligious" placeholder="Madrassa / Dars Qualification" required>
                 </div>
                 <div class="form-group col-md-6">
@@ -297,6 +307,17 @@
       var nextSibling = e.target.nextElementSibling;
       nextSibling.innerText = fileName;
     });
+
+    // Check Admission Status
+    fetch('/api/settings/admission')
+      .then(res => res.json())
+      .then(data => {
+        if (!data.isOpen) {
+          document.getElementById('admissionForm').style.display = 'none';
+          document.getElementById('admissionClosedMsg').style.display = 'block';
+        }
+      })
+      .catch(err => console.error('Error fetching admission status:', err));
 
     // Toast Notification helper
     function showToast(message, isError) {

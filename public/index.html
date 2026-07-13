@@ -31,6 +31,7 @@
 
   <!-- Main Stylesheet File -->
   <link href="css/style.css" rel="stylesheet">
+  <style>
     .footer-top h3, .footer-top h4 {
       color: var(--accent) !important;
       font-family: 'Outfit', sans-serif;
@@ -302,6 +303,9 @@
           <p>
             <strong style="color: rgb(5, 52, 90);">Muttichira Bayanul Uloom Dars </strong>is located in the historic Muttichira Shuhada Juma Mosque, which is situated near Talappara Town.
           </p>
+          <div class="text-center w-100 mt-4 mb-4">
+            <a href="/about" class="btn btn-outline-success">Read More About Us</a>
+          </div>
 
           <div class="icon-box wow fadeInUp">
             <div class="icon"><i class="fa fa-graduation-cap"></i></div>
@@ -711,17 +715,40 @@
             var container = document.getElementById('dynamicGallery');
             var categoryMap = { 'Programme': 'filter-app', 'Collections': 'filter-card', 'Design': 'filter-web' };
             var html = '';
-            items.forEach(function(item) {
+            
+            // Limit to 6 items for the homepage
+            var displayItems = items.slice(0, 6);
+            
+            displayItems.forEach(function(item) {
               var filterClass = categoryMap[item.category] || 'filter-app';
+              
+              var mediaHtml = '';
+              if (item.mediaType === 'video') {
+                // If it's a direct video link
+                if (item.imageUrl.includes('youtube.com') || item.imageUrl.includes('youtu.be')) {
+                  // Basic extraction for YouTube ID could go here, but using thumbnail or iframe
+                  mediaHtml = '<div class="video-placeholder" style="background:#000; height:200px; display:flex; align-items:center; justify-content:center;"><i class="fa fa-play-circle" style="color:#fff; font-size:48px;"></i></div>';
+                } else {
+                  mediaHtml = '<video src="' + item.imageUrl + '" style="width: 100%; height: 200px; object-fit: cover;"></video>';
+                }
+              } else {
+                mediaHtml = '<img src="' + item.imageUrl + '" class="img-fluid" alt="' + item.title + '">';
+              }
+
               html += '<div class="col-lg-4 col-md-6 portfolio-item ' + filterClass + '">' +
-                '<div class="portfolio-wrap">' +
-                '<img src="' + item.imageUrl + '" class="img-fluid" alt="' + item.title + '">' +
+                '<div class="portfolio-wrap">' + mediaHtml + 
                 '<div class="portfolio-info">' +
-                '<h4><a href="#">' + item.title + '</a></h4>' +
+                '<h4><a href="/gallery">' + item.title + '</a></h4>' +
                 '<p>' + item.category + '</p>' +
-                '<div><a href="' + item.imageUrl + '" data-lightbox="portfolio" data-title="' + item.title + '" class="link-preview" title="Preview"><i class="ion ion-eye"></i></a></div>' +
+                '<div><a href="/gallery" title="View in Gallery"><i class="ion ion-eye"></i></a></div>' +
                 '</div></div></div>';
             });
+            
+            // Add a "See More" button at the end
+            if (items.length > 6) {
+                html += '<div class="col-12 text-center mt-4"><a href="/gallery" class="btn btn-outline-success">See More Gallery</a></div>';
+            }
+            
             container.innerHTML = html;
           }
         })

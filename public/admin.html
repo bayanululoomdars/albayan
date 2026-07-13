@@ -452,6 +452,15 @@
 
     <!-- ADMISSIONS TAB -->
     <div class="tab-content" id="tab-admissions">
+      <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
+         <h3 style="border-bottom:none; margin-bottom:0;"><i class="fa fa-cogs"></i> Admission Settings</h3>
+         <div>
+            <label class="switch" style="display:flex; align-items:center; cursor:pointer;">
+               <span style="margin-right:10px; font-weight:bold;">Admissions Open</span>
+               <input type="checkbox" id="admissionToggle" onchange="toggleAdmission(this.checked)" style="width:auto;">
+            </label>
+         </div>
+      </div>
       <div class="card">
         <h3><i class="fa fa-graduation-cap"></i> Admission Applications / പ്രവേശന അപേക്ഷകൾ</h3>
         <div style="overflow-x:auto;">
@@ -507,11 +516,11 @@
     <!-- GALLERY TAB -->
     <div class="tab-content" id="tab-gallery">
       <div class="card">
-        <h3><i class="fa fa-plus-circle"></i> Upload Gallery Image</h3>
+        <h3><i class="fa fa-plus-circle"></i> Add Gallery Item</h3>
         <form id="galleryForm" enctype="multipart/form-data">
           <div class="form-group">
             <label>Title</label>
-            <input type="text" id="galleryTitle" placeholder="Image title" required>
+            <input type="text" id="galleryTitle" placeholder="Item title" required>
           </div>
           <div class="form-group">
             <label>Category</label>
@@ -523,8 +532,19 @@
             </select>
           </div>
           <div class="form-group">
-            <label>Image</label>
-            <input type="file" id="galleryImage" accept="image/*" required>
+            <label>Media Type</label>
+            <select id="galleryMediaType" onchange="toggleGalleryMediaInputs()" required>
+              <option value="image">Image</option>
+              <option value="video">Video</option>
+            </select>
+          </div>
+          <div class="form-group" id="galleryImageInputGroup">
+            <label>Image/Video File</label>
+            <input type="file" id="galleryImage" accept="image/*,video/*">
+          </div>
+          <div class="form-group" id="galleryVideoUrlGroup" style="display:none;">
+            <label>Video URL (YouTube/Direct Link)</label>
+            <input type="text" id="galleryVideoUrl" placeholder="https://...">
           </div>
           <button type="submit" class="btn" style="max-width:200px;"><i class="fa fa-upload"></i> Upload</button>
         </form>
@@ -665,6 +685,31 @@
       .catch(function() {
         document.getElementById('loginError').textContent = 'Network error';
       });
+      checkAdmissionStatus();
+    }
+
+    function checkAdmissionStatus() {
+      fetch('/api/settings/admission')
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById('admissionToggle').checked = data.isOpen;
+        })
+        .catch(err => console.error('Error fetching admission status:', err));
+    }
+
+    function toggleAdmission(isOpen) {
+      fetch('/api/settings/admission', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isOpen })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+           alert('Admission status updated to: ' + (data.isOpen ? 'OPEN' : 'CLOSED'));
+        }
+      })
+      .catch(err => console.error('Error updating admission status:', err));
     }
 
     function doLogout() {
@@ -814,8 +859,20 @@
         var html = '';
         data.forEach(function(item) {
           var d = new Date(item.createdAt).toLocaleDateString('en-IN');
+          
+          var mediaTag = '';
+          if (item.mediaType === 'video') {
+             if (item.imageUrl.includes('youtube.com') || item.imageUrl.includes('youtu.be')) {
+                mediaTag = '<i class="fa fa-youtube-play fa-2x text-danger"></i>';
+             } else {
+                mediaTag = '<video src="' + item.imageUrl + '" style="width:50px;height:50px;object-fit:cover;" muted></video>';
+             }
+          } else {
+             mediaTag = '<img src="' + item.imageUrl + '">';
+          }
+
           html += '<tr>' +
-            '<td><img src="' + item.imageUrl + '"></td>' +
+            '<td>' + mediaTag + '</td>' +
             '<td>' + item.title + '</td>' +
             '<td><span class="badge ' + (badgeMap[item.category] || '') + '">' + item.category + '</span></td>' +
             '<td>' + d + '</td>' +
@@ -825,16 +882,38 @@
       });
     }
 
+    function toggleGalleryMediaInputs() {
+      var type = document.getElementById('galleryMediaType').value;
+      if (type === 'video') {
+        document.getElementById('galleryVideoUrlGroup').style.display = 'block';
+        document.getElementById('galleryImage').removeAttribute('required');
+      } else {
+        document.getElementById('galleryVideoUrlGroup').style.display = 'none';
+        document.getElementById('galleryImage').setAttribute('required', 'required');
+      }
+    }
+
     document.getElementById('galleryForm').addEventListener('submit', function(e) {
       e.preventDefault();
       var fd = new FormData();
       fd.append('title', document.getElementById('galleryTitle').value);
       fd.append('category', document.getElementById('galleryCategory').value);
-      fd.append('image', document.getElementById('galleryImage').files[0]);
+      fd.append('mediaType', document.getElementById('galleryMediaType').value);
+      
+      var file = document.getElementById('galleryImage').files[0];
+      if (file) {
+        fd.append('image', file);
+      }
+      
+      var mediaUrl = document.getElementById('galleryVideoUrl').value;
+      if (mediaUrl) {
+         fd.append('mediaUrl', mediaUrl);
+      }
+
       fetch('/api/gallery', { method: 'POST', body: fd })
         .then(function(r) { return r.json(); })
         .then(function(data) {
-          if (data.success) { document.getElementById('galleryForm').reset(); loadGalleryAdmin(); }
+          if (data.success) { document.getElementById('galleryForm').reset(); loadGalleryAdmin(); toggleGalleryMediaInputs(); }
           alert(data.message);
         });
     });
