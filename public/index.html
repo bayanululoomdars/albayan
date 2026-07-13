@@ -341,6 +341,42 @@
       </div>
     </section><!-- #about -->
 
+    <!-- Stats Counter Section -->
+    <section id="stats" style="background: linear-gradient(135deg, #0a3d1f 0%, #0d5a2e 50%, #0a3d1f 100%); padding: 70px 0; position: relative; overflow: hidden;">
+      <div class="container" style="position:relative;z-index:1;">
+        <div class="row text-center">
+          <div class="col-6 col-md-3 mb-4">
+            <div style="padding:20px;">
+              <i class="fa fa-graduation-cap" style="font-size:2.5rem; color:#d4af37; margin-bottom:12px;"></i>
+              <div id="counterStudents" class="counter-number" style="font-family:'Outfit',sans-serif; font-size:2.8rem; font-weight:800; color:#fff;">0</div>
+              <div style="color:rgba(255,255,255,0.7); font-size:0.9rem; font-weight:500; margin-top:4px;">Students</div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3 mb-4">
+            <div style="padding:20px;">
+              <i class="fa fa-users" style="font-size:2.5rem; color:#d4af37; margin-bottom:12px;"></i>
+              <div id="counterUstads" class="counter-number" style="font-family:'Outfit',sans-serif; font-size:2.8rem; font-weight:800; color:#fff;">0</div>
+              <div style="color:rgba(255,255,255,0.7); font-size:0.9rem; font-weight:500; margin-top:4px;">Usthads</div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3 mb-4">
+            <div style="padding:20px;">
+              <i class="fa fa-book" style="font-size:2.5rem; color:#d4af37; margin-bottom:12px;"></i>
+              <div id="counterYears" class="counter-number" style="font-family:'Outfit',sans-serif; font-size:2.8rem; font-weight:800; color:#fff;">0</div>
+              <div style="color:rgba(255,255,255,0.7); font-size:0.9rem; font-weight:500; margin-top:4px;">Years of Tradition</div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3 mb-4">
+            <div style="padding:20px;">
+              <i class="fa fa-trophy" style="font-size:2.5rem; color:#d4af37; margin-bottom:12px;"></i>
+              <div id="counterAlumni" class="counter-number" style="font-family:'Outfit',sans-serif; font-size:2.8rem; font-weight:800; color:#fff;">0</div>
+              <div style="color:rgba(255,255,255,0.7); font-size:0.9rem; font-weight:500; margin-top:4px;">Distinguished Alumni</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Admission Section (Split Layout + Modal) -->
     <section id="admission" style="background:#f8fff8; padding: 60px 0;">
       <div class="container">
@@ -455,6 +491,40 @@
         </div>
       </div>
     </section><!-- #team -->
+
+    <!-- Leadership Section -->
+    <section id="leadership" style="padding: 70px 0; background: #f8f9fa;">
+      <div class="container">
+        <header class="section-header">
+          <h3>Current Leadership</h3>
+          <p>The guiding lights of Muttichira Bayanul Uloom Dars</p>
+        </header>
+        <div class="row justify-content-center" id="leadershipContent">
+          <!-- Principal Mudarris -->
+          <div class="col-lg-4 col-md-6 text-center mb-4" id="principalCard">
+            <div style="background:#fff; border-radius:20px; padding:30px; box-shadow:0 8px 30px rgba(0,0,0,0.08); border:2px solid #e8e8e8; transition:all 0.3s;" onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 15px 40px rgba(0,0,0,0.12)'" onmouseout="this.style.transform='';this.style.boxShadow='0 8px 30px rgba(0,0,0,0.08)'">
+              <img id="principalImg" src="img/new_logo.png" alt="Principal" style="width:120px; height:120px; border-radius:50%; object-fit:cover; border:4px solid #0a4d2e; margin-bottom:16px;">
+              <h5 id="principalNameEl" style="color:#0a3d1f; font-family:'Outfit',sans-serif; font-weight:700;">Sheikhuna Ibrahim Baqavi Al Haithami</h5>
+              <p id="principalTitleEl" style="color:#d4af37; font-weight:600; font-size:0.9rem;">Principal Mudarris</p>
+              <p id="principalBioEl" style="color:#666; font-size:0.85rem;"></p>
+            </div>
+          </div>
+        </div>
+        <!-- Assistant Mudarris -->
+        <div class="row justify-content-center mt-4" id="assistantList"></div>
+      </div>
+    </section>
+
+    <!-- Branch & Faculty Network -->
+    <section id="branches" style="padding: 70px 0; background: #fff;">
+      <div class="container">
+        <header class="section-header">
+          <h3>Branch & Faculty Network</h3>
+          <p>Our connected network of Islamic education</p>
+        </header>
+        <div class="row justify-content-center" id="branchList"></div>
+      </div>
+    </section>
 
     <!--==========================
       Contact Section
@@ -574,12 +644,9 @@
           </div>
 
           <div class="col-lg-3 col-md-6 footer-newsletter">
-            <h4>Our Newsletter</h4>
-            <p>Subscribe to get the latest updates from Bayanul Uloom Dars.</p>
-            <form id="newsletterForm">
-              <input type="email" name="email" id="newsletterEmail" placeholder="Your email" required>
-              <input type="submit" value="Subscribe">
-            </form>
+            <h4 id="footerMudarrisNameEl">Principal Mudarris</h4>
+            <p id="footerMudarrisTitleEl" style="color:#d4af37; font-weight:600;"></p>
+            <p id="footerMudarrisDetailEl" style="color:rgba(255,255,255,0.6); font-size:0.85rem;"></p>
           </div>
         </div>
       </div>
@@ -943,12 +1010,84 @@
       });
     });
 
-    // \u2500\u2500 Initialize \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+    // ── Load Home Settings ──────────
+    function loadHomeSettings() {
+      fetch('/api/home-settings')
+        .then(function(res) { return res.json(); })
+        .then(function(s) {
+          // Stats counters with animation
+          animateCounter('counterStudents', s.statsStudents || 90);
+          animateCounter('counterUstads', s.statsUstads || 6);
+          animateCounter('counterYears', s.statsYears || 50);
+          animateCounter('counterAlumni', s.statsAlumni || 25);
+
+          // Leadership
+          if (s.principalName) document.getElementById('principalNameEl').textContent = s.principalName;
+          if (s.principalTitle) document.getElementById('principalTitleEl').textContent = s.principalTitle;
+          if (s.principalBio) document.getElementById('principalBioEl').textContent = s.principalBio;
+          if (s.principalImageUrl) document.getElementById('principalImg').src = s.principalImageUrl;
+
+          // Assistant Mudarris
+          if (s.assistantMudarris && s.assistantMudarris.length > 0) {
+            var html = '';
+            s.assistantMudarris.forEach(function(a) {
+              html += '<div class="col-lg-3 col-md-4 col-6 text-center mb-4">' +
+                '<div style="background:#fff; border-radius:16px; padding:20px; box-shadow:0 4px 20px rgba(0,0,0,0.06);">' +
+                '<img src="' + (a.imageUrl || 'img/new_logo.png') + '" style="width:80px; height:80px; border-radius:50%; object-fit:cover; border:3px solid #d4af37; margin-bottom:10px;">' +
+                '<h6 style="color:#0a3d1f; font-weight:700; margin-bottom:4px;">' + a.name + '</h6>' +
+                '<small style="color:#888;">' + a.role + '</small>' +
+                '</div></div>';
+            });
+            document.getElementById('assistantList').innerHTML = html;
+          }
+
+          // Branches
+          if (s.branches && s.branches.length > 0) {
+            var bHtml = '';
+            s.branches.forEach(function(b) {
+              bHtml += '<div class="col-lg-4 col-md-6 mb-4">' +
+                '<div style="background:#f8f9fa; border-radius:14px; padding:24px; border-left:4px solid #0a4d2e; height:100%;">' +
+                '<h6 style="color:#0a3d1f; font-weight:700;"><i class="fa fa-map-marker" style="color:#d4af37; margin-right:8px;"></i>' + b.name + '</h6>' +
+                (b.location ? '<p style="color:#666; font-size:0.85rem; margin:0;">' + b.location + '</p>' : '') +
+                (b.description ? '<p style="color:#888; font-size:0.8rem; margin-top:6px;">' + b.description + '</p>' : '') +
+                '</div></div>';
+            });
+            document.getElementById('branchList').innerHTML = bHtml;
+          }
+
+          // Footer Mudarris
+          var fName = document.getElementById('footerMudarrisNameEl');
+          var fTitle = document.getElementById('footerMudarrisTitleEl');
+          var fDetail = document.getElementById('footerMudarrisDetailEl');
+          if (fName && s.footerMudarrisName) fName.textContent = s.footerMudarrisName;
+          if (fTitle && s.footerMudarrisTitle) fTitle.textContent = s.footerMudarrisTitle;
+          if (fDetail && s.footerMudarrisDetail) fDetail.textContent = s.footerMudarrisDetail;
+        })
+        .catch(function(err) { console.warn('Home settings load error', err); });
+    }
+
+    function animateCounter(id, target) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      var current = 0;
+      var step = Math.max(1, Math.floor(target / 60));
+      var timer = setInterval(function() {
+        current += step;
+        if (current >= target) {
+          current = target;
+          clearInterval(timer);
+        }
+        el.textContent = current + '+';
+      }, 30);
+    }
+
+    // ── Initialize ─────────────────────────────
     document.addEventListener('DOMContentLoaded', function() {
       loadSliders();
       loadSections();
       loadNews();
       loadGallery();
+      loadHomeSettings();
 
       // Check admission status
       fetch('/api/settings/admission').then(r=>r.json()).then(d=>{ _admissionOpen = d.isOpen; }).catch(()=>{});

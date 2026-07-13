@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 
 const galleryItemSchema = new mongoose.Schema({
   title: { type: String, required: true },
+  description: { type: String, default: '' },
+  hashtags: [{ type: String }],
   category: { 
     type: String, 
     enum: ['Programme', 'Collections', 'Design'],
@@ -10,6 +12,7 @@ const galleryItemSchema = new mongoose.Schema({
   imageUrl: { type: String, required: true },
   cloudinaryId: { type: String, default: '' },
   mediaType: { type: String, enum: ['image', 'video'], default: 'image' },
+  pinned: { type: Boolean, default: false },
   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   comments: [{
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },

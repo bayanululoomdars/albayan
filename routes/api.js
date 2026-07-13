@@ -9,6 +9,8 @@ const SectionContent = require('../models/SectionContent');
 const Admission = require('../models/Admission');
 const User = require('../models/User');
 const Settings = require('../models/Settings');
+const Story = require('../models/Story');
+const HomeSettings = require('../models/HomeSettings');
 const { OAuth2Client } = require('google-auth-library');
 const { upload, uploadLocal, isCloudinaryConfigured, cloudinary } = require('../config/cloudinary');
 
@@ -208,7 +210,7 @@ router.post('/gallery', (req, res) => {
       return res.status(500).json({ success: false, message: 'Media upload failed' });
     }
     try {
-      const { title, category, mediaType, mediaUrl } = req.body;
+      const { title, category, mediaType, mediaUrl, description, hashtags } = req.body;
       if (!title || !category) {
         return res.status(400).json({ success: false, message: 'Title and category are required' });
       }
@@ -217,6 +219,8 @@ router.post('/gallery', (req, res) => {
         title,
         category,
         mediaType: mediaType || 'image',
+        description: description || '',
+        hashtags: hashtags ? hashtags.split(',').map(h => h.trim()).filter(h => h) : []
       };
 
       if (req.file) {
@@ -610,6 +614,194 @@ router.post('/settings/burda', (req, res) => {
       res.status(500).json({ success: false, message: err.message });
     }
   });
+// GET /api/stories — Get active (non-expired) stories
+router.get('/stories', async (req, res) => {
+  try {
+    const stories = await Story.find({ expiresAt: { $gt: new Date() } }).sort({ createdAt: -1 });
+    res.json(stories);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// GET /api/stories/all — Get ALL stories including expired (admin)
+router.get('/stories/all', async (req, res) => {
+  try {
+    const stories = await Story.find().sort({ createdAt: -1 });
+    res.json(stories);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// POST /api/stories — Upload a story
+router.post('/stories', (req, res) => {
+  const uploader = getUploader();
+  uploader.single('image')(req, res, async (uploadErr) => {
+    if (uploadErr) return res.status(500).json({ success: false, message: 'Upload failed' });
+    try {
+      if (!req.file) return res.status(400).json({ success: false, message: 'Image required' });
+      const imageUrl = isCloudinaryConfigured() ? req.file.path : '/img/uploads/' + req.file.filename;
+      const daysActive = parseInt(req.body.daysActive) || 1;
+      const story = new Story({
+        title: req.body.title || '',
+        imageUrl,
+        cloudinaryId: req.file.filename || '',
+        daysActive
+      });
+      await story.save();
+      res.json({ success: true, data: story });
+    } catch (err) {
+      res.status(500).json({ success: false, message: err.message });
+    }
+  });
+});
+
+// DELETE /api/stories/:id
+router.delete('/stories/:id', async (req, res) => {
+  try {
+    const story = await Story.findById(req.params.id);
+    if (!story) return res.status(404).json({ message: 'Story not found' });
+    if (story.cloudinaryId && isCloudinaryConfigured()) {
+      try { await cloudinary.uploader.destroy(story.cloudinaryId); } catch (e) {}
+    }
+    await Story.findByIdAndDelete(req.params.id);
+    res.json({ success: true, message: 'Story deleted' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// POST /api/gallery/:id/pin — Toggle pin status
+router.post('/gallery/:id/pin', async (req, res) => {
+  try {
+    const item = await GalleryItem.findById(req.params.id);
+    if (!item) return res.status(404).json({ success: false, message: 'Item not found' });
+    item.pinned = !item.pinned;
+    await item.save();
+    res.json({ success: true, pinned: item.pinned });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// GET /api/home-settings
+router.get('/home-settings', async (req, res) => {
+  try {
+    let settings = await HomeSettings.findOne();
+    if (!settings) {
+      settings = new HomeSettings();
+      await settings.save();
+    }
+    res.json(settings);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// POST /api/home-settings — Update home settings
+router.post('/home-settings', async (req, res) => {
+  try {
+    let settings = await HomeSettings.findOne();
+    if (!settings) settings = new HomeSettings();
+    const fields = ['statsStudents', 'statsUstads', 'statsYears', 'statsAlumni',
+      'principalName', 'principalTitle', 'principalBio',
+      'footerMudarrisName', 'footerMudarrisTitle', 'footerMudarrisDetail'];
+    fields.forEach(f => { if (req.body[f] !== undefined) settings[f] = req.body[f]; });
+    settings.updatedAt = Date.now();
+    await settings.save();
+    res.json({ success: true, data: settings });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// POST /api/home-settings/principal-image — Upload principal image
+router.post('/home-settings/principal-image', (req, res) => {
+  const uploader = getUploader();
+  uploader.single('image')(req, res, async (uploadErr) => {
+    if (uploadErr) return res.status(500).json({ success: false, message: 'Upload failed' });
+    try {
+      if (!req.file) return res.status(400).json({ success: false, message: 'No file' });
+      const imageUrl = isCloudinaryConfigured() ? req.file.path : '/img/uploads/' + req.file.filename;
+      let settings = await HomeSettings.findOne();
+      if (!settings) settings = new HomeSettings();
+      settings.principalImageUrl = imageUrl;
+      await settings.save();
+      res.json({ success: true, imageUrl });
+    } catch (err) {
+      res.status(500).json({ success: false, message: err.message });
+    }
+  });
+});
+
+// POST /api/home-settings/assistant — Add assistant mudarris
+router.post('/home-settings/assistant', (req, res) => {
+  const uploader = getUploader();
+  uploader.single('image')(req, res, async (uploadErr) => {
+    if (uploadErr) return res.status(500).json({ success: false, message: 'Upload failed' });
+    try {
+      const { name, role } = req.body;
+      if (!name) return res.status(400).json({ success: false, message: 'Name required' });
+      let settings = await HomeSettings.findOne();
+      if (!settings) settings = new HomeSettings();
+      const assistant = { name, role: role || 'Assistant Mudarris' };
+      if (req.file) {
+        assistant.imageUrl = isCloudinaryConfigured() ? req.file.path : '/img/uploads/' + req.file.filename;
+        assistant.cloudinaryId = req.file.filename || '';
+      }
+      settings.assistantMudarris.push(assistant);
+      await settings.save();
+      res.json({ success: true, data: settings });
+    } catch (err) {
+      res.status(500).json({ success: false, message: err.message });
+    }
+  });
+});
+
+// DELETE /api/home-settings/assistant/:id — Delete assistant
+router.delete('/home-settings/assistant/:id', async (req, res) => {
+  try {
+    let settings = await HomeSettings.findOne();
+    if (!settings) return res.status(404).json({ message: 'Not found' });
+    settings.assistantMudarris = settings.assistantMudarris.filter(
+      a => a._id.toString() !== req.params.id
+    );
+    await settings.save();
+    res.json({ success: true, data: settings });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// POST /api/home-settings/branch — Add branch
+router.post('/home-settings/branch', async (req, res) => {
+  try {
+    const { name, location, description } = req.body;
+    if (!name) return res.status(400).json({ success: false, message: 'Name required' });
+    let settings = await HomeSettings.findOne();
+    if (!settings) settings = new HomeSettings();
+    settings.branches.push({ name, location: location || '', description: description || '' });
+    await settings.save();
+    res.json({ success: true, data: settings });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// DELETE /api/home-settings/branch/:id — Delete branch
+router.delete('/api/home-settings/branch/:id', async (req, res) => {
+  try {
+    let settings = await HomeSettings.findOne();
+    if (!settings) return res.status(404).json({ message: 'Not found' });
+    settings.branches = settings.branches.filter(
+      b => b._id.toString() !== req.params.id
+    );
+    await settings.save();
+    res.json({ success: true, data: settings });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
 });
 
 module.exports = router;

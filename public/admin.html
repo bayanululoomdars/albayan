@@ -423,6 +423,8 @@
       <button class="tab-btn" onclick="switchTab('subscribers')"><i class="fa fa-users"></i> Subscribers</button>
       <button class="tab-btn" onclick="switchTab('sliders')"><i class="fa fa-sliders"></i> Sliders</button>
       <button class="tab-btn" onclick="switchTab('sections')"><i class="fa fa-edit"></i> Sections</button>
+      <button class="tab-btn" onclick="switchTab('stories')"><i class="fa fa-camera"></i> Stories</button>
+      <button class="tab-btn" onclick="switchTab('homepage')"><i class="fa fa-home"></i> Home Page</button>
     </div>
 
     <!-- OVERVIEW TAB -->
@@ -565,6 +567,14 @@
             <label>Video URL (YouTube/Direct Link)</label>
             <input type="text" id="galleryVideoUrl" placeholder="https://...">
           </div>
+          <div class="form-group">
+            <label>Description / Caption</label>
+            <textarea id="galleryDesc" placeholder="Post description..."></textarea>
+          </div>
+          <div class="form-group">
+            <label>Hashtags (comma-separated)</label>
+            <input type="text" id="galleryHashtags" placeholder="samastha, dars, islamic">
+          </div>
           <button type="submit" class="btn" style="max-width:200px;"><i class="fa fa-upload"></i> Upload</button>
         </form>
       </div>
@@ -572,7 +582,7 @@
         <h3><i class="fa fa-th"></i> All Gallery Images</h3>
         <div style="overflow-x:auto;">
           <table class="data-table">
-            <thead><tr><th>Image</th><th>Title</th><th>Category</th><th>Date</th><th>Action</th></tr></thead>
+            <thead><tr><th>Image</th><th>Title</th><th>Category</th><th>Pin Status</th><th>Date</th><th>Action</th></tr></thead>
             <tbody id="galleryTableBody"></tbody>
           </table>
         </div>
@@ -671,8 +681,159 @@
             <button type="button" class="btn" style="max-width:250px; background:#dc3545; margin:0;" onclick="deleteHomepageSection()"><i class="fa fa-eye-slash"></i> Hide / Delete Section</button>
           </div>
         </form>
+    </div>
+
+    <!-- STORIES TAB -->
+    <div class="tab-content" id="tab-stories">
+      <div class="card">
+        <h3><i class="fa fa-plus-circle"></i> Add Story</h3>
+        <form id="storyForm" enctype="multipart/form-data">
+          <div class="form-group">
+            <label>Story Title (optional)</label>
+            <input type="text" id="storyTitle" placeholder="Story title">
+          </div>
+          <div class="form-group">
+            <label>Story Image</label>
+            <input type="file" id="storyImage" accept="image/*" required>
+          </div>
+          <div class="form-group">
+            <label>Active for (days)</label>
+            <select id="storyDays">
+              <option value="1">1 Day</option>
+              <option value="3">3 Days</option>
+              <option value="7" selected>7 Days</option>
+              <option value="14">14 Days</option>
+              <option value="30">30 Days</option>
+            </select>
+          </div>
+          <button type="submit" class="btn" style="max-width:200px;"><i class="fa fa-upload"></i> Upload Story</button>
+        </form>
+      </div>
+      <div class="card">
+        <h3><i class="fa fa-list"></i> All Stories</h3>
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead><tr><th>Image</th><th>Title</th><th>Days</th><th>Expires</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody id="storiesTableBody"></tbody>
+          </table>
+        </div>
       </div>
     </div>
+
+    <!-- HOME PAGE TAB -->
+    <div class="tab-content" id="tab-homepage">
+      <!-- Stats Counters -->
+      <div class="card">
+        <h3><i class="fa fa-bar-chart"></i> Stats Counters</h3>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+          <div class="form-group">
+            <label>Students Count</label>
+            <input type="number" id="hpStudents" placeholder="90">
+          </div>
+          <div class="form-group">
+            <label>Usthads Count</label>
+            <input type="number" id="hpUstads" placeholder="6">
+          </div>
+          <div class="form-group">
+            <label>Years of Legacy</label>
+            <input type="number" id="hpYears" placeholder="50">
+          </div>
+          <div class="form-group">
+            <label>Distinguished Alumni</label>
+            <input type="number" id="hpAlumni" placeholder="25">
+          </div>
+        </div>
+        <button class="btn" style="max-width:200px;" onclick="saveHomeStats()"><i class="fa fa-save"></i> Save Stats</button>
+      </div>
+
+      <!-- Principal Mudarris -->
+      <div class="card">
+        <h3><i class="fa fa-user-circle"></i> Principal Mudarris</h3>
+        <div style="display:flex; gap:20px; flex-wrap:wrap; align-items:flex-start;">
+          <img id="principalPreview" src="" style="width:100px; height:100px; border-radius:50%; object-fit:cover; border:3px solid var(--accent); display:none;">
+          <div style="flex:1;">
+            <div class="form-group">
+              <label>Name</label>
+              <input type="text" id="hpPrincipalName" placeholder="Sheikhuna Ibrahim Baqavi Al Haithami">
+            </div>
+            <div class="form-group">
+              <label>Title</label>
+              <input type="text" id="hpPrincipalTitle" placeholder="Principal Mudarris">
+            </div>
+            <div class="form-group">
+              <label>Bio</label>
+              <textarea id="hpPrincipalBio" placeholder="Short biography..."></textarea>
+            </div>
+            <div class="form-group">
+              <label>Upload Photo</label>
+              <input type="file" id="principalImageFile" accept="image/*">
+            </div>
+            <button class="btn" style="max-width:250px;" onclick="savePrincipal()"><i class="fa fa-save"></i> Save Principal Info</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Assistant Mudarris -->
+      <div class="card">
+        <h3><i class="fa fa-users"></i> Assistant Mudarris</h3>
+        <form id="assistantForm" enctype="multipart/form-data" style="display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end; margin-bottom:20px;">
+          <div class="form-group" style="flex:1; min-width:150px;">
+            <label>Name</label>
+            <input type="text" id="assistantName" placeholder="Name" required>
+          </div>
+          <div class="form-group" style="flex:1; min-width:150px;">
+            <label>Role</label>
+            <input type="text" id="assistantRole" placeholder="Assistant Mudarris">
+          </div>
+          <div class="form-group" style="flex:1; min-width:150px;">
+            <label>Photo</label>
+            <input type="file" id="assistantImage" accept="image/*">
+          </div>
+          <button type="submit" class="btn" style="max-width:150px; height:45px; margin:0;"><i class="fa fa-plus"></i> Add</button>
+        </form>
+        <div id="assistantListAdmin"></div>
+      </div>
+
+      <!-- Branch & Faculty Network -->
+      <div class="card">
+        <h3><i class="fa fa-sitemap"></i> Branch & Faculty Network</h3>
+        <form id="branchForm" style="display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end; margin-bottom:20px;">
+          <div class="form-group" style="flex:1; min-width:150px;">
+            <label>Branch Name</label>
+            <input type="text" id="branchName" placeholder="Branch name" required>
+          </div>
+          <div class="form-group" style="flex:1; min-width:150px;">
+            <label>Location</label>
+            <input type="text" id="branchLocation" placeholder="Location">
+          </div>
+          <div class="form-group" style="flex:1; min-width:150px;">
+            <label>Description</label>
+            <input type="text" id="branchDesc" placeholder="Short description">
+          </div>
+          <button type="submit" class="btn" style="max-width:150px; height:45px; margin:0;"><i class="fa fa-plus"></i> Add</button>
+        </form>
+        <div id="branchListAdmin"></div>
+      </div>
+
+      <!-- Footer Mudarris Info -->
+      <div class="card">
+        <h3><i class="fa fa-footer"></i> Footer — Mudarris Info (replaces Newsletter)</h3>
+        <div class="form-group">
+          <label>Mudarris Name</label>
+          <input type="text" id="hpFooterName" placeholder="Name">
+        </div>
+        <div class="form-group">
+          <label>Title</label>
+          <input type="text" id="hpFooterTitle" placeholder="Principal Mudarris">
+        </div>
+        <div class="form-group">
+          <label>Detail</label>
+          <input type="text" id="hpFooterDetail" placeholder="Muttichira Bayanul Uloom Dars">
+        </div>
+        <button class="btn" style="max-width:200px;" onclick="saveFooterInfo()"><i class="fa fa-save"></i> Save Footer Info</button>
+      </div>
+    </div>
+  </div>
   </div>
 
   <!-- ADMISSION DETAIL MODAL -->
@@ -686,134 +847,186 @@
 
   <!-- Hidden PDF Download Template -->
   <div style="display:none;">
-    <div id="pdfPrintTemplate" style="width:740px; min-height:1020px; padding:30px; font-family:'Inter', 'Unicode', sans-serif; color:#000; background:#fff; box-sizing:border-box;">
-      <div style="border:4px double #000; padding:25px; min-height:960px; display:flex; flex-direction:column; justify-content:space-between; box-sizing:border-box;">
-        <div>
-          <!-- Header -->
-          <div style="text-align:center; margin-bottom:15px;">
-            <h1 style="font-size:1.85rem; margin:0 0 5px 0; font-weight:700;">സ്റ്റുഡന്റ്സ് ബയോഡാറ്റ</h1>
-            <h2 style="font-size:1.45rem; margin:0 0 5px 0; font-weight:600;">ബായാനുൽ ഉലൂം ദർസ്</h2>
-            <p style="font-size:1rem; margin:0; font-weight:bold;">ശുഹദാ മസ്ജിദ് മുട്ടിച്ചിറ, തലപ്പാറ Pin : 676 311</p>
-            <div style="border-bottom:3px solid #000; margin-top:15px; margin-bottom:20px;"></div>
-          </div>
-
-          <!-- Fields Table-Like Layout -->
-          <style>
-            .pdf-row { display:flex; border:2px solid #000; margin-bottom:12px; border-radius:4px; overflow:hidden; }
-            .pdf-label { width:180px; padding:8px 12px; border-right:2px solid #000; font-weight:bold; background:#f5f5f5; font-size:0.92rem; }
-            .pdf-val { flex:1; padding:8px 12px; font-size:0.95rem; }
-            .pdf-split { display:flex; gap:12px; margin-bottom:12px; }
-            .pdf-split-left { flex:1.3; }
-            .pdf-split-right { width:180px; height:220px; border:2px solid #000; display:flex; align-items:center; justify-content:center; font-weight:bold; border-radius:4px; font-size:0.9rem; }
-          </style>
-
-          <div class="pdf-row">
-            <div class="pdf-label">പേര്</div>
-            <div class="pdf-val" id="pdf_name"></div>
-          </div>
-
-          <div class="pdf-row">
-            <div class="pdf-label">പിതാവിന്റെ പേര്</div>
-            <div class="pdf-val" id="pdf_fatherName"></div>
-          </div>
-
-          <div class="pdf-row">
-            <div class="pdf-label">ഫോൺ നമ്പർ</div>
-            <div class="pdf-val" id="pdf_phone"></div>
-          </div>
-
-          <div class="pdf-row">
-            <div class="pdf-label">മാതാവിന്റെ പേര്</div>
-            <div class="pdf-val" id="pdf_motherName"></div>
-          </div>
-
-          <div class="pdf-split">
-            <!-- Left Info Split -->
-            <div class="pdf-split-left">
-              <div class="pdf-row">
-                <div class="pdf-label">വീട്ടു പേര്</div>
-                <div class="pdf-val" id="pdf_houseName">______________________</div>
-              </div>
-              <div class="pdf-row">
-                <div class="pdf-label" style="font-size:0.85rem;">വീട്ടിലെ ഫോൺ നമ്പർ</div>
-                <div class="pdf-val" id="pdf_homePhone">______________________</div>
-              </div>
-              <div class="pdf-row">
-                <div class="pdf-label">സ്ഥലം</div>
-                <div class="pdf-val" id="pdf_place">______________________</div>
-              </div>
-              <div class="pdf-row">
-                <div class="pdf-label">പോസ്റ്റ്</div>
-                <div class="pdf-val" id="pdf_postOffice">______________________</div>
-              </div>
-              <div class="pdf-row">
-                <div class="pdf-label">ജില്ല</div>
-                <div class="pdf-val" id="pdf_district">______________________</div>
-              </div>
-            </div>
-            <!-- Right Photo Box -->
-            <div class="pdf-split-right" style="position:relative;">
-              <span id="pdfPhotoLabel">PHOTO</span>
-              <img id="pdfPhotoImg" src="" style="display:none; width:100%; height:100%; object-fit:cover;">
-            </div>
-          </div>
-
-          <div class="pdf-row">
-            <div class="pdf-label">പിൻകോഡ്</div>
-            <div class="pdf-val" id="pdf_pincode">______________________</div>
-          </div>
-
-          <div class="pdf-split" style="margin-bottom:12px;">
-            <div class="pdf-row" style="flex:1; margin-bottom:0;">
-              <div class="pdf-label">ജനനതീയതി</div>
-              <div class="pdf-val" id="pdf_dob"></div>
-            </div>
-            <div class="pdf-row" style="flex:1; margin-bottom:0;">
-              <div class="pdf-label">രക്ത ഗ്രൂപ്പ്</div>
-              <div class="pdf-val" id="pdf_bloodGroup">______________________</div>
-            </div>
-          </div>
-
-          <div class="pdf-split" style="margin-bottom:12px;">
-            <div class="pdf-row" style="flex:1; margin-bottom:0;">
-              <div class="pdf-label">വിദ്യാഭ്യാസം; മതം</div>
-              <div class="pdf-val" id="pdf_eduRel">______________________</div>
-            </div>
-            <div class="pdf-row" style="flex:1; margin-bottom:0;">
-              <div class="pdf-label">ഭൗതികം</div>
-              <div class="pdf-val" id="pdf_eduSec">______________________</div>
-            </div>
-          </div>
-
-          <div class="pdf-row">
-            <div class="pdf-label">രക്ഷിതാവിന്റെ പേര്</div>
-            <div class="pdf-val" id="pdf_guardianName">______________________</div>
-          </div>
-
-          <div class="pdf-split" style="margin-bottom:12px;">
-            <div class="pdf-row" style="flex:1; margin-bottom:0;">
-              <div class="pdf-label">കുട്ടിയുമായുള്ള ബന്ധം</div>
-              <div class="pdf-val" id="pdf_relationship">______________________</div>
-            </div>
-            <div class="pdf-row" style="flex:1; margin-bottom:0;">
-              <div class="pdf-label">ഫോൺ നമ്പർ</div>
-              <div class="pdf-val" id="pdf_guardianPhone">______________________</div>
-            </div>
-          </div>
+    <div id="pdfPrintTemplate" style="width:790px; min-height:1120px; padding:45px; font-family:'Inter', sans-serif; color:#000; background:#fff; box-sizing:border-box; position:relative;">
+      <!-- Header Area -->
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:25px; border-bottom:3px solid #1a6b3a; padding-bottom:15px;">
+        <div style="flex:1;">
+          <h5 style="margin:0; font-size:14px; font-weight:700; color:#333; text-transform:uppercase; letter-spacing:0.5px;">Bayanul Uloom Dars, Muttichira</h5>
+          <p style="margin:2px 0 15px 0; font-size:11px; color:#666;">Shuhada Masjid Muttichira, Thalappara, PIN: 676311</p>
+          <h1 style="margin:0; font-size:32px; font-weight:800; color:#1a6b3a; font-family:'Outfit', sans-serif; line-height:1.1; text-transform:uppercase; letter-spacing:0.5px;">Student Biodata</h1>
+          <h2 style="margin:0; font-size:24px; font-weight:700; color:#222; font-family:'Outfit', sans-serif; text-transform:uppercase; letter-spacing:0.5px;">Application Form</h2>
         </div>
+        <!-- Passport Photo Container -->
+        <div style="width:125px; height:160px; border:2px solid #1a6b3a; border-radius:8px; overflow:hidden; background:#f9f9f9; display:flex; align-items:center; justify-content:center; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+          <img id="pdfPhotoImg" src="" style="width:100%; height:100%; object-fit:cover; display:none;">
+          <span id="pdfPhotoLabel" style="font-size:12px; color:#aaa; font-weight:600; text-transform:uppercase;">Photo</span>
+        </div>
+      </div>
 
-        <!-- Footer terms / signs -->
-        <div style="margin-top:20px;">
-          <p style="font-size:0.9rem; font-weight:bold; margin-bottom:40px;">മേൽ വിവരങ്ങൾ എനിക്ക് ബോധ്യമുള്ളതും സത്യസന്ധവുമാണെന്ന് ബോധ്യപ്പെടുത്തുന്നു.</p>
-          <div style="display:flex; justify-content:space-between; align-items:flex-end;">
-            <div style="text-align:center;">
-              <div style="width:120px; border-bottom:1px solid #000; margin-bottom:5px;"></div>
-              <span style="font-size:0.85rem; font-weight:bold;">തീയതി</span>
-            </div>
-            <div style="text-align:center;">
-              <div style="width:120px; border-bottom:1px solid #000; margin-bottom:5px;"></div>
-              <span style="font-size:0.85rem; font-weight:bold;">ഒപ്പ്<br>രക്ഷിതാവ്</span>
-            </div>
+      <!-- Helper style tags for layout -->
+      <style>
+        .pdf-section-title {
+          font-family: 'Outfit', sans-serif;
+          font-size: 15px;
+          font-weight: 700;
+          color: #1a6b3a;
+          margin: 20px 0 12px 0;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          border-bottom: 2px solid #e2e8f0;
+          padding-bottom: 6px;
+          text-transform: uppercase;
+        }
+        .pdf-grid-2 {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 15px;
+        }
+        .pdf-grid-3 {
+          display: grid;
+          grid-template-columns: 1.2fr 0.8fr 1fr;
+          gap: 15px;
+        }
+        .pdf-field {
+          margin-bottom: 12px;
+        }
+        .pdf-label {
+          font-size: 11px;
+          font-weight: 600;
+          color: #4a5568;
+          margin-bottom: 4px;
+          display: block;
+        }
+        .pdf-val-box {
+          border: 1px solid #cbd5e1;
+          border-radius: 6px;
+          padding: 8px 12px;
+          font-size: 13px;
+          color: #1a202c;
+          background: #f8fafc;
+          min-height: 38px;
+          box-sizing: border-box;
+          font-weight: 500;
+        }
+      </style>
+
+      <!-- Section: Personal Details / വ്യക്തിഗത വിവരങ്ങൾ -->
+      <div class="pdf-section-title">
+        👤 Personal Details / വ്യക്തിഗത വിവരങ്ങൾ
+      </div>
+      <div class="pdf-grid-2">
+        <div class="pdf-field">
+          <span class="pdf-label">Student Name / പേര് *</span>
+          <div class="pdf-val-box" id="pdf_name"></div>
+        </div>
+        <div class="pdf-field">
+          <span class="pdf-label">Date of Birth / ജനനതീയതി *</span>
+          <div class="pdf-val-box" id="pdf_dob"></div>
+        </div>
+      </div>
+      <div class="pdf-grid-2">
+        <div class="pdf-field">
+          <span class="pdf-label">Father's Name / പിതാവിന്റെ പേര് *</span>
+          <div class="pdf-val-box" id="pdf_fatherName"></div>
+        </div>
+        <div class="pdf-field">
+          <span class="pdf-label">Mother's Name / മാതാവിന്റെ പേര് *</span>
+          <div class="pdf-val-box" id="pdf_motherName"></div>
+        </div>
+      </div>
+      <div class="pdf-grid-2">
+        <div class="pdf-field">
+          <span class="pdf-label">Student Phone / ഫോൺ നമ്പർ *</span>
+          <div class="pdf-val-box" id="pdf_phone"></div>
+        </div>
+        <div class="pdf-field">
+          <span class="pdf-label">Blood Group / രക്ത ഗ്രൂപ്പ് *</span>
+          <div class="pdf-val-box" id="pdf_bloodGroup"></div>
+        </div>
+      </div>
+
+      <!-- Section: Address Details / വിലാസം -->
+      <div class="pdf-section-title">
+        🏠 Address Details / വിലാസം
+      </div>
+      <div class="pdf-grid-2">
+        <div class="pdf-field">
+          <span class="pdf-label">House Name / വീട്ടിന്റെ പേര് *</span>
+          <div class="pdf-val-box" id="pdf_houseName"></div>
+        </div>
+        <div class="pdf-field">
+          <span class="pdf-label">Home Phone / വീട്ടിലെ ഫോൺ നമ്പർ</span>
+          <div class="pdf-val-box" id="pdf_homePhone"></div>
+        </div>
+      </div>
+      <div class="pdf-grid-2">
+        <div class="pdf-field">
+          <span class="pdf-label">Place / സ്ഥലം *</span>
+          <div class="pdf-val-box" id="pdf_place"></div>
+        </div>
+        <div class="pdf-field">
+          <span class="pdf-label">Post Office / പോസ്റ്റ് *</span>
+          <div class="pdf-val-box" id="pdf_postOffice"></div>
+        </div>
+      </div>
+      <div class="pdf-grid-2">
+        <div class="pdf-field">
+          <span class="pdf-label">District / ജില്ല *</span>
+          <div class="pdf-val-box" id="pdf_district"></div>
+        </div>
+        <div class="pdf-field">
+          <span class="pdf-label">Pincode / പിൻകോഡ് *</span>
+          <div class="pdf-val-box" id="pdf_pincode"></div>
+        </div>
+      </div>
+
+      <!-- Section: Education & Guardian / വിദ്യാഭ്യാസം, രക്ഷിതാവ് -->
+      <div class="pdf-section-title">
+        🎓 Education & Guardian / വിദ്യാഭ്യാസം, രക്ഷിതാവ്
+      </div>
+      <div class="pdf-grid-2">
+        <div class="pdf-field">
+          <span class="pdf-label">Religious Education / വിദ്യാഭ്യാസം: മദ്രസ *</span>
+          <div class="pdf-val-box" id="pdf_eduRel"></div>
+        </div>
+        <div class="pdf-field">
+          <span class="pdf-label">Secular Education / വിദ്യാഭ്യാസം: സ്കൂൾ *</span>
+          <div class="pdf-val-box" id="pdf_eduSec"></div>
+        </div>
+      </div>
+      <div class="pdf-grid-3">
+        <div class="pdf-field">
+          <span class="pdf-label">Guardian Name / രക്ഷിതാവിന്റെ പേര് *</span>
+          <div class="pdf-val-box" id="pdf_guardianName"></div>
+        </div>
+        <div class="pdf-field">
+          <span class="pdf-label">Relationship / ബന്ധം *</span>
+          <div class="pdf-val-box" id="pdf_relationship"></div>
+        </div>
+        <div class="pdf-field">
+          <span class="pdf-label">Guardian Phone / രക്ഷിതാവിന്റെ ഫോൺ നമ്പർ *</span>
+          <div class="pdf-val-box" id="pdf_guardianPhone"></div>
+        </div>
+      </div>
+
+      <!-- Declaration and Signatures -->
+      <div style="margin-top:25px; border-top:1px solid #cbd5e1; padding-top:15px;">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:40px;">
+          <input type="checkbox" checked disabled style="width:16px; height:16px; accent-color:#1a6b3a;">
+          <span style="font-size:11px; color:#475569; line-height:1.4;">
+            മുകളിൽ നൽകിയ വിവരങ്ങൾ സത്യവും ശരിയും ആണെന്ന് ഞാൻ ഉറപ്പുനൽകുന്നു. / I hereby declare that the above information is true and correct to the best of my knowledge.
+          </span>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+          <div>
+            <span style="font-size:11px; color:#64748b; display:block; margin-bottom:5px;">Date / തീയതി</span>
+            <div style="border-bottom:1px solid #94a3b8; width:150px; font-size:13px; padding-bottom:3px; font-weight:600;" id="pdf_date"></div>
+          </div>
+          <div style="text-align:right; position:relative; width:200px;">
+            <div style="font-family:'Caveat', 'Brush Script MT', cursive; font-size:24px; color:#1a6b3a; position:absolute; bottom:18px; right:20px; font-weight:700;" id="pdf_signature"></div>
+            <div style="border-bottom:1px solid #94a3b8; width:100%; margin-bottom:5px;"></div>
+            <span style="font-size:11px; color:#64748b; display:block;">Signature / ഒപ്പ്</span>
           </div>
         </div>
       </div>
@@ -899,6 +1112,8 @@
       loadSubscribers();
       loadSlidersAdmin();
       loadSectionEditor();
+      loadStories();
+      loadHomeSettings();
     }
 
     // ── ADMISSIONS ─────────────────────────────────
@@ -954,6 +1169,8 @@
       document.getElementById('pdf_guardianName').innerText = item.guardianName || '______________________';
       document.getElementById('pdf_relationship').innerText = item.relationship || '______________________';
       document.getElementById('pdf_guardianPhone').innerText = item.guardianPhone || '______________________';
+      document.getElementById('pdf_date').innerText = new Date(item.createdAt).toLocaleDateString('en-IN');
+      document.getElementById('pdf_signature').innerText = item.name.split(' ')[0] || '';
 
       // Setup Photo
       var photoLabel = document.getElementById('pdfPhotoLabel');
@@ -1081,15 +1298,25 @@
              mediaTag = '<img src="' + item.imageUrl + '">';
           }
 
+          var pinText = item.pinned ? '<i class="fa fa-thumb-tack"></i> Pinned' : '<i class="fa fa-thumb-tack"></i> Pin';
+          var pinStyle = item.pinned ? 'background:var(--accent);color:#000;' : 'background:var(--bg-input);color:var(--text);';
+
           html += '<tr>' +
             '<td>' + mediaTag + '</td>' +
             '<td>' + item.title + '</td>' +
             '<td><span class="badge ' + (badgeMap[item.category] || '') + '">' + item.category + '</span></td>' +
+            '<td><button class="btn btn-sm" style="' + pinStyle + '" onclick="togglePin(\'' + item._id + '\')">' + pinText + '</button></td>' +
             '<td>' + d + '</td>' +
             '<td><button class="btn btn-danger btn-sm" onclick="deleteItem(\'gallery\',\'' + item._id + '\')"><i class="fa fa-trash"></i></button></td></tr>';
         });
-        document.getElementById('galleryTableBody').innerHTML = html || '<tr><td colspan="5" style="text-align:center;color:var(--text-muted)">No gallery items yet</td></tr>';
+        document.getElementById('galleryTableBody').innerHTML = html || '<tr><td colspan="6" style="text-align:center;color:var(--text-muted)">No gallery items yet</td></tr>';
       });
+    }
+
+    function togglePin(id) {
+      fetch('/api/gallery/' + id + '/pin', { method: 'POST' })
+        .then(function(r) { return r.json(); })
+        .then(function(res) { if(res.success) loadGalleryAdmin(); });
     }
 
     function toggleGalleryMediaInputs() {
@@ -1109,6 +1336,8 @@
       fd.append('title', document.getElementById('galleryTitle').value);
       fd.append('category', document.getElementById('galleryCategory').value);
       fd.append('mediaType', document.getElementById('galleryMediaType').value);
+      fd.append('description', document.getElementById('galleryDesc').value);
+      fd.append('hashtags', document.getElementById('galleryHashtags').value);
       
       var file = document.getElementById('galleryImage').files[0];
       if (file) {
@@ -1271,6 +1500,195 @@
           alert(res.message);
         }
       });
+    }
+
+    // ============ STORIES ============
+    document.getElementById('storyForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var fd = new FormData();
+      fd.append('title', document.getElementById('storyTitle').value);
+      fd.append('image', document.getElementById('storyImage').files[0]);
+      fd.append('daysActive', document.getElementById('storyDays').value);
+      fetch('/api/stories', { method: 'POST', body: fd })
+        .then(r => r.json())
+        .then(res => { if(res.success) { loadStories(); e.target.reset(); alert('Story uploaded!'); } else alert(res.message); })
+        .catch(err => alert('Error: ' + err.message));
+    });
+
+    function loadStories() {
+      fetch('/api/stories/all')
+        .then(r => r.json())
+        .then(stories => {
+          var html = '';
+          stories.forEach(s => {
+            var exp = new Date(s.expiresAt);
+            var isActive = exp > new Date();
+            html += '<tr>' +
+              '<td><img src="' + s.imageUrl + '" style="width:50px;height:50px;border-radius:50%;object-fit:cover;"></td>' +
+              '<td>' + (s.title || '-') + '</td>' +
+              '<td>' + s.daysActive + '</td>' +
+              '<td>' + exp.toLocaleDateString() + '</td>' +
+              '<td><span class="badge" style="background:' + (isActive ? 'rgba(46,204,113,0.2);color:#2ecc71' : 'rgba(231,76,60,0.2);color:#e74c3c') + ';">' + (isActive ? 'Active' : 'Expired') + '</span></td>' +
+              '<td><button class="btn btn-danger btn-sm" onclick="deleteStory(\'' + s._id + '\')"><i class="fa fa-trash"></i></button></td>' +
+              '</tr>';
+          });
+          document.getElementById('storiesTableBody').innerHTML = html || '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);">No stories</td></tr>';
+        });
+    }
+
+    function deleteStory(id) {
+      if (!confirm('Delete this story?')) return;
+      fetch('/api/stories/' + id, { method: 'DELETE' })
+        .then(r => r.json())
+        .then(() => loadStories());
+    }
+
+    // ============ HOME SETTINGS ============
+    function loadHomeSettings() {
+      fetch('/api/home-settings')
+        .then(r => r.json())
+        .then(s => {
+          document.getElementById('hpStudents').value = s.statsStudents || '';
+          document.getElementById('hpUstads').value = s.statsUstads || '';
+          document.getElementById('hpYears').value = s.statsYears || '';
+          document.getElementById('hpAlumni').value = s.statsAlumni || '';
+          document.getElementById('hpPrincipalName').value = s.principalName || '';
+          document.getElementById('hpPrincipalTitle').value = s.principalTitle || '';
+          document.getElementById('hpPrincipalBio').value = s.principalBio || '';
+          if (s.principalImageUrl) {
+            var pi = document.getElementById('principalPreview');
+            pi.src = s.principalImageUrl;
+            pi.style.display = 'block';
+          }
+          document.getElementById('hpFooterName').value = s.footerMudarrisName || '';
+          document.getElementById('hpFooterTitle').value = s.footerMudarrisTitle || '';
+          document.getElementById('hpFooterDetail').value = s.footerMudarrisDetail || '';
+
+          // Assistants list
+          renderAssistants(s.assistantMudarris || []);
+          // Branches list
+          renderBranches(s.branches || []);
+        });
+    }
+
+    window.saveHomeStats = function() {
+      fetch('/api/home-settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          statsStudents: parseInt(document.getElementById('hpStudents').value) || 0,
+          statsUstads: parseInt(document.getElementById('hpUstads').value) || 0,
+          statsYears: parseInt(document.getElementById('hpYears').value) || 0,
+          statsAlumni: parseInt(document.getElementById('hpAlumni').value) || 0
+        })
+      }).then(r => r.json()).then(res => { if(res.success) alert('Stats saved!'); });
+    }
+
+    window.savePrincipal = function() {
+      var imgFile = document.getElementById('principalImageFile').files[0];
+      // Save text first
+      fetch('/api/home-settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          principalName: document.getElementById('hpPrincipalName').value,
+          principalTitle: document.getElementById('hpPrincipalTitle').value,
+          principalBio: document.getElementById('hpPrincipalBio').value
+        })
+      }).then(r => r.json()).then(res => {
+        if (imgFile) {
+          var fd = new FormData();
+          fd.append('image', imgFile);
+          fetch('/api/home-settings/principal-image', { method: 'POST', body: fd })
+            .then(r => r.json())
+            .then(imgRes => {
+              if (imgRes.success) {
+                document.getElementById('principalPreview').src = imgRes.imageUrl;
+                document.getElementById('principalPreview').style.display = 'block';
+              }
+              alert('Principal info saved!');
+            });
+        } else {
+          alert('Principal info saved!');
+        }
+      });
+    }
+
+    window.saveFooterInfo = function() {
+      fetch('/api/home-settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          footerMudarrisName: document.getElementById('hpFooterName').value,
+          footerMudarrisTitle: document.getElementById('hpFooterTitle').value,
+          footerMudarrisDetail: document.getElementById('hpFooterDetail').value
+        })
+      }).then(r => r.json()).then(res => { if(res.success) alert('Footer info saved!'); });
+    }
+
+    // Assistants
+    document.getElementById('assistantForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var fd = new FormData();
+      fd.append('name', document.getElementById('assistantName').value);
+      fd.append('role', document.getElementById('assistantRole').value || 'Assistant Mudarris');
+      var imgFile = document.getElementById('assistantImage').files[0];
+      if (imgFile) fd.append('image', imgFile);
+      fetch('/api/home-settings/assistant', { method: 'POST', body: fd })
+        .then(r => r.json())
+        .then(res => { if(res.success) { loadHomeSettings(); e.target.reset(); } else alert(res.message); });
+    });
+
+    window.deleteAssistant = function(id) {
+      if (!confirm('Delete this assistant?')) return;
+      fetch('/api/home-settings/assistant/' + id, { method: 'DELETE' })
+        .then(r => r.json())
+        .then(() => loadHomeSettings());
+    }
+
+    function renderAssistants(list) {
+      var html = '';
+      list.forEach(a => {
+        html += '<div style="display:flex; align-items:center; gap:12px; padding:10px; border-bottom:1px solid var(--border);">' +
+          '<img src="' + (a.imageUrl || 'img/new_logo.png') + '" style="width:40px;height:40px;border-radius:50%;object-fit:cover;">' +
+          '<div style="flex:1;"><strong>' + a.name + '</strong><br><small style="color:var(--text-muted);">' + a.role + '</small></div>' +
+          '<button class="btn btn-danger btn-sm" onclick="deleteAssistant(\'' + a._id + '\')"><i class="fa fa-trash"></i></button>' +
+          '</div>';
+      });
+      document.getElementById('assistantListAdmin').innerHTML = html || '<p style="color:var(--text-muted);">No assistants added yet</p>';
+    }
+
+    // Branches
+    document.getElementById('branchForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      fetch('/api/home-settings/branch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: document.getElementById('branchName').value,
+          location: document.getElementById('branchLocation').value,
+          description: document.getElementById('branchDesc').value
+        })
+      }).then(r => r.json()).then(res => { if(res.success) { loadHomeSettings(); e.target.reset(); } });
+    });
+
+    window.deleteBranch = function(id) {
+      if (!confirm('Delete this branch?')) return;
+      fetch('/api/home-settings/branch/' + id, { method: 'DELETE' })
+        .then(r => r.json())
+        .then(() => loadHomeSettings());
+    }
+
+    function renderBranches(list) {
+      var html = '';
+      list.forEach(b => {
+        html += '<div style="display:flex; align-items:center; gap:12px; padding:10px; border-bottom:1px solid var(--border);">' +
+          '<i class="fa fa-map-marker" style="color:var(--accent);font-size:1.2rem;"></i>' +
+          '<div style="flex:1;"><strong>' + b.name + '</strong>' + (b.location ? '<br><small style="color:var(--text-muted);">' + b.location + '</small>' : '') + '</div>' +
+          '<button class="btn btn-danger btn-sm" onclick="deleteBranch(\'' + b._id + '\')"><i class="fa fa-trash"></i></button>' +
+          '</div>';
+      });
+      document.getElementById('branchListAdmin').innerHTML = html || '<p style="color:var(--text-muted);">No branches added yet</p>';
     }
   </script>
 </body>
