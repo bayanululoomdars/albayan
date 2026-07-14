@@ -508,6 +508,67 @@ router.post('/settings/poster', (req, res) => {
   });
 });
 
+// GET /api/settings/admission-banner — Get admission banner text settings
+router.get('/settings/admission-banner', async (req, res) => {
+  try {
+    let titleSetting = await Settings.findOne({ key: 'admissionBannerTitle' });
+    let contentSetting = await Settings.findOne({ key: 'admissionBannerContent' });
+    res.json({
+      title: titleSetting ? titleSetting.value : '',
+      content: contentSetting ? contentSetting.value : ''
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// POST /api/settings/admission-banner — Update admission banner text settings
+router.post('/settings/admission-banner', async (req, res) => {
+  try {
+    const { title, content } = req.body;
+    // Save title
+    let titleSetting = await Settings.findOne({ key: 'admissionBannerTitle' });
+    if (!titleSetting) {
+      titleSetting = new Settings({ key: 'admissionBannerTitle', value: title || '' });
+    } else {
+      titleSetting.value = title || '';
+    }
+    await titleSetting.save();
+    // Save content
+    let contentSetting = await Settings.findOne({ key: 'admissionBannerContent' });
+    if (!contentSetting) {
+      contentSetting = new Settings({ key: 'admissionBannerContent', value: content || '' });
+    } else {
+      contentSetting.value = content || '';
+    }
+    await contentSetting.save();
+    res.json({ success: true, title: titleSetting.value, content: contentSetting.value });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// DELETE /api/settings/poster — Remove admission poster
+router.delete('/settings/poster', async (req, res) => {
+  try {
+    const setting = await Settings.findOne({ key: 'admissionPosterUrl' });
+    if (setting) {
+      // Try to delete from Cloudinary if applicable
+      if (isCloudinaryConfigured() && setting.value) {
+        try {
+          const publicId = setting.value.split('/').slice(-1)[0].split('.')[0];
+          await cloudinary.uploader.destroy(publicId);
+        } catch (e) { /* ignore */ }
+      }
+      setting.value = null;
+      await setting.save();
+    }
+    res.json({ success: true, message: 'Poster removed' });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 // GET /api/settings/gallery-categories — Get custom categories
 router.get('/settings/gallery-categories', async (req, res) => {
   try {

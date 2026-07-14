@@ -465,19 +465,47 @@
          </div>
       </div>
 
-      <!-- Admission Poster Upload -->
+      <!-- Admission Banner Settings -->
       <div class="card">
-        <h3><i class="fa fa-image"></i> Admission Poster</h3>
-        <div style="display:flex; align-items:flex-start; gap:20px; flex-wrap:wrap;">
-          <img id="currentPosterPreview" src="" alt="Poster Preview" style="width:150px; border-radius:10px; display:none; border:2px solid var(--accent);">
-          <div style="flex:1;">
-            <form id="posterUploadForm" enctype="multipart/form-data">
-              <div class="form-group">
-                <label>Upload Admission Poster Image</label>
-                <input type="file" id="posterFile" accept="image/*" required>
-              </div>
-              <button type="submit" class="btn" style="max-width:200px;"><i class="fa fa-upload"></i> Upload Poster</button>
-            </form>
+        <h3><i class="fa fa-pencil-square-o"></i> Admission Banner Settings</h3>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:20px;"><i class="fa fa-info-circle"></i> Edit the title, content text, and poster of the home page admission banner.</p>
+
+        <!-- Banner Title -->
+        <div class="form-group">
+          <label>Banner Title / ബാനർ തലക്കെട്ട്</label>
+          <input type="text" id="bannerTitle" placeholder="2026 പുതിയ അധ്യയന വർഷത്തേക്കുള്ള അഡ്മിഷൻ തുടരുന്നു..." style="font-size:0.95rem;">
+        </div>
+
+        <!-- Banner Content -->
+        <div class="form-group">
+          <label>Banner Content / ബാനർ ഉള്ളടക്കം (optional)</label>
+          <textarea id="bannerContent" rows="3" placeholder="Enter additional text to show below the title..."></textarea>
+        </div>
+
+        <button class="btn" style="max-width:240px; margin-bottom:20px;" onclick="saveBannerText()"><i class="fa fa-save"></i> Save Title &amp; Content</button>
+
+        <!-- Poster Upload -->
+        <div style="border-top:1px solid var(--border); padding-top:20px; margin-top:4px;">
+          <h4 style="font-size:0.95rem; color:var(--text-muted); margin-bottom:16px;"><i class="fa fa-image"></i> Admission Poster Image</h4>
+          <div style="display:flex; align-items:flex-start; gap:20px; flex-wrap:wrap;">
+            <!-- Poster preview -->
+            <div id="adminPosterPreviewWrap" style="display:none; flex-direction:column; align-items:center; gap:8px;">
+              <img id="currentPosterPreview" src="" alt="Poster Preview" style="width:150px; border-radius:10px; border:2px solid var(--accent);">
+              <button class="btn btn-danger btn-sm" onclick="removePoster()"><i class="fa fa-trash"></i> Remove Poster</button>
+            </div>
+            <!-- No poster notice -->
+            <div id="adminNoPosterNotice" style="color:var(--text-muted); font-size:0.85rem; padding:12px 16px; background:rgba(255,255,255,0.04); border-radius:8px; border:1px dashed var(--border);">
+              <i class="fa fa-image" style="margin-right:6px;"></i> No poster uploaded yet — the banner will show a stylish placeholder.
+            </div>
+            <div style="flex:1;">
+              <form id="posterUploadForm" enctype="multipart/form-data">
+                <div class="form-group">
+                  <label>Upload New Poster Image</label>
+                  <input type="file" id="posterFile" accept="image/*" required>
+                </div>
+                <button type="submit" class="btn" style="max-width:200px;"><i class="fa fa-upload"></i> Upload Poster</button>
+              </form>
+            </div>
           </div>
         </div>
       </div>
@@ -1113,6 +1141,7 @@
       loadSectionEditor();
       loadStories();
       loadHomeSettings();
+      loadPosterAndBanner();
     }
 
     // ── ADMISSIONS ─────────────────────────────────
@@ -1298,6 +1327,114 @@
         modal.style.display = "none";
       }
     }
+
+    // ── ADMISSION BANNER POSTER & TEXT ─────────────────
+    function loadPosterAndBanner() {
+      // Load poster
+      fetch('/api/settings/poster')
+        .then(r => r.json())
+        .then(d => {
+          var preview = document.getElementById('currentPosterPreview');
+          var previewWrap = document.getElementById('adminPosterPreviewWrap');
+          var noNotice = document.getElementById('adminNoPosterNotice');
+          if (d.posterUrl) {
+            preview.src = d.posterUrl;
+            if (previewWrap) previewWrap.style.display = 'flex';
+            if (noNotice) noNotice.style.display = 'none';
+          } else {
+            if (previewWrap) previewWrap.style.display = 'none';
+            if (noNotice) noNotice.style.display = 'block';
+          }
+        })
+        .catch(() => {});
+
+      // Load banner text
+      fetch('/api/settings/admission-banner')
+        .then(r => r.json())
+        .then(d => {
+          if (d.title) document.getElementById('bannerTitle').value = d.title;
+          if (d.content) document.getElementById('bannerContent').value = d.content;
+        })
+        .catch(() => {});
+    }
+
+    window.saveBannerText = function() {
+      var btn = event.currentTarget || document.querySelector('[onclick="saveBannerText()"]');
+      var title = document.getElementById('bannerTitle').value.trim();
+      var content = document.getElementById('bannerContent').value.trim();
+      fetch('/api/settings/admission-banner', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, content })
+      })
+      .then(r => r.json())
+      .then(res => {
+        if (res.success) {
+          showAdminToast('Banner text saved successfully!', false);
+        } else {
+          showAdminToast('Failed to save: ' + (res.message || 'Unknown error'), true);
+        }
+      })
+      .catch(() => showAdminToast('Network error. Please try again.', true));
+    };
+
+    window.removePoster = function() {
+      if (!confirm('Remove the admission poster? The banner will show a placeholder instead.')) return;
+      fetch('/api/settings/poster', { method: 'DELETE' })
+        .then(r => r.json())
+        .then(res => {
+          if (res.success) {
+            showAdminToast('Poster removed!', false);
+            loadPosterAndBanner();
+          } else {
+            showAdminToast('Failed to remove poster', true);
+          }
+        })
+        .catch(() => showAdminToast('Network error', true));
+    };
+
+    // Admin toast notification helper
+    function showAdminToast(message, isError) {
+      var existing = document.getElementById('adminToastContainer');
+      if (!existing) {
+        existing = document.createElement('div');
+        existing.id = 'adminToastContainer';
+        existing.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:10px;';
+        document.body.appendChild(existing);
+      }
+      var toast = document.createElement('div');
+      toast.style.cssText = 'background:' + (isError ? '#e74c3c' : '#2ecc71') + ';color:#fff;padding:12px 20px;border-radius:10px;font-size:0.9rem;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,0.3);display:flex;align-items:center;gap:8px;animation:slideIn 0.3s ease;';
+      toast.innerHTML = '<i class="fa ' + (isError ? 'fa-times-circle' : 'fa-check-circle') + '"></i> ' + message;
+      existing.appendChild(toast);
+      setTimeout(function() { toast.remove(); }, 3500);
+    }
+
+    // ── POSTER UPLOAD FORM ─────────────────────────
+    document.getElementById('posterUploadForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var fd = new FormData();
+      var posterFile = document.getElementById('posterFile').files[0];
+      if (!posterFile) { showAdminToast('Please select an image file', true); return; }
+      fd.append('poster', posterFile);
+      var btn = this.querySelector('button[type=submit]');
+      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Uploading...'; }
+      fetch('/api/settings/poster', { method: 'POST', body: fd })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Upload Poster'; }
+          if (data.success) {
+            showAdminToast('Poster uploaded successfully!', false);
+            document.getElementById('posterUploadForm').reset();
+            loadPosterAndBanner();
+          } else {
+            showAdminToast(data.message || 'Upload failed', true);
+          }
+        })
+        .catch(function() {
+          if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Upload Poster'; }
+          showAdminToast('Network error. Please try again.', true);
+        });
+    });
 
     // ── NEWS ───────────────────────────────────────
     function loadNewsAdmin() {
