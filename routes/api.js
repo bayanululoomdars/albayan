@@ -675,6 +675,8 @@ router.post('/settings/burda', (req, res) => {
       res.status(500).json({ success: false, message: err.message });
     }
   });
+});
+
 // GET /api/stories — Get active (non-expired) stories
 router.get('/stories', async (req, res) => {
   try {
