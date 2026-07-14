@@ -1,0 +1,1887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Admin Panel | BAYANUL ULOOM DARS</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <link rel="icon" type="image/png" href="img/favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    :root {
+      --primary: #0a4d2e;
+      --primary-light: #0f6b3f;
+      --primary-dark: #063a22;
+      --accent: #d4af37;
+      --accent-light: #e8c84a;
+      --bg: #0f1923;
+      --bg-card: #1a2634;
+      --bg-input: #243040;
+      --text: #e0e0e0;
+      --text-muted: #8899aa;
+      --danger: #e74c3c;
+      --success: #2ecc71;
+      --border: rgba(212,175,55,0.15);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── LOGIN SCREEN ──────────────────────────────── */
+    .login-screen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--bg) 0%, #0d2818 100%);
+    }
+
+    .login-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 50px 40px;
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+
+    .login-box img {
+      height: 70px;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
+    }
+
+    .login-box h2 {
+      font-family: 'Outfit', sans-serif;
+      color: var(--accent);
+      margin-bottom: 8px;
+      font-size: 1.5rem;
+    }
+
+    .login-box p {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 30px;
+    }
+
+    .login-box input {
+      width: 100%;
+      padding: 14px 18px;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 1rem;
+      margin-bottom: 16px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .login-box input:focus {
+      border-color: var(--accent);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      color: var(--primary-dark);
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(212,175,55,0.3);
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, var(--danger), #c0392b);
+      color: #fff;
+    }
+
+    .btn-sm {
+      width: auto;
+      padding: 8px 16px;
+      font-size: 0.8rem;
+      border-radius: 8px;
+    }
+
+    .error-msg {
+      color: var(--danger);
+      font-size: 0.85rem;
+      margin-top: 10px;
+    }
+
+    /* ── ADMIN DASHBOARD ──────────────────────────── */
+    .dashboard { display: none; }
+
+    .admin-header {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      padding: 16px 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid var(--accent);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .admin-header h1 {
+      font-family: 'Outfit', sans-serif;
+      color: var(--accent);
+      font-size: 1.3rem;
+      margin: 0;
+    }
+
+    .admin-header .btn-logout {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 8px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.3s;
+    }
+
+    .admin-header .btn-logout:hover {
+      background: var(--danger);
+      border-color: var(--danger);
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      padding: 16px 24px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover { color: var(--text); }
+
+    .tab-btn.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    /* Content */
+    .tab-content {
+      display: none;
+      padding: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .tab-content.active { display: block; }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .card h3 {
+      font-family: 'Outfit', sans-serif;
+      color: var(--accent);
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--accent);
+    }
+
+    .form-group textarea { resize: vertical; min-height: 100px; }
+
+    /* Data Table */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .data-table th {
+      background: var(--bg-input);
+      color: var(--accent);
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .data-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.85rem;
+      color: var(--text);
+    }
+
+    .data-table tr:hover td {
+      background: rgba(212,175,55,0.03);
+    }
+
+    .data-table img {
+      width: 60px;
+      height: 40px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .badge-programme { background: rgba(52,152,219,0.2); color: #3498db; }
+    .badge-collections { background: rgba(46,204,113,0.2); color: #2ecc71; }
+    .badge-design { background: rgba(155,89,182,0.2); color: #9b59b6; }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .stat-card .stat-number {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .stat-card .stat-label {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 768px) {
+      .tab-content { padding: 16px; }
+      .data-table { font-size: 0.75rem; }
+      .data-table th, .data-table td { padding: 8px; }
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 10000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.6);
+      backdrop-filter: blur(5px);
+    }
+    .modal-content {
+      background-color: var(--bg-card);
+      margin: 5% auto;
+      padding: 30px;
+      border: 1px solid var(--border);
+      width: 90%;
+      max-width: 750px;
+      border-radius: 16px;
+      color: var(--text);
+      position: relative;
+    }
+    .modal-close {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      font-size: 1.5rem;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+    .modal-close:hover {
+      color: var(--text);
+    }
+    .modal-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    .modal-grid div {
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding-bottom: 8px;
+    }
+    .modal-grid label {
+      display: block;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOGIN SCREEN -->
+  <div class="login-screen" id="loginScreen">
+    <div class="login-box">
+      <img src="img/new_logo.png" alt="AL BAYAN Logo">
+      <h2>Admin Panel</h2>
+      <p>Enter the admin password to manage content</p>
+      <input type="password" id="loginPassword" placeholder="Enter admin password" onkeypress="if(event.key==='Enter')doLogin()">
+      <button class="btn" onclick="doLogin()">
+        <i class="fa fa-lock"></i> Login
+      </button>
+      <p class="error-msg" id="loginError"></p>
+    </div>
+  </div>
+
+  <!-- ADMIN DASHBOARD -->
+  <div class="dashboard" id="dashboard">
+    <div class="admin-header">
+      <h1><i class="fa fa-shield"></i> AL BAYAN Admin</h1>
+      <div>
+        <a href="/" style="color:#fff; text-decoration:none; margin-right:16px; font-size:0.85rem;"><i class="fa fa-home"></i> View Site</a>
+        <button class="btn-logout" onclick="doLogout()"><i class="fa fa-sign-out"></i> Logout</button>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('overview')"><i class="fa fa-dashboard"></i> Overview</button>
+      <button class="tab-btn" onclick="switchTab('admissions')"><i class="fa fa-graduation-cap"></i> Admissions</button>
+      <button class="tab-btn" onclick="switchTab('news')"><i class="fa fa-newspaper-o"></i> News</button>
+      <button class="tab-btn" onclick="switchTab('gallery')"><i class="fa fa-image"></i> Gallery</button>
+      <button class="tab-btn" onclick="switchTab('contacts')"><i class="fa fa-envelope"></i> Messages</button>
+      <button class="tab-btn" onclick="switchTab('subscribers')"><i class="fa fa-users"></i> Subscribers</button>
+      <button class="tab-btn" onclick="switchTab('sliders')"><i class="fa fa-sliders"></i> Sliders</button>
+      <button class="tab-btn" onclick="switchTab('sections')"><i class="fa fa-edit"></i> Sections</button>
+      <button class="tab-btn" onclick="switchTab('stories')"><i class="fa fa-camera"></i> Stories</button>
+      <button class="tab-btn" onclick="switchTab('homepage')"><i class="fa fa-home"></i> Home Page</button>
+    </div>
+
+    <!-- OVERVIEW TAB -->
+    <div class="tab-content active" id="tab-overview">
+      <div class="stats-row" id="statsRow">
+        <div class="stat-card">
+          <div class="stat-number" id="statAdmissions">0</div>
+          <div class="stat-label">Applications</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="statNews">0</div>
+          <div class="stat-label">News Articles</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="statGallery">0</div>
+          <div class="stat-label">Gallery Images</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="statContacts">0</div>
+          <div class="stat-label">Messages</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="statSubscribers">0</div>
+          <div class="stat-label">Subscribers</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADMISSIONS TAB -->
+    <div class="tab-content" id="tab-admissions">
+      <div class="card" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+         <h3 style="border-bottom:none; margin-bottom:0;"><i class="fa fa-cogs"></i> Admission Settings</h3>
+         <div style="display:flex; align-items:center; gap:20px; flex-wrap:wrap;">
+            <label style="display:flex; align-items:center; cursor:pointer; gap:10px; font-weight:bold;">
+               Admissions Open
+               <input type="checkbox" id="admissionToggle" onchange="toggleAdmission(this.checked)" style="width:auto; cursor:pointer;">
+            </label>
+         </div>
+      </div>
+
+      <!-- Admission Banner Settings -->
+      <div class="card">
+        <h3><i class="fa fa-pencil-square-o"></i> Admission Banner Settings</h3>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:20px;"><i class="fa fa-info-circle"></i> Edit the title, content text, and poster of the home page admission banner.</p>
+
+        <!-- Banner Title -->
+        <div class="form-group">
+          <label>Banner Title / ബാനർ തലക്കെട്ട്</label>
+          <input type="text" id="bannerTitle" placeholder="2026 പുതിയ അധ്യയന വർഷത്തേക്കുള്ള അഡ്മിഷൻ തുടരുന്നു..." style="font-size:0.95rem;">
+        </div>
+
+        <!-- Banner Content -->
+        <div class="form-group">
+          <label>Banner Content / ബാനർ ഉള്ളടക്കം (optional)</label>
+          <textarea id="bannerContent" rows="3" placeholder="Enter additional text to show below the title..."></textarea>
+        </div>
+
+        <button class="btn" style="max-width:240px; margin-bottom:20px;" onclick="saveBannerText()"><i class="fa fa-save"></i> Save Title &amp; Content</button>
+
+        <!-- Poster Upload -->
+        <div style="border-top:1px solid var(--border); padding-top:20px; margin-top:4px;">
+          <h4 style="font-size:0.95rem; color:var(--text-muted); margin-bottom:16px;"><i class="fa fa-image"></i> Admission Poster Image</h4>
+          <div style="display:flex; align-items:flex-start; gap:20px; flex-wrap:wrap;">
+            <!-- Poster preview -->
+            <div id="adminPosterPreviewWrap" style="display:none; flex-direction:column; align-items:center; gap:8px;">
+              <img id="currentPosterPreview" src="" alt="Poster Preview" style="width:150px; border-radius:10px; border:2px solid var(--accent);">
+              <button class="btn btn-danger btn-sm" onclick="removePoster()"><i class="fa fa-trash"></i> Remove Poster</button>
+            </div>
+            <!-- No poster notice -->
+            <div id="adminNoPosterNotice" style="color:var(--text-muted); font-size:0.85rem; padding:12px 16px; background:rgba(255,255,255,0.04); border-radius:8px; border:1px dashed var(--border);">
+              <i class="fa fa-image" style="margin-right:6px;"></i> No poster uploaded yet — the banner will show a stylish placeholder.
+            </div>
+            <div style="flex:1;">
+              <form id="posterUploadForm" enctype="multipart/form-data">
+                <div class="form-group">
+                  <label>Upload New Poster Image</label>
+                  <input type="file" id="posterFile" accept="image/*" required>
+                </div>
+                <button type="submit" class="btn" style="max-width:200px;"><i class="fa fa-upload"></i> Upload Poster</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><i class="fa fa-graduation-cap"></i> Admission Applications / പ്രവേശന അപേക്ഷകൾ</h3>
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Father</th>
+                <th>Mother</th>
+                <th>Phone</th>
+                <th>DOB</th>
+                <th>Applied</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admissionsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- NEWS TAB -->
+    <div class="tab-content" id="tab-news">
+      <div class="card">
+        <h3><i class="fa fa-plus-circle"></i> Add News</h3>
+        <form id="newsForm" enctype="multipart/form-data">
+          <div class="form-group">
+            <label>Title</label>
+            <input type="text" id="newsTitle" placeholder="News title" required>
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea id="newsDesc" placeholder="News description" required></textarea>
+          </div>
+          <div class="form-group">
+            <label>Image (optional)</label>
+            <input type="file" id="newsImage" accept="image/*">
+          </div>
+          <button type="submit" class="btn" style="max-width:200px;"><i class="fa fa-plus"></i> Add News</button>
+        </form>
+      </div>
+      <div class="card">
+        <h3><i class="fa fa-list"></i> All News</h3>
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead><tr><th>Image</th><th>Title</th><th>Description</th><th>Date</th><th>Action</th></tr></thead>
+            <tbody id="newsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- GALLERY TAB -->
+    <div class="tab-content" id="tab-gallery">
+      <div class="card">
+        <h3><i class="fa fa-plus-circle"></i> Add Gallery Item</h3>
+        <form id="galleryForm" enctype="multipart/form-data">
+          <div class="form-group">
+            <label>Title</label>
+            <input type="text" id="galleryTitle" placeholder="Item title" required>
+          </div>
+          <div class="form-group">
+            <label>Category</label>
+            <select id="galleryCategory" required>
+              <option value="">Select category</option>
+              <option value="Post (Image)">Post (Image)</option>
+              <option value="Reel (Video)">Reel (Video)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Media Type</label>
+            <select id="galleryMediaType" onchange="toggleGalleryMediaInputs()" required>
+              <option value="image">Image</option>
+              <option value="video">Video</option>
+            </select>
+          </div>
+          <div class="form-group" id="galleryImageInputGroup">
+            <label>Image/Video File</label>
+            <input type="file" id="galleryImage" accept="image/*,video/*">
+          </div>
+          <div class="form-group" id="galleryVideoUrlGroup" style="display:none;">
+            <label>Video URL (YouTube/Direct Link)</label>
+            <input type="text" id="galleryVideoUrl" placeholder="https://...">
+          </div>
+          <div class="form-group">
+            <label>Description / Caption</label>
+            <textarea id="galleryDesc" placeholder="Post description..."></textarea>
+          </div>
+          <div class="form-group">
+            <label>Hashtags (comma-separated)</label>
+            <input type="text" id="galleryHashtags" placeholder="samastha, dars, islamic">
+          </div>
+          <button type="submit" class="btn" style="max-width:200px;"><i class="fa fa-upload"></i> Upload</button>
+        </form>
+      </div>
+      <div class="card">
+        <h3><i class="fa fa-th"></i> All Gallery Images</h3>
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead><tr><th>Image</th><th>Title</th><th>Category</th><th>Pin Status</th><th>Date</th><th>Action</th></tr></thead>
+            <tbody id="galleryTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTACTS TAB -->
+    <div class="tab-content" id="tab-contacts">
+      <div class="card">
+        <h3><i class="fa fa-envelope-open"></i> Contact Messages</h3>
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead><tr><th>Name</th><th>Email</th><th>Subject</th><th>Message</th><th>Date</th><th>Action</th></tr></thead>
+            <tbody id="contactsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUBSCRIBERS TAB -->
+    <div class="tab-content" id="tab-subscribers">
+      <div class="card">
+        <h3><i class="fa fa-users"></i> Newsletter Subscribers</h3>
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead><tr><th>#</th><th>Email</th><th>Subscribed At</th></tr></thead>
+            <tbody id="subscribersTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDERS TAB -->
+    <div class="tab-content" id="tab-sliders">
+      <div class="card">
+        <h3><i class="fa fa-plus-circle"></i> Add Intro Slider</h3>
+        <form id="sliderForm" enctype="multipart/form-data">
+          <div class="form-group">
+            <label>Title (optional)</label>
+            <input type="text" id="sliderTitle" placeholder="Slider text">
+          </div>
+          <div class="form-group">
+            <label>Media Type</label>
+            <select id="sliderMediaType" required>
+              <option value="image">Image</option>
+              <option value="video">Video</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Media File</label>
+            <input type="file" id="sliderMedia" accept="image/*,video/mp4,video/webm" required>
+          </div>
+          <button type="submit" class="btn" style="max-width:200px;"><i class="fa fa-upload"></i> Upload</button>
+        </form>
+      </div>
+      <div class="card">
+        <h3><i class="fa fa-th"></i> All Sliders</h3>
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead><tr><th>Media</th><th>Type</th><th>Title</th><th>Date</th><th>Action</th></tr></thead>
+            <tbody id="slidersTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTIONS TAB -->
+    <div class="tab-content" id="tab-sections">
+      <div class="card">
+        <h3><i class="fa fa-edit"></i> Edit Homepage Sections</h3>
+        <div class="form-group">
+          <label>Select Section to Edit</label>
+          <select id="sectionSelector" onchange="loadSectionEditor()">
+            <option value="latestNews">Latest News</option>
+            <option value="gallery">Gallery</option>
+            <option value="admission">Admission</option>
+            <option value="aboutUs">About Us</option>
+            <option value="contact">Contact</option>
+          </select>
+        </div>
+        <form id="sectionForm">
+          <div class="form-group">
+            <label>Section Title</label>
+            <input type="text" id="sectionTitle" required>
+          </div>
+          <div class="form-group">
+            <label>Introduction Text</label>
+            <textarea id="sectionDesc" required></textarea>
+          </div>
+          <div class="form-group">
+            <label>Read More Link</label>
+            <input type="text" id="sectionLink" placeholder="e.g., https://example.com or #about" required>
+          </div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:20px;">
+            <button type="submit" class="btn" style="max-width:200px; margin:0;"><i class="fa fa-save"></i> Save Section</button>
+            <button type="button" class="btn" style="max-width:250px; background:#dc3545; margin:0;" onclick="deleteHomepageSection()"><i class="fa fa-eye-slash"></i> Hide / Delete Section</button>
+          </div>
+        </form>
+    </div>
+
+    <!-- STORIES TAB -->
+    <div class="tab-content" id="tab-stories">
+      <div class="card">
+        <h3><i class="fa fa-plus-circle"></i> Add Story</h3>
+        <form id="storyForm" enctype="multipart/form-data">
+          <div class="form-group">
+            <label>Story Title (optional)</label>
+            <input type="text" id="storyTitle" placeholder="Story title">
+          </div>
+          <div class="form-group">
+            <label>Story Image</label>
+            <input type="file" id="storyImage" accept="image/*" required>
+          </div>
+          <div class="form-group">
+            <label>Active for (days)</label>
+            <select id="storyDays">
+              <option value="1">1 Day</option>
+              <option value="3">3 Days</option>
+              <option value="7" selected>7 Days</option>
+              <option value="14">14 Days</option>
+              <option value="30">30 Days</option>
+            </select>
+          </div>
+          <button type="submit" class="btn" style="max-width:200px;"><i class="fa fa-upload"></i> Upload Story</button>
+        </form>
+      </div>
+      <div class="card">
+        <h3><i class="fa fa-list"></i> All Stories</h3>
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead><tr><th>Image</th><th>Title</th><th>Days</th><th>Expires</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody id="storiesTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOME PAGE TAB -->
+    <div class="tab-content" id="tab-homepage">
+      <!-- Stats Counters -->
+      <div class="card">
+        <h3><i class="fa fa-bar-chart"></i> Stats Counters</h3>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+          <div class="form-group">
+            <label>Students Count</label>
+            <input type="number" id="hpStudents" placeholder="90">
+          </div>
+          <div class="form-group">
+            <label>Usthads Count</label>
+            <input type="number" id="hpUstads" placeholder="6">
+          </div>
+          <div class="form-group">
+            <label>Years of Legacy</label>
+            <input type="number" id="hpYears" placeholder="50">
+          </div>
+          <div class="form-group">
+            <label>Distinguished Alumni</label>
+            <input type="number" id="hpAlumni" placeholder="25">
+          </div>
+        </div>
+        <button class="btn" style="max-width:200px;" onclick="saveHomeStats()"><i class="fa fa-save"></i> Save Stats</button>
+      </div>
+
+      <!-- Principal Mudarris -->
+      <div class="card">
+        <h3><i class="fa fa-user-circle"></i> Principal Mudarris</h3>
+        <div style="display:flex; gap:20px; flex-wrap:wrap; align-items:flex-start;">
+          <img id="principalPreview" src="" style="width:100px; height:100px; border-radius:50%; object-fit:cover; border:3px solid var(--accent); display:none;">
+          <div style="flex:1;">
+            <div class="form-group">
+              <label>Name</label>
+              <input type="text" id="hpPrincipalName" placeholder="Sheikhuna Ibrahim Baqavi Al Haithami">
+            </div>
+            <div class="form-group">
+              <label>Title</label>
+              <input type="text" id="hpPrincipalTitle" placeholder="Principal Mudarris">
+            </div>
+            <div class="form-group">
+              <label>Bio</label>
+              <textarea id="hpPrincipalBio" placeholder="Short biography..."></textarea>
+            </div>
+            <div class="form-group">
+              <label>Upload Photo</label>
+              <input type="file" id="principalImageFile" accept="image/*">
+            </div>
+            <button class="btn" style="max-width:250px;" onclick="savePrincipal()"><i class="fa fa-save"></i> Save Principal Info</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Assistant Mudarris -->
+      <div class="card">
+        <h3><i class="fa fa-users"></i> Assistant Mudarris</h3>
+        <form id="assistantForm" enctype="multipart/form-data" style="display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end; margin-bottom:20px;">
+          <div class="form-group" style="flex:1; min-width:150px;">
+            <label>Name</label>
+            <input type="text" id="assistantName" placeholder="Name" required>
+          </div>
+          <div class="form-group" style="flex:1; min-width:150px;">
+            <label>Role</label>
+            <input type="text" id="assistantRole" placeholder="Assistant Mudarris">
+          </div>
+          <div class="form-group" style="flex:1; min-width:150px;">
+            <label>Photo</label>
+            <input type="file" id="assistantImage" accept="image/*">
+          </div>
+          <button type="submit" class="btn" style="max-width:150px; height:45px; margin:0;"><i class="fa fa-plus"></i> Add</button>
+        </form>
+        <div id="assistantListAdmin"></div>
+      </div>
+
+      <!-- Branch & Faculty Network -->
+      <div class="card">
+        <h3><i class="fa fa-sitemap"></i> Branch & Faculty Network</h3>
+        <form id="branchForm" style="display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end; margin-bottom:20px;">
+          <div class="form-group" style="flex:1; min-width:150px;">
+            <label>Branch Name</label>
+            <input type="text" id="branchName" placeholder="Branch name" required>
+          </div>
+          <div class="form-group" style="flex:1; min-width:150px;">
+            <label>Location</label>
+            <input type="text" id="branchLocation" placeholder="Location">
+          </div>
+          <div class="form-group" style="flex:1; min-width:150px;">
+            <label>Description</label>
+            <input type="text" id="branchDesc" placeholder="Short description">
+          </div>
+          <button type="submit" class="btn" style="max-width:150px; height:45px; margin:0;"><i class="fa fa-plus"></i> Add</button>
+        </form>
+        <div id="branchListAdmin"></div>
+      </div>
+
+      <!-- Footer Mudarris Info -->
+      <div class="card">
+        <h3><i class="fa fa-footer"></i> Footer — Mudarris Info (replaces Newsletter)</h3>
+        <div class="form-group">
+          <label>Mudarris Name</label>
+          <input type="text" id="hpFooterName" placeholder="Name">
+        </div>
+        <div class="form-group">
+          <label>Title</label>
+          <input type="text" id="hpFooterTitle" placeholder="Principal Mudarris">
+        </div>
+        <div class="form-group">
+          <label>Detail</label>
+          <input type="text" id="hpFooterDetail" placeholder="Muttichira Bayanul Uloom Dars">
+        </div>
+        <button class="btn" style="max-width:200px;" onclick="saveFooterInfo()"><i class="fa fa-save"></i> Save Footer Info</button>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- ADMISSION DETAIL MODAL -->
+  <div class="modal" id="admissionModal">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeAdmissionModal()">&times;</span>
+      <h3 style="border-bottom: 2px solid var(--accent); padding-bottom: 10px; margin-bottom: 20px; font-family: 'Outfit', sans-serif;"><i class="fa fa-graduation-cap text-success mr-2"></i> Biodata Details / പൂർണ്ണ വിവരങ്ങൾ</h3>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- Hidden PDF Download Template -->
+  <div style="display:none;">
+    <div id="pdfPrintTemplate" style="width:790px; min-height:1120px; padding:45px; font-family:'Inter', sans-serif; color:#000; background:#fff; box-sizing:border-box; position:relative;">
+      <!-- Header Area -->
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:25px; border-bottom:3px solid #1a6b3a; padding-bottom:15px;">
+        <div style="flex:1;">
+          <h5 style="margin:0; font-size:14px; font-weight:700; color:#333; text-transform:uppercase; letter-spacing:0.5px;">Bayanul Uloom Dars, Muttichira</h5>
+          <p style="margin:2px 0 15px 0; font-size:11px; color:#666;">Shuhada Masjid Muttichira, Thalappara, PIN: 676311</p>
+          <h1 style="margin:0; font-size:32px; font-weight:800; color:#1a6b3a; font-family:'Outfit', sans-serif; line-height:1.1; text-transform:uppercase; letter-spacing:0.5px;">Student Biodata</h1>
+          <h2 style="margin:0; font-size:24px; font-weight:700; color:#222; font-family:'Outfit', sans-serif; text-transform:uppercase; letter-spacing:0.5px;">Application Form</h2>
+        </div>
+        <!-- Passport Photo Container -->
+        <div style="width:125px; height:160px; border:2px solid #1a6b3a; border-radius:8px; overflow:hidden; background:#f9f9f9; display:flex; align-items:center; justify-content:center; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+          <img id="pdfPhotoImg" src="" style="width:100%; height:100%; object-fit:cover; display:none;">
+          <span id="pdfPhotoLabel" style="font-size:12px; color:#aaa; font-weight:600; text-transform:uppercase;">Photo</span>
+        </div>
+      </div>
+
+      <!-- Helper style tags for layout -->
+      <style>
+        .pdf-section-title {
+          font-family: 'Outfit', sans-serif;
+          font-size: 15px;
+          font-weight: 700;
+          color: #1a6b3a;
+          margin: 20px 0 12px 0;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          border-bottom: 2px solid #e2e8f0;
+          padding-bottom: 6px;
+          text-transform: uppercase;
+        }
+        .pdf-grid-2 {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 15px;
+        }
+        .pdf-grid-3 {
+          display: grid;
+          grid-template-columns: 1.2fr 0.8fr 1fr;
+          gap: 15px;
+        }
+        .pdf-field {
+          margin-bottom: 12px;
+        }
+        .pdf-label {
+          font-size: 11px;
+          font-weight: 600;
+          color: #4a5568;
+          margin-bottom: 4px;
+          display: block;
+        }
+        .pdf-val-box {
+          border: 1px solid #cbd5e1;
+          border-radius: 6px;
+          padding: 8px 12px;
+          font-size: 13px;
+          color: #1a202c;
+          background: #f8fafc;
+          min-height: 38px;
+          box-sizing: border-box;
+          font-weight: 500;
+        }
+      </style>
+
+      <!-- Section: Personal Details / വ്യക്തിഗത വിവരങ്ങൾ -->
+      <div class="pdf-section-title">
+        👤 Personal Details / വ്യക്തിഗത വിവരങ്ങൾ
+      </div>
+      <div class="pdf-grid-2">
+        <div class="pdf-field">
+          <span class="pdf-label">Student Name / പേര് *</span>
+          <div class="pdf-val-box" id="pdf_name"></div>
+        </div>
+        <div class="pdf-field">
+          <span class="pdf-label">Date of Birth / ജനനതീയതി *</span>
+          <div class="pdf-val-box" id="pdf_dob"></div>
+        </div>
+      </div>
+      <div class="pdf-grid-2">
+        <div class="pdf-field">
+          <span class="pdf-label">Father's Name / പിതാവിന്റെ പേര് *</span>
+          <div class="pdf-val-box" id="pdf_fatherName"></div>
+        </div>
+        <div class="pdf-field">
+          <span class="pdf-label">Mother's Name / മാതാവിന്റെ പേര് *</span>
+          <div class="pdf-val-box" id="pdf_motherName"></div>
+        </div>
+      </div>
+      <div class="pdf-grid-2">
+        <div class="pdf-field">
+          <span class="pdf-label">Student Phone / ഫോൺ നമ്പർ *</span>
+          <div class="pdf-val-box" id="pdf_phone"></div>
+        </div>
+        <div class="pdf-field">
+          <span class="pdf-label">Blood Group / രക്ത ഗ്രൂപ്പ് *</span>
+          <div class="pdf-val-box" id="pdf_bloodGroup"></div>
+        </div>
+      </div>
+
+      <!-- Section: Address Details / വിലാസം -->
+      <div class="pdf-section-title">
+        🏠 Address Details / വിലാസം
+      </div>
+      <div class="pdf-grid-2">
+        <div class="pdf-field">
+          <span class="pdf-label">House Name / വീട്ടിന്റെ പേര് *</span>
+          <div class="pdf-val-box" id="pdf_houseName"></div>
+        </div>
+        <div class="pdf-field">
+          <span class="pdf-label">Home Phone / വീട്ടിലെ ഫോൺ നമ്പർ</span>
+          <div class="pdf-val-box" id="pdf_homePhone"></div>
+        </div>
+      </div>
+      <div class="pdf-grid-2">
+        <div class="pdf-field">
+          <span class="pdf-label">Place / സ്ഥലം *</span>
+          <div class="pdf-val-box" id="pdf_place"></div>
+        </div>
+        <div class="pdf-field">
+          <span class="pdf-label">Post Office / പോസ്റ്റ് *</span>
+          <div class="pdf-val-box" id="pdf_postOffice"></div>
+        </div>
+      </div>
+      <div class="pdf-grid-2">
+        <div class="pdf-field">
+          <span class="pdf-label">District / ജില്ല *</span>
+          <div class="pdf-val-box" id="pdf_district"></div>
+        </div>
+        <div class="pdf-field">
+          <span class="pdf-label">Pincode / പിൻകോഡ് *</span>
+          <div class="pdf-val-box" id="pdf_pincode"></div>
+        </div>
+      </div>
+
+      <!-- Section: Education & Guardian / വിദ്യാഭ്യാസം, രക്ഷിതാവ് -->
+      <div class="pdf-section-title">
+        🎓 Education & Guardian / വിദ്യാഭ്യാസം, രക്ഷിതാവ്
+      </div>
+      <div class="pdf-grid-2">
+        <div class="pdf-field">
+          <span class="pdf-label">Religious Education / വിദ്യാഭ്യാസം: മദ്രസ *</span>
+          <div class="pdf-val-box" id="pdf_eduRel"></div>
+        </div>
+        <div class="pdf-field">
+          <span class="pdf-label">Secular Education / വിദ്യാഭ്യാസം: സ്കൂൾ *</span>
+          <div class="pdf-val-box" id="pdf_eduSec"></div>
+        </div>
+      </div>
+      <div class="pdf-grid-3">
+        <div class="pdf-field">
+          <span class="pdf-label">Guardian Name / രക്ഷിതാവിന്റെ പേര് *</span>
+          <div class="pdf-val-box" id="pdf_guardianName"></div>
+        </div>
+        <div class="pdf-field">
+          <span class="pdf-label">Relationship / ബന്ധം *</span>
+          <div class="pdf-val-box" id="pdf_relationship"></div>
+        </div>
+        <div class="pdf-field">
+          <span class="pdf-label">Guardian Phone / രക്ഷിതാവിന്റെ ഫോൺ നമ്പർ *</span>
+          <div class="pdf-val-box" id="pdf_guardianPhone"></div>
+        </div>
+      </div>
+
+      <!-- Declaration and Signatures -->
+      <div style="margin-top:25px; border-top:1px solid #cbd5e1; padding-top:15px;">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:40px;">
+          <input type="checkbox" checked disabled style="width:16px; height:16px; accent-color:#1a6b3a;">
+          <span style="font-size:11px; color:#475569; line-height:1.4;">
+            മുകളിൽ നൽകിയ വിവരങ്ങൾ സത്യവും ശരിയും ആണെന്ന് ഞാൻ ഉറപ്പുനൽകുന്നു. / I hereby declare that the above information is true and correct to the best of my knowledge.
+          </span>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+          <div>
+            <span style="font-size:11px; color:#64748b; display:block; margin-bottom:5px;">Date / തീയതി</span>
+            <div style="border-bottom:1px solid #94a3b8; width:150px; font-size:13px; padding-bottom:3px; font-weight:600;" id="pdf_date"></div>
+          </div>
+          <div style="text-align:right; position:relative; width:200px;">
+            <div style="font-family:'Caveat', 'Brush Script MT', cursive; font-size:24px; color:#1a6b3a; position:absolute; bottom:18px; right:20px; font-weight:700;" id="pdf_signature"></div>
+            <div style="border-bottom:1px solid #94a3b8; width:100%; margin-bottom:5px;"></div>
+            <span style="font-size:11px; color:#64748b; display:block;">Signature / ഒപ്പ്</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ── LOGIN / LOGOUT ─────────────────────────────
+    function doLogin() {
+      var pw = document.getElementById('loginPassword').value;
+      fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pw })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.success) {
+          sessionStorage.setItem('admin', 'true');
+          document.getElementById('loginScreen').style.display = 'none';
+          document.getElementById('dashboard').style.display = 'block';
+          loadAll();
+        } else {
+          document.getElementById('loginError').textContent = data.message;
+        }
+      })
+      .catch(function() {
+        document.getElementById('loginError').textContent = 'Network error';
+      });
+      checkAdmissionStatus();
+    }
+
+    function checkAdmissionStatus() {
+      fetch('/api/settings/admission')
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById('admissionToggle').checked = data.isOpen;
+        })
+        .catch(err => console.error('Error fetching admission status:', err));
+    }
+
+    function toggleAdmission(isOpen) {
+      fetch('/api/settings/admission', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isOpen })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+           alert('Admission status updated to: ' + (data.isOpen ? 'OPEN' : 'CLOSED'));
+        }
+      })
+      .catch(err => console.error('Error updating admission status:', err));
+    }
+
+    function doLogout() {
+      sessionStorage.removeItem('admin');
+      location.reload();
+    }
+
+    // Auto-login if session exists
+    if (sessionStorage.getItem('admin')) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      setTimeout(loadAll, 100);
+    }
+
+    // ── TABS ───────────────────────────────────────
+    function switchTab(name) {
+      document.querySelectorAll('.tab-content').forEach(function(t) { t.classList.remove('active'); });
+      document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      document.getElementById('tab-' + name).classList.add('active');
+      event.target.closest('.tab-btn').classList.add('active');
+    }
+
+    // ── LOAD ALL DATA ──────────────────────────────
+    function loadAll() {
+      loadAdmissions();
+      loadNewsAdmin();
+      loadGalleryAdmin();
+      loadContacts();
+      loadSubscribers();
+      loadSlidersAdmin();
+      loadSectionEditor();
+      loadStories();
+      loadHomeSettings();
+      loadPosterAndBanner();
+    }
+
+    // ── ADMISSIONS ─────────────────────────────────
+    var currentAdmissions = [];
+    function loadAdmissions() {
+      fetch('/api/admissions')
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          currentAdmissions = data;
+          document.getElementById('statAdmissions').textContent = data.length;
+          var html = '';
+          data.forEach(function(item) {
+            var appliedDate = new Date(item.createdAt).toLocaleDateString('en-IN');
+            html += '<tr>' +
+              '<td>' + item.name + '</td>' +
+              '<td>' + item.fatherName + '</td>' +
+              '<td>' + item.motherName + '</td>' +
+              '<td>' + item.phone + '</td>' +
+              '<td>' + (item.dob || '-') + '</td>' +
+              '<td>' + appliedDate + '</td>' +
+              '<td style="white-space:nowrap;">' +
+              '  <button class="btn btn-sm" style="background:var(--accent);color:#000;margin-right:5px;" onclick="viewAdmission(\'' + item._id + '\')"><i class="fa fa-eye"></i> View</button>' +
+              '  <button class="btn btn-sm" style="background:#1a6b3a;color:#fff;margin-right:5px;" onclick="printAdmission(\'' + item._id + '\')"><i class="fa fa-print"></i> Print</button>' +
+              '  <button class="btn btn-danger btn-sm" onclick="deleteItem(\'admissions\',\'' + item._id + '\')"><i class="fa fa-trash"></i></button>' +
+              '</td>' +
+              '</tr>';
+          });
+          document.getElementById('admissionsTableBody').innerHTML = html || '<tr><td colspan="7" style="text-align:center;color:var(--text-muted)">No admission applications yet</td></tr>';
+        });
+    }
+
+    function downloadAdmissionPDF(id) {
+      var item = currentAdmissions.find(function(a) { return a._id === id; });
+      if (!item) return;
+
+      // Populate print template (kept for backward compatibility)
+      document.getElementById('pdf_name').innerText = item.name || '';
+      document.getElementById('pdf_fatherName').innerText = item.fatherName || '';
+      document.getElementById('pdf_phone').innerText = item.phone || '';
+      document.getElementById('pdf_motherName').innerText = item.motherName || '';
+      document.getElementById('pdf_dob').innerText = item.dob || '';
+
+      // Optional/Unused fields default to fallback values
+      document.getElementById('pdf_houseName').innerText = item.houseName || '______________________';
+      document.getElementById('pdf_homePhone').innerText = item.homePhone || '______________________';
+      document.getElementById('pdf_place').innerText = item.place || '______________________';
+      document.getElementById('pdf_postOffice').innerText = item.postOffice || '______________________';
+      document.getElementById('pdf_district').innerText = item.district || '______________________';
+      document.getElementById('pdf_pincode').innerText = item.pincode || '______________________';
+      document.getElementById('pdf_bloodGroup').innerText = item.bloodGroup || '______________________';
+      document.getElementById('pdf_eduRel').innerText = item.educationReligious || '______________________';
+      document.getElementById('pdf_eduSec').innerText = item.educationSecular || '______________________';
+      document.getElementById('pdf_guardianName').innerText = item.guardianName || '______________________';
+      document.getElementById('pdf_relationship').innerText = item.relationship || '______________________';
+      document.getElementById('pdf_guardianPhone').innerText = item.guardianPhone || '______________________';
+      document.getElementById('pdf_date').innerText = new Date(item.createdAt).toLocaleDateString('en-IN');
+      document.getElementById('pdf_signature').innerText = item.name.split(' ')[0] || '';
+
+      // Setup Photo
+      var photoLabel = document.getElementById('pdfPhotoLabel');
+      var photoImg = document.getElementById('pdfPhotoImg');
+      if (item.imageUrl) {
+        photoLabel.style.display = 'none';
+        photoImg.src = item.imageUrl;
+        photoImg.style.display = 'block';
+      } else {
+        photoLabel.style.display = 'block';
+        photoImg.style.display = 'none';
+        photoImg.src = '';
+      }
+
+      var element = document.getElementById('pdfPrintTemplate');
+      var opt = {
+        margin:       0.2,
+        filename:     'Student_Biodata_' + (item.name.replace(/\s+/g, '_')) + '.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true },
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+      };
+
+      // Generate PDF (kept for backward compatibility)
+      html2pdf().set(opt).from(element).save();
+    }
+
+    // New Print function – uses the same hidden template and triggers browser print dialog
+    function printAdmission(id) {
+      var item = currentAdmissions.find(function(a) { return a._id === id; });
+      if (!item) return;
+
+      // Populate the same hidden template used for PDF
+      document.getElementById('pdf_name').innerText = item.name || '';
+      document.getElementById('pdf_fatherName').innerText = item.fatherName || '';
+      document.getElementById('pdf_phone').innerText = item.phone || '';
+      document.getElementById('pdf_motherName').innerText = item.motherName || '';
+      document.getElementById('pdf_dob').innerText = item.dob || '';
+      document.getElementById('pdf_houseName').innerText = item.houseName || '______________________';
+      document.getElementById('pdf_homePhone').innerText = item.homePhone || '______________________';
+      document.getElementById('pdf_place').innerText = item.place || '______________________';
+      document.getElementById('pdf_postOffice').innerText = item.postOffice || '______________________';
+      document.getElementById('pdf_district').innerText = item.district || '______________________';
+      document.getElementById('pdf_pincode').innerText = item.pincode || '______________________';
+      document.getElementById('pdf_bloodGroup').innerText = item.bloodGroup || '______________________';
+      document.getElementById('pdf_eduRel').innerText = item.educationReligious || '______________________';
+      document.getElementById('pdf_eduSec').innerText = item.educationSecular || '______________________';
+      document.getElementById('pdf_guardianName').innerText = item.guardianName || '______________________';
+      document.getElementById('pdf_relationship').innerText = item.relationship || '______________________';
+      document.getElementById('pdf_guardianPhone').innerText = item.guardianPhone || '______________________';
+      document.getElementById('pdf_date').innerText = new Date(item.createdAt).toLocaleDateString('en-IN');
+      document.getElementById('pdf_signature').innerText = item.name.split(' ')[0] || '';
+
+      // Photo handling
+      var photoLabel = document.getElementById('pdfPhotoLabel');
+      var photoImg = document.getElementById('pdfPhotoImg');
+      if (item.imageUrl) {
+        photoLabel.style.display = 'none';
+        photoImg.src = item.imageUrl;
+        photoImg.style.display = 'block';
+      } else {
+        photoLabel.style.display = 'block';
+        photoImg.style.display = 'none';
+        photoImg.src = '';
+      }
+
+      // Open print dialog – the hidden template is now filled, so we can print it
+      var printWindow = window.open('', '_blank');
+      printWindow.document.write('<html><head><title>Print Admission</title>');
+      printWindow.document.write('<style>body{margin:0;padding:0;font-family:Arial,Helvetica,sans-serif;}</style>');
+      printWindow.document.write('</head><body>');
+      printWindow.document.write(document.getElementById('pdfPrintTemplate').outerHTML);
+      printWindow.document.write('</body></html>');
+      printWindow.document.close();
+      printWindow.focus();
+      // Wait for content to load before printing
+      printWindow.onload = function() {
+        printWindow.print();
+        // Close after printing
+        setTimeout(function(){ printWindow.close(); }, 500);
+      };
+    }
+
+    function viewAdmission(id) {
+      var item = currentAdmissions.find(function(a) { return a._id === id; });
+      if (!item) return;
+      var html = '<div style="display:flex; gap:20px; align-items:center; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:20px; margin-bottom:20px;">';
+      if (item.imageUrl) {
+        html += '  <img src="' + item.imageUrl + '" style="width:120px; height:120px; object-fit:cover; border-radius:12px; border:2px solid var(--accent);">';
+      }
+      html += '  <div>';
+      html += '    <h3 style="margin:0; font-family:\'Outfit\',sans-serif; color:var(--accent);">' + item.name + '</h3>';
+      html += '    <p style="margin:5px 0 0; color:var(--text-muted);"><i class="fa fa-calendar"></i> DOB: ' + item.dob + ' | Blood: ' + item.bloodGroup + '</p>';
+      html += '  </div>';
+      html += '</div>';
+      
+      html += '<div class="modal-grid">';
+      html += '  <div><label>Father\'s Name / പിതാവ്</label><span>' + item.fatherName + '</span></div>';
+      html += '  <div><label>Mother\'s Name / മാതാവ്</label><span>' + item.motherName + '</span></div>';
+      html += '  <div><label>Phone / ഫോൺ</label><span>' + item.phone + '</span></div>';
+      html += '  <div><label>Home Phone / വീട്ടിലെ ഫോൺ</label><span>' + (item.homePhone || '-') + '</span></div>';
+      html += '  <div><label>House Name / വീട്ടു പേര്</label><span>' + item.houseName + '</span></div>';
+      html += '  <div><label>Place / സ്ഥലം</label><span>' + item.place + '</span></div>';
+      html += '  <div><label>Post Office / പോസ്റ്റ്</label><span>' + item.postOffice + '</span></div>';
+      html += '  <div><label>District / ജില്ല</label><span>' + item.district + '</span></div>';
+      html += '  <div><label>Pincode / പിൻകോഡ്</label><span>' + item.pincode + '</span></div>';
+      html += '  <div><label>Religious Ed. / മതം</label><span>' + item.educationReligious + '</span></div>';
+      html += '  <div><label>Secular Ed. / ഭൗതികം</label><span>' + item.educationSecular + '</span></div>';
+      html += '  <div><label>Guardian / രക്ഷിതാവ്</label><span>' + item.guardianName + ' (' + item.relationship + ')</span></div>';
+      html += '  <div><label>Guardian Phone / ഫോൺ</label><span>' + item.guardianPhone + '</span></div>';
+      html += '  <div><label>Application Date</label><span>' + new Date(item.createdAt).toLocaleString('en-IN') + '</span></div>';
+      html += '</div>';
+
+      document.getElementById('modalBody').innerHTML = html;
+      document.getElementById('admissionModal').style.display = 'block';
+    }
+
+    function closeAdmissionModal() {
+      document.getElementById('admissionModal').style.display = 'none';
+    }
+
+    // Close modal when clicking outside content
+    window.onclick = function(event) {
+      var modal = document.getElementById('admissionModal');
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+
+    // ── ADMISSION BANNER POSTER & TEXT ─────────────────
+    function loadPosterAndBanner() {
+      // Load poster
+      fetch('/api/settings/poster')
+        .then(r => r.json())
+        .then(d => {
+          var preview = document.getElementById('currentPosterPreview');
+          var previewWrap = document.getElementById('adminPosterPreviewWrap');
+          var noNotice = document.getElementById('adminNoPosterNotice');
+          if (d.posterUrl) {
+            preview.src = d.posterUrl;
+            if (previewWrap) previewWrap.style.display = 'flex';
+            if (noNotice) noNotice.style.display = 'none';
+          } else {
+            if (previewWrap) previewWrap.style.display = 'none';
+            if (noNotice) noNotice.style.display = 'block';
+          }
+        })
+        .catch(() => {});
+
+      // Load banner text
+      fetch('/api/settings/admission-banner')
+        .then(r => r.json())
+        .then(d => {
+          if (d.title) document.getElementById('bannerTitle').value = d.title;
+          if (d.content) document.getElementById('bannerContent').value = d.content;
+        })
+        .catch(() => {});
+    }
+
+    window.saveBannerText = function() {
+      var btn = event.currentTarget || document.querySelector('[onclick="saveBannerText()"]');
+      var title = document.getElementById('bannerTitle').value.trim();
+      var content = document.getElementById('bannerContent').value.trim();
+      fetch('/api/settings/admission-banner', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, content })
+      })
+      .then(r => r.json())
+      .then(res => {
+        if (res.success) {
+          showAdminToast('Banner text saved successfully!', false);
+        } else {
+          showAdminToast('Failed to save: ' + (res.message || 'Unknown error'), true);
+        }
+      })
+      .catch(() => showAdminToast('Network error. Please try again.', true));
+    };
+
+    window.removePoster = function() {
+      if (!confirm('Remove the admission poster? The banner will show a placeholder instead.')) return;
+      fetch('/api/settings/poster', { method: 'DELETE' })
+        .then(r => r.json())
+        .then(res => {
+          if (res.success) {
+            showAdminToast('Poster removed!', false);
+            loadPosterAndBanner();
+          } else {
+            showAdminToast('Failed to remove poster', true);
+          }
+        })
+        .catch(() => showAdminToast('Network error', true));
+    };
+
+    // Admin toast notification helper
+    function showAdminToast(message, isError) {
+      var existing = document.getElementById('adminToastContainer');
+      if (!existing) {
+        existing = document.createElement('div');
+        existing.id = 'adminToastContainer';
+        existing.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:10px;';
+        document.body.appendChild(existing);
+      }
+      var toast = document.createElement('div');
+      toast.style.cssText = 'background:' + (isError ? '#e74c3c' : '#2ecc71') + ';color:#fff;padding:12px 20px;border-radius:10px;font-size:0.9rem;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,0.3);display:flex;align-items:center;gap:8px;animation:slideIn 0.3s ease;';
+      toast.innerHTML = '<i class="fa ' + (isError ? 'fa-times-circle' : 'fa-check-circle') + '"></i> ' + message;
+      existing.appendChild(toast);
+      setTimeout(function() { toast.remove(); }, 3500);
+    }
+
+    // ── POSTER UPLOAD FORM ─────────────────────────
+    document.getElementById('posterUploadForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var fd = new FormData();
+      var posterFile = document.getElementById('posterFile').files[0];
+      if (!posterFile) { showAdminToast('Please select an image file', true); return; }
+      fd.append('poster', posterFile);
+      var btn = this.querySelector('button[type=submit]');
+      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Uploading...'; }
+      fetch('/api/settings/poster', { method: 'POST', body: fd })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Upload Poster'; }
+          if (data.success) {
+            showAdminToast('Poster uploaded successfully!', false);
+            document.getElementById('posterUploadForm').reset();
+            loadPosterAndBanner();
+          } else {
+            showAdminToast(data.message || 'Upload failed', true);
+          }
+        })
+        .catch(function() {
+          if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Upload Poster'; }
+          showAdminToast('Network error. Please try again.', true);
+        });
+    });
+
+    // ── NEWS ───────────────────────────────────────
+    function loadNewsAdmin() {
+      fetch('/api/news').then(function(r) { return r.json(); }).then(function(data) {
+        document.getElementById('statNews').textContent = data.length;
+        var html = '';
+        data.forEach(function(item) {
+          var d = new Date(item.createdAt).toLocaleDateString('en-IN');
+          html += '<tr>' +
+            '<td>' + (item.imageUrl ? '<img src="' + item.imageUrl + '">' : '-') + '</td>' +
+            '<td>' + item.title + '</td>' +
+            '<td>' + item.description.substring(0, 60) + '...</td>' +
+            '<td>' + d + '</td>' +
+            '<td><button class="btn btn-danger btn-sm" onclick="deleteItem(\'news\',\'' + item._id + '\')"><i class="fa fa-trash"></i></button></td></tr>';
+        });
+        document.getElementById('newsTableBody').innerHTML = html || '<tr><td colspan="5" style="text-align:center;color:var(--text-muted)">No news yet</td></tr>';
+      });
+    }
+
+    document.getElementById('newsForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var fd = new FormData();
+      fd.append('title', document.getElementById('newsTitle').value);
+      fd.append('description', document.getElementById('newsDesc').value);
+      if (document.getElementById('newsImage').files[0]) {
+        fd.append('image', document.getElementById('newsImage').files[0]);
+      }
+      fetch('/api/news', { method: 'POST', body: fd })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.success) { document.getElementById('newsForm').reset(); loadNewsAdmin(); }
+          alert(data.message);
+        });
+    });
+
+    // ── GALLERY ────────────────────────────────────
+    function loadGalleryAdmin() {
+      fetch('/api/gallery').then(function(r) { return r.json(); }).then(function(data) {
+        document.getElementById('statGallery').textContent = data.length;
+        var badgeMap = { Programme: 'badge-programme', Collections: 'badge-collections', Design: 'badge-design' };
+        var html = '';
+        data.forEach(function(item) {
+          var d = new Date(item.createdAt).toLocaleDateString('en-IN');
+          
+          var mediaTag = '';
+          if (item.mediaType === 'video') {
+             if (item.imageUrl.includes('youtube.com') || item.imageUrl.includes('youtu.be')) {
+                mediaTag = '<i class="fa fa-youtube-play fa-2x text-danger"></i>';
+             } else {
+                mediaTag = '<video src="' + item.imageUrl + '" style="width:50px;height:50px;object-fit:cover;" muted></video>';
+             }
+          } else {
+             mediaTag = '<img src="' + item.imageUrl + '">';
+          }
+
+          var pinText = item.pinned ? '<i class="fa fa-thumb-tack"></i> Pinned' : '<i class="fa fa-thumb-tack"></i> Pin';
+          var pinStyle = item.pinned ? 'background:var(--accent);color:#000;' : 'background:var(--bg-input);color:var(--text);';
+
+          html += '<tr>' +
+            '<td>' + mediaTag + '</td>' +
+            '<td>' + item.title + '</td>' +
+            '<td><span class="badge ' + (badgeMap[item.category] || '') + '">' + item.category + '</span></td>' +
+            '<td><button class="btn btn-sm" style="' + pinStyle + '" onclick="togglePin(\'' + item._id + '\')">' + pinText + '</button></td>' +
+            '<td>' + d + '</td>' +
+            '<td><button class="btn btn-danger btn-sm" onclick="deleteItem(\'gallery\',\'' + item._id + '\')"><i class="fa fa-trash"></i></button></td></tr>';
+        });
+        document.getElementById('galleryTableBody').innerHTML = html || '<tr><td colspan="6" style="text-align:center;color:var(--text-muted)">No gallery items yet</td></tr>';
+      });
+    }
+
+    function togglePin(id) {
+      fetch('/api/gallery/' + id + '/pin', { method: 'POST' })
+        .then(function(r) { return r.json(); })
+        .then(function(res) { if(res.success) loadGalleryAdmin(); });
+    }
+
+    function toggleGalleryMediaInputs() {
+      var type = document.getElementById('galleryMediaType').value;
+      if (type === 'video') {
+        document.getElementById('galleryVideoUrlGroup').style.display = 'block';
+        document.getElementById('galleryImage').removeAttribute('required');
+      } else {
+        document.getElementById('galleryVideoUrlGroup').style.display = 'none';
+        document.getElementById('galleryImage').setAttribute('required', 'required');
+      }
+    }
+
+    document.getElementById('galleryForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var fd = new FormData();
+      fd.append('title', document.getElementById('galleryTitle').value);
+      fd.append('category', document.getElementById('galleryCategory').value);
+      fd.append('mediaType', document.getElementById('galleryMediaType').value);
+      fd.append('description', document.getElementById('galleryDesc').value);
+      fd.append('hashtags', document.getElementById('galleryHashtags').value);
+      
+      var file = document.getElementById('galleryImage').files[0];
+      if (file) {
+        fd.append('image', file);
+      }
+      
+      var mediaUrl = document.getElementById('galleryVideoUrl').value;
+      if (mediaUrl) {
+         fd.append('mediaUrl', mediaUrl);
+      }
+
+      fetch('/api/gallery', { method: 'POST', body: fd })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.success) { document.getElementById('galleryForm').reset(); loadGalleryAdmin(); toggleGalleryMediaInputs(); }
+          alert(data.message);
+        });
+    });
+
+    // ── CONTACTS ───────────────────────────────────
+    function loadContacts() {
+      fetch('/api/contacts').then(function(r) { return r.json(); }).then(function(data) {
+        document.getElementById('statContacts').textContent = data.length;
+        var html = '';
+        data.forEach(function(item) {
+          var d = new Date(item.createdAt).toLocaleDateString('en-IN');
+          html += '<tr>' +
+            '<td>' + item.name + '</td>' +
+            '<td>' + item.email + '</td>' +
+            '<td>' + item.subject + '</td>' +
+            '<td>' + item.message.substring(0, 50) + '...</td>' +
+            '<td>' + d + '</td>' +
+            '<td><button class="btn btn-danger btn-sm" onclick="deleteItem(\'contacts\',\'' + item._id + '\')"><i class="fa fa-trash"></i></button></td></tr>';
+        });
+        document.getElementById('contactsTableBody').innerHTML = html || '<tr><td colspan="6" style="text-align:center;color:var(--text-muted)">No messages yet</td></tr>';
+      });
+    }
+
+    // ── SUBSCRIBERS ────────────────────────────────
+    function loadSubscribers() {
+      fetch('/api/subscribers').then(function(r) { return r.json(); }).then(function(data) {
+        document.getElementById('statSubscribers').textContent = data.length;
+        var html = '';
+        data.forEach(function(item, i) {
+          var d = new Date(item.subscribedAt).toLocaleDateString('en-IN');
+          html += '<tr><td>' + (i + 1) + '</td><td>' + item.email + '</td><td>' + d + '</td></tr>';
+        });
+        document.getElementById('subscribersTableBody').innerHTML = html || '<tr><td colspan="3" style="text-align:center;color:var(--text-muted)">No subscribers yet</td></tr>';
+      });
+    }
+
+    // ── DELETE ITEM ────────────────────────────────
+    function deleteItem(type, id) {
+      if (!confirm('Are you sure you want to delete this?')) return;
+      fetch('/api/' + type + '/' + id, { method: 'DELETE' })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          alert(data.message);
+          loadAll();
+        });
+    }
+
+    // ── SLIDERS ────────────────────────────────────
+    function loadSlidersAdmin() {
+      fetch('/api/sliders').then(function(r) { return r.json(); }).then(function(data) {
+        var html = '';
+        data.forEach(function(item) {
+          var d = new Date(item.createdAt).toLocaleDateString('en-IN');
+          var mediaTag = item.mediaType === 'video' ? 
+            '<video src="'+item.mediaUrl+'" style="width:60px; height:40px; object-fit:cover;" muted></video>' : 
+            '<img src="'+item.mediaUrl+'">';
+          html += '<tr>' +
+            '<td>' + mediaTag + '</td>' +
+            '<td><span class="badge badge-collections">' + item.mediaType + '</span></td>' +
+            '<td>' + (item.title || '-') + '</td>' +
+            '<td>' + d + '</td>' +
+            '<td><button class="btn btn-danger btn-sm" onclick="deleteItem(\'sliders\',\'' + item._id + '\')"><i class="fa fa-trash"></i></button></td></tr>';
+        });
+        document.getElementById('slidersTableBody').innerHTML = html || '<tr><td colspan="5" style="text-align:center;color:var(--text-muted)">No sliders yet</td></tr>';
+      });
+    }
+
+    document.getElementById('sliderForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var fd = new FormData();
+      fd.append('title', document.getElementById('sliderTitle').value);
+      fd.append('mediaType', document.getElementById('sliderMediaType').value);
+      fd.append('media', document.getElementById('sliderMedia').files[0]);
+      
+      fetch('/api/sliders', { method: 'POST', body: fd })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.success) { document.getElementById('sliderForm').reset(); loadSlidersAdmin(); }
+          alert(data.message);
+        });
+    });
+
+    // ── SECTIONS ───────────────────────────────────
+    let currentSections = [];
+    function fetchAllSections() {
+      return fetch('/api/sections').then(r => r.json()).then(data => {
+        currentSections = data;
+        return data;
+      });
+    }
+
+    function loadSectionEditor() {
+      fetchAllSections().then(() => {
+        const selectedId = document.getElementById('sectionSelector').value;
+        const section = currentSections.find(s => s.sectionId === selectedId);
+        if (section) {
+          document.getElementById('sectionTitle').value = section.title || '';
+          document.getElementById('sectionDesc').value = section.description || '';
+          document.getElementById('sectionLink').value = section.readMoreLink || '#';
+        } else {
+          document.getElementById('sectionTitle').value = '';
+          document.getElementById('sectionDesc').value = '';
+          document.getElementById('sectionLink').value = '#';
+        }
+      });
+    }
+
+    document.getElementById('sectionForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const selectedId = document.getElementById('sectionSelector').value;
+      const data = {
+        title: document.getElementById('sectionTitle').value,
+        description: document.getElementById('sectionDesc').value,
+        readMoreLink: document.getElementById('sectionLink').value
+      };
+      
+      fetch('/api/sections/' + selectedId, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(res) {
+        if (res.success) {
+          alert('Section updated successfully!');
+          loadSectionEditor();
+        } else {
+          alert(res.message);
+        }
+      });
+    });
+
+    function deleteHomepageSection() {
+      const selectedId = document.getElementById('sectionSelector').value;
+      if (!confirm('Are you sure you want to hide/delete this section from the homepage?')) return;
+      fetch('/api/sections/' + selectedId, {
+        method: 'DELETE'
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(res) {
+        if (res.success) {
+          alert('Section hidden successfully!');
+          loadSectionEditor();
+        } else {
+          alert(res.message);
+        }
+      });
+    }
+
+    // ============ STORIES ============
+    document.getElementById('storyForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var fd = new FormData();
+      fd.append('title', document.getElementById('storyTitle').value);
+      fd.append('image', document.getElementById('storyImage').files[0]);
+      fd.append('daysActive', document.getElementById('storyDays').value);
+      fetch('/api/stories', { method: 'POST', body: fd })
+        .then(r => r.json())
+        .then(res => { if(res.success) { loadStories(); e.target.reset(); alert('Story uploaded!'); } else alert(res.message); })
+        .catch(err => alert('Error: ' + err.message));
+    });
+
+    function loadStories() {
+      fetch('/api/stories/all')
+        .then(r => r.json())
+        .then(stories => {
+          var html = '';
+          stories.forEach(s => {
+            var exp = new Date(s.expiresAt);
+            var isActive = exp > new Date();
+            html += '<tr>' +
+              '<td><img src="' + s.imageUrl + '" style="width:50px;height:50px;border-radius:50%;object-fit:cover;"></td>' +
+              '<td>' + (s.title || '-') + '</td>' +
+              '<td>' + s.daysActive + '</td>' +
+              '<td>' + exp.toLocaleDateString() + '</td>' +
+              '<td><span class="badge" style="background:' + (isActive ? 'rgba(46,204,113,0.2);color:#2ecc71' : 'rgba(231,76,60,0.2);color:#e74c3c') + ';">' + (isActive ? 'Active' : 'Expired') + '</span></td>' +
+              '<td><button class="btn btn-danger btn-sm" onclick="deleteStory(\'' + s._id + '\')"><i class="fa fa-trash"></i></button></td>' +
+              '</tr>';
+          });
+          document.getElementById('storiesTableBody').innerHTML = html || '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);">No stories</td></tr>';
+        });
+    }
+
+    function deleteStory(id) {
+      if (!confirm('Delete this story?')) return;
+      fetch('/api/stories/' + id, { method: 'DELETE' })
+        .then(r => r.json())
+        .then(() => loadStories());
+    }
+
+    // ============ HOME SETTINGS ============
+    function loadHomeSettings() {
+      fetch('/api/home-settings')
+        .then(r => r.json())
+        .then(s => {
+          document.getElementById('hpStudents').value = s.statsStudents || '';
+          document.getElementById('hpUstads').value = s.statsUstads || '';
+          document.getElementById('hpYears').value = s.statsYears || '';
+          document.getElementById('hpAlumni').value = s.statsAlumni || '';
+          document.getElementById('hpPrincipalName').value = s.principalName || '';
+          document.getElementById('hpPrincipalTitle').value = s.principalTitle || '';
+          document.getElementById('hpPrincipalBio').value = s.principalBio || '';
+          if (s.principalImageUrl) {
+            var pi = document.getElementById('principalPreview');
+            pi.src = s.principalImageUrl;
+            pi.style.display = 'block';
+          }
+          document.getElementById('hpFooterName').value = s.footerMudarrisName || '';
+          document.getElementById('hpFooterTitle').value = s.footerMudarrisTitle || '';
+          document.getElementById('hpFooterDetail').value = s.footerMudarrisDetail || '';
+
+          // Assistants list
+          renderAssistants(s.assistantMudarris || []);
+          // Branches list
+          renderBranches(s.branches || []);
+        });
+    }
+
+    window.saveHomeStats = function() {
+      fetch('/api/home-settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          statsStudents: parseInt(document.getElementById('hpStudents').value) || 0,
+          statsUstads: parseInt(document.getElementById('hpUstads').value) || 0,
+          statsYears: parseInt(document.getElementById('hpYears').value) || 0,
+          statsAlumni: parseInt(document.getElementById('hpAlumni').value) || 0
+        })
+      }).then(r => r.json()).then(res => { if(res.success) alert('Stats saved!'); });
+    }
+
+    window.savePrincipal = function() {
+      var imgFile = document.getElementById('principalImageFile').files[0];
+      // Save text first
+      fetch('/api/home-settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          principalName: document.getElementById('hpPrincipalName').value,
+          principalTitle: document.getElementById('hpPrincipalTitle').value,
+          principalBio: document.getElementById('hpPrincipalBio').value
+        })
+      }).then(r => r.json()).then(res => {
+        if (imgFile) {
+          var fd = new FormData();
+          fd.append('image', imgFile);
+          fetch('/api/home-settings/principal-image', { method: 'POST', body: fd })
+            .then(r => r.json())
+            .then(imgRes => {
+              if (imgRes.success) {
+                document.getElementById('principalPreview').src = imgRes.imageUrl;
+                document.getElementById('principalPreview').style.display = 'block';
+              }
+              alert('Principal info saved!');
+            });
+        } else {
+          alert('Principal info saved!');
+        }
+      });
+    }
+
+    window.saveFooterInfo = function() {
+      fetch('/api/home-settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          footerMudarrisName: document.getElementById('hpFooterName').value,
+          footerMudarrisTitle: document.getElementById('hpFooterTitle').value,
+          footerMudarrisDetail: document.getElementById('hpFooterDetail').value
+        })
+      }).then(r => r.json()).then(res => { if(res.success) alert('Footer info saved!'); });
+    }
+
+    // Assistants
+    document.getElementById('assistantForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var fd = new FormData();
+      fd.append('name', document.getElementById('assistantName').value);
+      fd.append('role', document.getElementById('assistantRole').value || 'Assistant Mudarris');
+      var imgFile = document.getElementById('assistantImage').files[0];
+      if (imgFile) fd.append('image', imgFile);
+      fetch('/api/home-settings/assistant', { method: 'POST', body: fd })
+        .then(r => r.json())
+        .then(res => { if(res.success) { loadHomeSettings(); e.target.reset(); } else alert(res.message); });
+    });
+
+    window.deleteAssistant = function(id) {
+      if (!confirm('Delete this assistant?')) return;
+      fetch('/api/home-settings/assistant/' + id, { method: 'DELETE' })
+        .then(r => r.json())
+        .then(() => loadHomeSettings());
+    }
+
+    function renderAssistants(list) {
+      var html = '';
+      list.forEach(a => {
+        html += '<div style="display:flex; align-items:center; gap:12px; padding:10px; border-bottom:1px solid var(--border);">' +
+          '<img src="' + (a.imageUrl || 'img/new_logo.png') + '" style="width:40px;height:40px;border-radius:50%;object-fit:cover;">' +
+          '<div style="flex:1;"><strong>' + a.name + '</strong><br><small style="color:var(--text-muted);">' + a.role + '</small></div>' +
+          '<button class="btn btn-danger btn-sm" onclick="deleteAssistant(\'' + a._id + '\')"><i class="fa fa-trash"></i></button>' +
+          '</div>';
+      });
+      document.getElementById('assistantListAdmin').innerHTML = html || '<p style="color:var(--text-muted);">No assistants added yet</p>';
+    }
+
+    // Branches
+    document.getElementById('branchForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      fetch('/api/home-settings/branch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: document.getElementById('branchName').value,
+          location: document.getElementById('branchLocation').value,
+          description: document.getElementById('branchDesc').value
+        })
+      }).then(r => r.json()).then(res => { if(res.success) { loadHomeSettings(); e.target.reset(); } });
+    });
+
+    window.deleteBranch = function(id) {
+      if (!confirm('Delete this branch?')) return;
+      fetch('/api/home-settings/branch/' + id, { method: 'DELETE' })
+        .then(r => r.json())
+        .then(() => loadHomeSettings());
+    }
+
+    function renderBranches(list) {
+      var html = '';
+      list.forEach(b => {
+        html += '<div style="display:flex; align-items:center; gap:12px; padding:10px; border-bottom:1px solid var(--border);">' +
+          '<i class="fa fa-map-marker" style="color:var(--accent);font-size:1.2rem;"></i>' +
+          '<div style="flex:1;"><strong>' + b.name + '</strong>' + (b.location ? '<br><small style="color:var(--text-muted);">' + b.location + '</small>' : '') + '</div>' +
+          '<button class="btn btn-danger btn-sm" onclick="deleteBranch(\'' + b._id + '\')"><i class="fa fa-trash"></i></button>' +
+          '</div>';
+      });
+      document.getElementById('branchListAdmin').innerHTML = html || '<p style="color:var(--text-muted);">No branches added yet</p>';
+    }
+  </script>
+</body>
+</html>

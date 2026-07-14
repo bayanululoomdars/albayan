@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Bayanul Uloom Dars | Muttichira</title>
+  <meta property="og:title" content="Bayanul Uloom Dars" />
+  <meta property="og:description" content="Official website of Muttichira Bayanul Uloom Dars, Islamic education institution." />
+  <meta property="og:image" content="img/new_logo.png" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="AL BAYAN, Bayanul Uloom, Dars, Muttichira, Islamic Education" name="keywords">
+  <meta content="Official website of Muttichira Bayanul Uloom Dars - Islamic educational institution" name="description">
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="img/favicon.png">
+  <link rel="apple-touch-icon" href="img/favicon.png">
+  <link href="css/custom.css" rel="stylesheet">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap CSS File -->
+  <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Libraries CSS Files -->
+  <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="lib/animate/animate.min.css" rel="stylesheet">
+  <link href="lib/ionicons/css/ionicons.min.css" rel="stylesheet">
+  <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+  <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+
+  <!-- Main Stylesheet File -->
+  <link href="css/style.css" rel="stylesheet">
+  <style>
+    .footer-top h3, .footer-top h4 {
+      color: var(--accent) !important;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    #footer .copyright {
+      background: #031a0e;
+      color: rgba(255,255,255,0.5);
+    }
+
+    #footer .credits a {
+      color: var(--accent);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!--==========================
+    Modern Header / Navbar
+  ============================-->
+  <header id="header" class="fixed-top">
+    <div class="navbar-container">
+      <a href="#intro" class="navbar-logo scrollto">
+        <img src="img/new_logo.png" alt="BAYANUL ULOOM DARS Logo">
+        <div class="logo-text">
+          BAYANUL ULOOM DARS
+          <small>MUTTICHIRA</small>
+        </div>
+      </a>
+
+      <button class="mobile-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')">
+        <i class="fa fa-bars"></i>
+      </button>
+
+      <ul class="nav-links">
+        <li><a href="/home" class="active">Home</a></li>
+        <li><a href="/latest-news">Latest News</a></li>
+        <li><a href="/gallery">Gallery</a></li>
+        <li><a href="/admission" class="nav-btn-admission">Admission</a></li>
+        <li><a href="/about">About Us</a></li>
+        <li><a href="/contact">Contact Us</a></li>
+      </ul>
+    </div>
+  </header><!-- #header -->
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!--==========================
+    Intro Section
+  ============================-->
+  <section id="intro" class="clearfix">
+    <div id="demo" class="carousel slide" data-ride="carousel">
+      <ul class="carousel-indicators" id="sliderIndicators">
+        <!-- Default static indicators -->
+        <li data-target="#demo" data-slide-to="0" class="active"></li>
+      </ul>
+      <div class="carousel-inner" id="sliderInner">
+        <!-- Default static image -->
+        <div class="carousel-item active">
+          <img src="img/palli.jpg" alt="Muttichira Juma Masjid" class="img-fluid" style="width:100%; height:100vh; object-fit:cover;">
+        </div>
+      </div>
+      <a class="carousel-control-prev" href="#demo" data-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+      </a>
+      <a class="carousel-control-next" href="#demo" data-slide="next">
+        <span class="carousel-control-next-icon"></span>
+      </a>
+    </div>
+  </section><!-- #intro -->
+
+  <main id="main">
+
+    <!--==========================
+      Latest News Section (Dynamic from MongoDB)
+    ============================-->
+    <section id="services" class="section-bg">
+      <div class="container">
+        <header class="section-header" id="newsSecHeader">
+          <h3>Latest News</h3>
+          <p>All the news that are relevant for our small community</p>
+          <a href="#" class="btn btn-outline-success btn-sm mt-3" style="display:none;" id="newsReadMore">Read more...</a>
+        </header>
+
+        <!-- Dynamic news from MongoDB -->
+        <div class="row" id="dynamicNews"></div>
+      </div>
+    </section><!-- #services -->
+
+    <!--==========================
+      Gallery Section (Dynamic from MongoDB)
+    ============================-->
+    <section id="portfolio" class="clearfix">
+      <div class="container">
+        <header class="section-header" id="gallerySecHeader">
+          <h3 class="section-title">Gallery</h3>
+          <p>Explore our latest moments and activities</p>
+          <a href="#" class="btn btn-outline-success btn-sm mt-3" style="display:none;" id="galleryReadMore">Read more...</a>
+        </header>
+
+        <div class="row">
+          <div class="col-lg-12">
+            <ul id="portfolio-flters">
+              <li data-filter="*" class="filter-active">All</li>
+              <li data-filter=".filter-post">Post (Image)</li>
+              <li data-filter=".filter-reel">Reel (Video)</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Static gallery (existing images) -->
+        <div class="row portfolio-container" id="staticGallery">
+          <div class="col-lg-4 col-md-6 portfolio-item filter-app">
+            <div class="portfolio-wrap">
+              <img src="img/friday talk 2 and isthifadah workshop.png" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4><a href="#">Friday Talk & Workshop</a></h4>
+                <p>Programme</p>
+                <div>
+                  <a href="img/friday talk 2 and isthifadah workshop.png" data-lightbox="portfolio" data-title="Friday Talk" class="link-preview" title="Preview"><i class="ion ion-eye"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 portfolio-item filter-app" data-wow-delay="0.1s">
+            <div class="portfolio-wrap">
+              <img src="img/past year symposium.jpg" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4><a href="#">Symposium</a></h4>
+                <p>Programme</p>
+                <div>
+                  <a href="img/past year symposium.jpg" data-lightbox="portfolio" data-title="Symposium" class="link-preview" title="Preview"><i class="ion ion-eye"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 portfolio-item filter-web" data-wow-delay="0.2s">
+            <div class="portfolio-wrap">
+              <img src="img/e-vara.png" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4><a href="#">E-Vara Design</a></h4>
+                <p>Design</p>
+                <div>
+                  <a href="img/e-vara.png" class="link-preview" data-lightbox="portfolio" data-title="E-Vara" title="Preview"><i class="ion ion-eye"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 portfolio-item filter-app" data-wow-delay="0.3s">
+            <div class="portfolio-wrap">
+              <img src="img/3RD PRICE.png" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4><a href="#">3rd Prize</a></h4>
+                <p>Programme</p>
+                <div>
+                  <a href="img/3RD PRICE.png" class="link-preview" data-lightbox="portfolio" data-title="3rd Prize" title="Preview"><i class="ion ion-eye"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 portfolio-item filter-card">
+            <div class="portfolio-wrap">
+              <img src="img/jalika.jpg" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4><a href="#">Jalika</a></h4>
+                <p>Collections</p>
+                <div>
+                  <a href="img/jalika.jpg" class="link-preview" data-lightbox="portfolio" data-title="Jalika" title="Preview"><i class="ion ion-eye"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 portfolio-item filter-web" data-wow-delay="0.1s">
+            <div class="portfolio-wrap">
+              <img src="img/action plan.png" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4><a href="#">Action Plan</a></h4>
+                <p>Design</p>
+                <div>
+                  <a href="img/action plan.png" class="link-preview" data-lightbox="portfolio" data-title="Action Plan" title="Preview"><i class="ion ion-eye"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 portfolio-item filter-app" data-wow-delay="0.2s">
+            <div class="portfolio-wrap">
+              <img src="img/fist epi.png" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4><a href="#">First Episode</a></h4>
+                <p>Programme</p>
+                <div>
+                  <a href="img/fist epi.png" class="link-preview" data-lightbox="portfolio" data-title="First Episode" title="Preview"><i class="ion ion-eye"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 portfolio-item filter-card">
+            <div class="portfolio-wrap">
+              <img src="img/launchinhg 1.png" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4><a href="#">Launching</a></h4>
+                <p>Collections</p>
+                <div>
+                  <a href="img/launchinhg 1.png" class="link-preview" data-lightbox="portfolio" data-title="Launching" title="Preview"><i class="ion ion-eye"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 portfolio-item filter-web" data-wow-delay="0.2s">
+            <div class="portfolio-wrap">
+              <img src="img/launchinhg.png" class="img-fluid" alt="">
+              <div class="portfolio-info">
+                <h4><a href="#">Launch Design</a></h4>
+                <p>Design</p>
+                <div>
+                  <a href="img/launchinhg.png" class="link-preview" data-lightbox="portfolio" data-title="Launch Design" title="Preview"><i class="ion ion-eye"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dynamic gallery from MongoDB -->
+        <div class="row portfolio-container" id="dynamicGallery"></div>
+      </div>
+    </section><!-- #portfolio -->
+
+    <!--==========================
+      About Us Section
+    ============================-->
+    <section id="about">
+      <div class="container">
+        <header class="section-header" id="aboutSecHeader">
+          <h3>About Us</h3>
+          <p>It helps you to know and understand something about Muttichira Bayanul Uloom Dars</p>
+          <a href="#" class="btn btn-outline-success btn-sm mt-3" style="display:none;" id="aboutReadMore">Read more...</a>
+        </header>
+        <div class="divider div-transparent div-arrow-down"></div>
+
+        <div class="row about-container">
+          <p>
+            <strong style="color: rgb(5, 52, 90);">Muttichira Bayanul Uloom Dars </strong>is located in the historic Muttichira Shuhada Juma Mosque, which is situated near Talappara Town.
+          </p>
+          <div class="text-center w-100 mt-4 mb-4">
+            <a href="/about" class="btn btn-outline-success">Read More About Us</a>
+          </div>
+
+          <div class="icon-box wow fadeInUp">
+            <div class="icon"><i class="fa fa-graduation-cap"></i></div>
+            <h4 class="title"><a href="">Student</a></h4>
+            <p class="description">Our Dars has more than 90 Students and under the managment of <strong>six Usthad</strong></p>
+          </div>
+
+          <div class="icon-box wow fadeInUp" data-wow-delay="0.2s">
+            <div class="icon"><i class="fa fa-users"></i></div>
+            <h4 class="title"><a href="">Sahithya Samajam</a></h4>
+            <p class="description"><strong style="color: rgb(6, 46, 105);">Bayanul Uloom Sahithya Samajam is a platform for the literary and non literary activities of students. The activities of the Samajam begin after the official inauguration every year. All extra curricular activities conducted by the Bayanul Uloom Dars are under the auspicious of Sahithya Samajam. It aims the Islamic literary and artistic development of the students</p>
+          </div>
+
+          <div class="icon-box wow fadeInUp" data-wow-delay="0.4s">
+            <div class="icon"><i class="fa fa-book"></i></div>
+            <h4 class="title"><a href="">Library</a></h4>
+            <p class="description" style="color: rgb(0, 0, 0);">It is a collection of books for explore extra curricular activities.</p>
+          </div>
+        </div>
+
+        <div class="row about-extra ">
+          <div class="icon-box wow fadeInUp">
+            <div class="icon"><i class="fa fa-newspaper-o"></i></div>
+            <h4 class="title"><a href="">Magazine</a></h4>
+            <p class="description" style="color: rgb(0, 0, 0);">Magazines impulse the writing abilities of a student. AL Bayan Magazine is publishing to improve the writing and literacy skills of students.</p>
+          </div>
+
+          <div class="icon-box wow fadeInUp" data-wow-delay="0.2s">
+            <div class="icon"><i class="fa fa-graduation-cap"></i></div>
+            <h4 class="title"><a href="">Education</a></h4>
+            <p class="description" style="color: rgb(0, 0, 0);">It is an important wing of BUSS under the control of experienced faculties in different educational sectors.</p>
+          </div>
+
+          <div class="icon-box wow fadeInUp" data-wow-delay="0.4s">
+            <div class="icon"><i class="fa fa-desktop"></i></div>
+            <h4 class="title"><a href="">Computer Lab</a></h4>
+            <p class="description" style="color: rgb(0, 0, 0);">It is a space provides Computer Services to students. There are 8 computers for 92 students. Alhamdulillah.</p>
+          </div>
+
+          <div class="icon-box wow fadeInUp">
+            <div class="icon"><i class="fa fa-rss" aria-hidden="true"></i></div>
+            <h4 class="title"><a href="">Smart Class</a></h4>
+            <p class="description" style="color: rgb(0, 0, 0);">It is a virtual platform for expanded research in religious studies.</p>
+          </div>
+
+          <div class="icon-box wow fadeInUp" data-wow-delay="0.2s">
+            <div class="icon"><i class="fa fa-shopping-bag" aria-hidden="true"></i></div>
+            <h4 class="title"><a href="">Store</a></h4>
+            <p class="description" style="color: rgb(0, 0, 0);">A dedicated store that provides stationery, books, and daily essentials for students, ensuring they have everything needed for their learning journey.</p>
+          </div>
+
+          <div class="icon-box wow fadeInUp" data-wow-delay="0.4s">
+            <div class="icon"><i class="fa fa-plus-square"></i></div>
+            <h4 class="title"><a href="">Medical Wing</a></h4>
+            <p class="description" style="color: rgb(0, 0, 0);">A dedicated Medical Wing ensures the health and well-being of all students, with first-aid facilities, health check-ups, and care support within the Dars premises.</p>
+          </div>
+        </div>
+      </div>
+    </section><!-- #about -->
+
+    <!-- Stats Counter Section -->
+    <section id="stats" style="background: linear-gradient(135deg, #0a3d1f 0%, #0d5a2e 50%, #0a3d1f 100%); padding: 70px 0; position: relative; overflow: hidden;">
+      <div class="container" style="position:relative;z-index:1;">
+        <div class="row text-center">
+          <div class="col-6 col-md-3 mb-4">
+            <div style="padding:20px;">
+              <i class="fa fa-graduation-cap" style="font-size:2.5rem; color:#d4af37; margin-bottom:12px;"></i>
+              <div id="counterStudents" class="counter-number" style="font-family:'Outfit',sans-serif; font-size:2.8rem; font-weight:800; color:#fff;">0</div>
+              <div style="color:rgba(255,255,255,0.7); font-size:0.9rem; font-weight:500; margin-top:4px;">Students</div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3 mb-4">
+            <div style="padding:20px;">
+              <i class="fa fa-users" style="font-size:2.5rem; color:#d4af37; margin-bottom:12px;"></i>
+              <div id="counterUstads" class="counter-number" style="font-family:'Outfit',sans-serif; font-size:2.8rem; font-weight:800; color:#fff;">0</div>
+              <div style="color:rgba(255,255,255,0.7); font-size:0.9rem; font-weight:500; margin-top:4px;">Usthads</div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3 mb-4">
+            <div style="padding:20px;">
+              <i class="fa fa-book" style="font-size:2.5rem; color:#d4af37; margin-bottom:12px;"></i>
+              <div id="counterYears" class="counter-number" style="font-family:'Outfit',sans-serif; font-size:2.8rem; font-weight:800; color:#fff;">0</div>
+              <div style="color:rgba(255,255,255,0.7); font-size:0.9rem; font-weight:500; margin-top:4px;">Years of Tradition</div>
+            </div>
+          </div>
+          <div class="col-6 col-md-3 mb-4">
+            <div style="padding:20px;">
+              <i class="fa fa-trophy" style="font-size:2.5rem; color:#d4af37; margin-bottom:12px;"></i>
+              <div id="counterAlumni" class="counter-number" style="font-family:'Outfit',sans-serif; font-size:2.8rem; font-weight:800; color:#fff;">0</div>
+              <div style="color:rgba(255,255,255,0.7); font-size:0.9rem; font-weight:500; margin-top:4px;">Distinguished Alumni</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!--==========================
+      Admission Section
+    ============================-->
+    <section id="admission">
+      <div class="container">
+        <header class="section-header" id="admissionSecHeader">
+          <h3>Admission</h3>
+          <p>Join our institution for quality Islamic education</p>
+        </header>
+        <div class="row align-items-center" style="margin-top:30px;">
+          <!-- Left: Poster Image (admin-uploaded) OR no-poster placeholder -->
+          <div class="col-lg-5 col-md-12 mb-4 mb-lg-0 text-center">
+            <!-- Poster image (shown when poster is uploaded) -->
+            <a href="/admission" id="admissionPosterLink" style="display:none; position:relative; text-decoration:none;">
+              <img id="admissionPosterImg" src="" alt="Admission Poster" style="width:100%; max-width:380px; border-radius:16px; box-shadow:0 8px 40px rgba(0,80,30,0.18); border:3px solid #1a6b3a; transition:transform 0.3s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+              <div style="position:absolute; bottom:16px; left:50%; transform:translateX(-50%); background:rgba(26,107,58,0.95); color:#fff; padding:8px 22px; border-radius:30px; font-size:0.9rem; font-weight:600; white-space:nowrap;"><i class="fa fa-edit" style="margin-right:6px;"></i>Apply Now</div>
+            </a>
+            <!-- No-poster placeholder (shown when no poster is uploaded) -->
+            <a href="/admission" id="admissionNoPoster" style="display:inline-block; text-decoration:none;">
+              <div style="width:100%; max-width:380px; min-height:340px; border-radius:16px; border:3px dashed rgba(255,255,255,0.3); background:linear-gradient(135deg,rgba(26,107,58,0.5),rgba(10,61,31,0.7)); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; transition:transform 0.3s; margin:0 auto; padding:30px;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform=''">
+                <div style="width:90px; height:90px; border-radius:50%; background:rgba(212,175,55,0.15); border:2px solid rgba(212,175,55,0.4); display:flex; align-items:center; justify-content:center;">
+                  <i class="fa fa-graduation-cap" style="font-size:2.5rem; color:#d4af37;"></i>
+                </div>
+                <div style="text-align:center;">
+                  <p style="color:rgba(255,255,255,0.85); font-weight:700; font-family:'Outfit',sans-serif; font-size:1.1rem; margin:0 0 6px;">Admissions Open</p>
+                  <p style="color:rgba(255,255,255,0.55); font-size:0.85rem; margin:0;">BAYANUL ULOOM DARS<br>Muttichira</p>
+                </div>
+                <div style="background:rgba(212,175,55,0.2); border:1px solid rgba(212,175,55,0.5); color:#d4af37; padding:8px 22px; border-radius:30px; font-size:0.85rem; font-weight:600;">
+                  <i class="fa fa-arrow-right" style="margin-right:6px;"></i>Apply Now
+                </div>
+              </div>
+            </a>
+          </div>
+          <!-- Right: Details -->
+          <div class="col-lg-7 col-md-12 text-center text-lg-left">
+            <h2 id="admissionBannerTitle" style="font-family:'Outfit',sans-serif; font-weight:700; font-size:2.2rem; line-height:1.5; color:#fff; margin-bottom:20px; padding-left:15px;">
+              2026 പുതിയ അധ്യയന വർഷത്തേക്കുള്ള അഡ്മിഷൻ തുടരുന്നു...
+            </h2>
+            <p id="admissionBannerContent" style="color:rgba(255,255,255,0.75); font-size:1rem; line-height:1.7; padding-left:15px; margin-bottom:30px;"></p>
+            <div style="margin-top:20px; padding-left:15px;">
+              <a href="/admission" class="btn-admission" style="display:inline-flex; align-items:center; gap:8px;">
+                <i class="fa fa-edit"></i> Apply for Admission
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section><!-- #admission -->
+
+    <!-- Admission Modal (Popup Form) -->
+    <div id="admissionModal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.7); overflow-y:auto;" onclick="if(event.target===this)closeAdmissionModal()">
+      <div style="background:#fff; border-radius:20px; max-width:520px; margin:40px auto; padding:36px 30px; position:relative; box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+        <button onclick="closeAdmissionModal()" style="position:absolute; top:14px; right:18px; background:none; border:none; font-size:1.6rem; color:#999; cursor:pointer; line-height:1;">&times;</button>
+        <div class="text-center mb-3">
+          <img src="img/new_logo.png" style="width:50px; margin-bottom:8px;">
+          <h4 style="color:#0a3d1f; font-family:'Outfit',sans-serif; font-weight:700;">Admission Application</h4>
+          <p style="color:#1a6b3a; font-size:0.88rem; font-weight:600;">Bayanul Uloom Dars, Muttichira</p>
+        </div>
+        <div id="admissionClosedBanner" style="display:none;" class="alert alert-warning text-center">
+          <i class="fa fa-exclamation-triangle"></i> Admissions are currently <strong>CLOSED</strong>. Please check back later.
+        </div>
+        <form id="admissionModalForm" style="">
+          <div class="form-group mb-3">
+            <label style="font-weight:600;">Student Name / വിദ്യാർത്ഥിയുടെ പേർ <span class="text-danger">*</span></label>
+            <input type="text" id="m_name" class="form-control" placeholder="Full Name" required>
+          </div>
+          <div class="form-group mb-3">
+            <label style="font-weight:600;">Date of Birth / ജനനതീയതി</label>
+            <input type="date" id="m_dob" class="form-control">
+          </div>
+          <div class="form-group mb-3">
+            <label style="font-weight:600;">Father's Name / പിതാവിന്റെ പേർ <span class="text-danger">*</span></label>
+            <input type="text" id="m_fatherName" class="form-control" placeholder="Father's Name" required>
+          </div>
+          <div class="form-group mb-3">
+            <label style="font-weight:600;">Mother's Name / മാതാവിന്റെ പേർ <span class="text-danger">*</span></label>
+            <input type="text" id="m_motherName" class="form-control" placeholder="Mother's Name" required>
+          </div>
+          <div class="form-group mb-3">
+            <label style="font-weight:600;">Phone Number / ഫോണ്് നംബർ <span class="text-danger">*</span></label>
+            <input type="tel" id="m_phone" class="form-control" placeholder="+91 XXXXX XXXXX" required>
+          </div>
+          <button type="submit" id="modalSubmitBtn" class="btn btn-success w-100" style="border-radius:10px; padding:12px; font-weight:700;"><i class="fa fa-send" style="margin-right:8px;"></i>Submit Application</button>
+        </form>
+        <div id="admissionModalSuccess" style="display:none; text-align:center; padding:20px;">
+          <i class="fa fa-check-circle" style="color:#1a6b3a; font-size:3rem; margin-bottom:12px;"></i>
+          <h5 style="color:#0a3d1f;">Application Submitted!</h5>
+          <p style="color:#555;">We will contact you soon. جزاك الله خيرا</p>
+          <button onclick="closeAdmissionModal()" class="btn btn-outline-success mt-2">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!--==========================
+      Burda Team Section
+    ============================-->
+    <section id="team">
+      <div class="container">
+        <div class="section-header">
+          <h3>Burda Team</h3>
+          <p>Bayanul Uloom Dars Al Bayan Burda Team</p>
+          <img id="burdaTeamImg" src="img/burda team.png" class="rounded mx-auto d-block img-fluid" alt="Burda Team">
+        </div>
+      </div>
+    </section><!-- #team -->
+
+    <!-- Leadership Section -->
+    <section id="leadership" style="padding: 70px 0; background: #f8f9fa;">
+      <div class="container">
+        <header class="section-header">
+          <h3>Current Leadership</h3>
+          <p>The guiding lights of Muttichira Bayanul Uloom Dars</p>
+        </header>
+        <div class="row justify-content-center" id="leadershipContent">
+          <!-- Principal Mudarris -->
+          <div class="col-lg-4 col-md-6 text-center mb-4" id="principalCard">
+            <div style="background:#fff; border-radius:20px; padding:30px; box-shadow:0 8px 30px rgba(0,0,0,0.08); border:2px solid #e8e8e8; transition:all 0.3s;" onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 15px 40px rgba(0,0,0,0.12)'" onmouseout="this.style.transform='';this.style.boxShadow='0 8px 30px rgba(0,0,0,0.08)'">
+              <img id="principalImg" src="img/new_logo.png" alt="Principal" style="width:120px; height:120px; border-radius:50%; object-fit:cover; border:4px solid #0a4d2e; margin-bottom:16px;">
+              <h5 id="principalNameEl" style="color:#0a3d1f; font-family:'Outfit',sans-serif; font-weight:700;">Sheikhuna Ibrahim Baqavi Al Haithami</h5>
+              <p id="principalTitleEl" style="color:#d4af37; font-weight:600; font-size:0.9rem;">Principal Mudarris</p>
+              <p id="principalBioEl" style="color:#666; font-size:0.85rem;"></p>
+            </div>
+          </div>
+        </div>
+        <!-- Assistant Mudarris -->
+        <div class="row justify-content-center mt-4" id="assistantList"></div>
+      </div>
+    </section>
+
+    <!-- Branch & Faculty Network -->
+    <section id="branches" style="padding: 70px 0; background: #fff;">
+      <div class="container">
+        <header class="section-header">
+          <h3>Branch & Faculty Network</h3>
+          <p>Our connected network of Islamic education</p>
+        </header>
+        <div class="row justify-content-center" id="branchList"></div>
+      </div>
+    </section>
+
+    <!--==========================
+      Contact Section
+    ============================-->
+    <section id="contact">
+      <div class="container-fluid">
+        <div class="section-header" id="contactSecHeader">
+          <h3>Contact Us</h3>
+          <p style="text-align:center; color:#555;">Get in touch with us for more information</p>
+          <div class="text-center"><a href="#" class="btn btn-outline-success btn-sm mt-3" style="display:none;" id="contactReadMore">Read more...</a></div>
+        </div>
+
+        <div class="row wow fadeInUp">
+          <div class="col-lg-6">
+            <div class="map mb-4 mb-lg-0">
+            </div>
+            <p>
+              <strong>Muttichira Bayanul Uloom Dars</strong>
+              <br>
+              Muttichira Juma Masjid, Moonniyur Post, Malappuram
+              <br>
+              Kerala, India
+            </p>
+            <p>
+              <strong>Phone:</strong>
+              <br>
+              +91 9526919218
+            </p>
+            <p>
+              <strong>E-Mail:</strong>
+              <br>
+              darsbayanululoom@gmail.com
+            </p>
+          </div>
+
+          <div class="col-lg-6">
+            <div class="row">
+              <div class="col-md-5 info">
+                <i class="ion-ios-location-outline"></i>
+                <p>Thalappara, Muttichira, Moonniyur P.O, 676311</p>
+              </div>
+              <div class="col-md-4 info">
+                <i class="ion-ios-email-outline"></i>
+                <p>darsbayanululoom@gmail.com</p>
+              </div>
+              <div class="col-md-3 info">
+                <i class="ion-ios-telephone-outline"></i>
+                <p>+91 9526 919 218</p>
+              </div>
+            </div>
+
+            <div class="form">
+              <form id="contactForm">
+                <div class="form-row">
+                  <div class="form-group col-lg-6">
+                    <input type="text" name="name" class="form-control" id="contactName" placeholder="Your Name" required />
+                  </div>
+                  <div class="form-group col-lg-6">
+                    <input type="email" class="form-control" name="email" id="contactEmail" placeholder="Your Email" required />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" name="subject" id="contactSubject" placeholder="Subject" required />
+                </div>
+                <div class="form-group">
+                  <textarea class="form-control" name="message" id="contactMessage" rows="5" placeholder="Message" required></textarea>
+                </div>
+                <div class="text-center"><button type="submit" title="Send Message" id="contactSubmitBtn">Send Message</button></div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section><!-- #contact -->
+
+  </main>
+
+  <!--==========================
+    Footer
+  ============================-->
+  <footer id="footer">
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4 col-md-6 footer-info">
+            <h3>BAYANUL ULOOM DARS</h3>
+            <p>Bayanul Uloom Sahithya Samajam is a platform for the literary and non literary activities of students. The activities of the Samajam begin after the official inauguration every year. All extra curricular activities conducted by the Bayanul Uloom Dars are under the auspicious of Sahithya Samajam. It aims the Islamic literary and artistic development of the students</p>
+          </div>
+
+          <div class="col-lg-2 col-md-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><a href="/home">Home</a></li>
+              <li><a href="/about">About us</a></li>
+              <li><a href="/latest-news">Latest News</a></li>
+              <li><a href="/admission">Admission</a></li>
+              <li><a href="/contact">Contact Us</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-3 col-md-6 footer-contact">
+            <h4>Contact Us</h4>
+            <p>
+              Thalappara <br>
+              Moonniyur P.O, PIN: 676311<br>
+              Kerala, India <br>
+              <strong>Phone:</strong> +91 9526 919 218<br>
+              <strong>Email:</strong> darsbayanululoom@gmail.com<br>
+            </p>
+            <div class="social-links">
+              <a href="https://wa.me/+919526919218/" class="twitter"><i class="fa fa-whatsapp"></i></a>
+              <a href="https://www.facebook.com/share/18UxCZE5qW/" target="_blank" class="facebook"><i class="fa fa-facebook"></i></a>
+              <a href="https://www.instagram.com/muttichira_dars?igsh=ZTZ2M3ZhNDFwMXU4&utm_source=ig_contact_invite" target="_blank" class="instagram"><i class="fa fa-instagram"></i></a>
+              <a href="https://www.youtube.com/channel/UCnfgm7rNEqGDN68loux5-JQ" class="google-plus"><i class="fa fa-youtube"></i></a>
+              <a href="tel:+919526919218" class="linkedin"><i class="fa fa-phone"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6 footer-newsletter">
+            <h4 id="footerMudarrisNameEl">Principal Mudarris</h4>
+            <p id="footerMudarrisTitleEl" style="color:#d4af37; font-weight:600;"></p>
+            <p id="footerMudarrisDetailEl" style="color:rgba(255,255,255,0.6); font-size:0.85rem;"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="copyright">
+        &copy; Copyright <strong>BAYANUL ULOOM DARS</strong>. All Rights Reserved
+      </div>
+      <div class="credits">
+        Designed by <a href="">BAYANUL ULOOM DARS</a>
+      </div>
+    </div>
+  </footer><!-- #footer -->
+
+  <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+
+  <!-- JavaScript Libraries -->
+  <script src="lib/jquery/jquery.min.js"></script>
+  <script src="lib/jquery/jquery-migrate.min.js"></script>
+  <script src="lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="lib/easing/easing.min.js"></script>
+  <script src="lib/mobile-nav/mobile-nav.js"></script>
+  <script src="lib/wow/wow.min.js"></script>
+  <script src="lib/waypoints/waypoints.min.js"></script>
+  <script src="lib/counterup/counterup.min.js"></script>
+  <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+  <script src="lib/isotope/isotope.pkgd.min.js"></script>
+  <script src="lib/lightbox/js/lightbox.min.js"></script>
+
+  <!-- Template Main Javascript File -->
+  <script src="js/main.js"></script>
+
+  <!-- AL BAYAN API Integration -->
+  <script>
+    // ── Toast notification helper ──────────────────
+    function showToast(message, isError) {
+      var container = document.getElementById('toastContainer');
+      var toast = document.createElement('div');
+      toast.className = 'toast-msg' + (isError ? ' error' : '');
+      toast.innerHTML = '<i class="fa ' + (isError ? 'fa-times-circle' : 'fa-check-circle') + '"></i> ' + message;
+      container.appendChild(toast);
+      setTimeout(function() { toast.remove(); }, 4000);
+    }
+
+    // ── Contact Form AJAX ──────────────────────────
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var btn = document.getElementById('contactSubmitBtn');
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+
+      var data = {
+        name: document.getElementById('contactName').value,
+        email: document.getElementById('contactEmail').value,
+        subject: document.getElementById('contactSubject').value,
+        message: document.getElementById('contactMessage').value
+      };
+
+      fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(result) {
+        showToast(result.message, !result.success);
+        if (result.success) { document.getElementById('contactForm').reset(); }
+        btn.disabled = false;
+        btn.textContent = 'Send Message';
+      })
+      .catch(function() {
+        showToast('Network error. Please try again.', true);
+        btn.disabled = false;
+        btn.textContent = 'Send Message';
+      });
+    });
+
+    // ── Newsletter Form AJAX ───────────────────────
+    document.getElementById('newsletterForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var email = document.getElementById('newsletterEmail').value;
+
+      fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email })
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(result) {
+        showToast(result.message, !result.success);
+        if (result.success) { document.getElementById('newsletterForm').reset(); }
+      })
+      .catch(function() {
+        showToast('Network error. Please try again.', true);
+      });
+    });
+
+    // ── Load Dynamic News from MongoDB ──────────
+    function loadNews() {
+      fetch('/api/news')
+        .then(function(res) { return res.json(); })
+        .then(function(news) {
+          if (news.length > 0) {
+            // Ticker bar hidden intentionally
+
+            // Show dynamic cards (hide static)
+            var container = document.getElementById('dynamicNews');
+            var html = '';
+            news.forEach(function(item) {
+              var date = new Date(item.createdAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' });
+              html += '<div class="col-lg-4 col-md-6">' +
+                '<div class="news-card-dynamic wow fadeInUp">' +
+                (item.imageUrl ? '<img src="' + item.imageUrl + '" alt="' + item.title + '" style="width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:12px 12px 0 0;">' : '') +
+                '<div class="card-body">' +
+                '<span class="card-date"><i class="fa fa-calendar"></i> ' + date + '</span>' +
+                '<h4>' + item.title + '</h4>' +
+                '<p>' + item.description + '</p>' +
+                '</div></div></div>';
+            });
+            container.innerHTML = html;
+            container.style.display = 'flex';
+            container.style.flexWrap = 'wrap';
+            // Hide static news
+            var staticNews = document.getElementById('staticNews');
+            if (staticNews) staticNews.style.display = 'none';
+          }
+        })
+        .catch(function() { /* Keep static news visible */ });
+    }
+
+    // ── Load Dynamic Gallery from MongoDB ──────────
+    function loadGallery() {
+      fetch('/api/gallery')
+        .then(function(res) { return res.json(); })
+        .then(function(items) {
+          if (items.length > 0) {
+            var container = document.getElementById('dynamicGallery');
+            var categoryMap = { 'Post (Image)': 'filter-post', 'Reel (Video)': 'filter-reel' };
+            var html = '';
+            
+            // Sort by likes desc
+            items.sort(function(a, b) {
+              var aLikes = a.likes ? a.likes.length : 0;
+              var bLikes = b.likes ? b.likes.length : 0;
+              return bLikes - aLikes;
+            });
+
+            // Limit to 4 items for the homepage
+            var displayItems = items.slice(0, 4);
+            
+            displayItems.forEach(function(item) {
+              var filterClass = categoryMap[item.category] || 'filter-post';
+              
+              var mediaHtml = '';
+              if (item.mediaType === 'video') {
+                if (item.imageUrl.includes('youtube.com') || item.imageUrl.includes('youtu.be')) {
+                  mediaHtml = '<div class="video-placeholder" style="background:#000; height:200px; display:flex; align-items:center; justify-content:center;"><i class="fa fa-play-circle" style="color:#fff; font-size:48px;"></i></div>';
+                } else {
+                  mediaHtml = '<video src="' + item.imageUrl + '" style="width: 100%; height: 200px; object-fit: cover;"></video>';
+                }
+              } else {
+                mediaHtml = '<img src="' + item.imageUrl + '" class="img-fluid" alt="' + item.title + '">';
+              }
+
+              html += '<div class="col-lg-4 col-md-6 portfolio-item ' + filterClass + '">' +
+                '<div class="portfolio-wrap">' + mediaHtml + 
+                '<div class="portfolio-info">' +
+                '<h4><a href="/gallery">' + item.title + '</a></h4>' +
+                '<p>' + item.category + '</p>' +
+                '<div><a href="/gallery" title="View in Gallery"><i class="ion ion-eye"></i></a></div>' +
+                '</div></div></div>';
+            });
+            
+            // Add a "See More" button at the end
+            if (items.length > 4) {
+                html += '<div class="col-12 text-center mt-4"><a href="/gallery" class="btn btn-outline-success">Explore More Gallery</a></div>';
+            }
+            
+            container.innerHTML = html;
+          }
+        })
+        .catch(function() { /* Keep static gallery */ });
+    }
+
+    // ── Smooth scroll for nav links ──────────────────
+    document.querySelectorAll('.scrollto').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        var target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          var offset = document.getElementById('header').offsetHeight;
+          window.scrollTo({ top: target.offsetTop - offset, behavior: 'smooth' });
+          document.querySelector('.nav-links').classList.remove('show');
+          document.querySelectorAll('.nav-links li a').forEach(function(a) { a.classList.remove('active'); });
+          this.classList.add('active');
+        }
+      });
+    });
+
+    // ── Active nav on scroll ───────────────────────
+    window.addEventListener('scroll', function() {
+      var header = document.getElementById('header');
+      if (window.scrollY > 100) {
+        header.classList.add('header-scrolled');
+      } else {
+        header.classList.remove('header-scrolled');
+      }
+    });
+
+    // ── Load Dynamic Sliders from MongoDB ──────────
+    function loadSliders() {
+      fetch('/api/sliders')
+        .then(function(res) { return res.json(); })
+        .then(function(sliders) {
+          if (sliders && sliders.length > 0) {
+            var indicators = document.getElementById('sliderIndicators');
+            var inner = document.getElementById('sliderInner');
+            var indHtml = '';
+            var innerHtml = '';
+            
+            sliders.forEach(function(item, idx) {
+              var activeClass = idx === 0 ? 'active' : '';
+              indHtml += '<li data-target="#demo" data-slide-to="'+idx+'" class="'+activeClass+'"></li>';
+              
+              innerHtml += '<div class="carousel-item '+activeClass+'">';
+              if (item.mediaType === 'video') {
+                innerHtml += '<video src="'+item.mediaUrl+'" autoplay loop muted playsinline style="width:100%; height:100vh; object-fit:cover;"></video>';
+              } else {
+                innerHtml += '<img src="'+item.mediaUrl+'" alt="AL BAYAN" class="img-fluid" style="width:100%; height:100vh; object-fit:cover;">';
+              }
+              innerHtml += '</div>';
+            });
+            
+            indicators.innerHTML = indHtml;
+            inner.innerHTML = innerHtml;
+          }
+        })
+        .catch(function(err) { console.error('Slider fetch error', err); });
+    }
+
+    // ── Load Dynamic Sections from MongoDB ─────────
+    function loadSections() {
+      fetch('/api/sections')
+        .then(function(res) { return res.json(); })
+        .then(function(sections) {
+          if (sections && sections.length > 0) {
+            var map = {
+              'latestNews': 'newsSecHeader',
+              'gallery': 'gallerySecHeader',
+              'admission': 'admissionSecHeader',
+              'aboutUs': 'aboutSecHeader',
+              'contact': 'contactSecHeader'
+            };
+            var rmMap = {
+              'latestNews': 'newsReadMore',
+              'gallery': 'galleryReadMore',
+              'admission': 'admissionReadMore',
+              'aboutUs': 'aboutReadMore',
+              'contact': 'contactReadMore'
+            };
+            var containerMap = {
+              'latestNews': 'services',
+              'gallery': 'portfolio',
+              'admission': 'admission',
+              'aboutUs': 'about',
+              'contact': 'contact'
+            };
+            
+            // Collect all active sectionIds
+            var activeIds = sections.map(function(s) { return s.sectionId; });
+            
+            // Hide any section not in the active database response
+            var allSectionKeys = ['latestNews', 'gallery', 'admission', 'aboutUs', 'contact'];
+            allSectionKeys.forEach(function(key) {
+              if (activeIds.indexOf(key) === -1) {
+                var el = document.getElementById(containerMap[key]);
+                if (el) el.style.display = 'none';
+              }
+            });
+
+            sections.forEach(function(sec) {
+              var headerId = map[sec.sectionId];
+              var rmId = rmMap[sec.sectionId];
+              
+              if (headerId) {
+                var headerDiv = document.getElementById(headerId);
+                if (headerDiv) {
+                  var titleEl = headerDiv.querySelector('h3, .section-title');
+                  var pEl = headerDiv.querySelector('p');
+                  if (titleEl && sec.title) titleEl.textContent = sec.title;
+                  if (pEl && sec.description) pEl.textContent = sec.description;
+                }
+              }
+              
+              if (rmId) {
+                var rmBtn = document.getElementById(rmId);
+                if (rmBtn && sec.readMoreLink && sec.readMoreLink !== '#') {
+                  rmBtn.href = sec.readMoreLink;
+                  rmBtn.style.display = 'inline-block';
+                }
+              }
+            });
+          }
+        })
+        .catch(function(err) { console.error('Section fetch error', err); });
+    }
+
+    // \u2500\u2500 Admission Modal \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+    var _admissionOpen = true;
+
+    function openAdmissionModal() {
+      document.getElementById('admissionModal').style.display = 'block';
+      document.body.style.overflow = 'hidden';
+      if (!_admissionOpen) {
+        document.getElementById('admissionModalForm').style.display = 'none';
+        document.getElementById('admissionClosedBanner').style.display = 'block';
+      }
+    }
+    function closeAdmissionModal() {
+      document.getElementById('admissionModal').style.display = 'none';
+      document.body.style.overflow = '';
+      document.getElementById('admissionModalSuccess').style.display = 'none';
+      document.getElementById('admissionModalForm').style.display = '';
+      document.getElementById('admissionModalForm').reset();
+    }
+
+    // Admission modal form submit
+    document.getElementById('admissionModalForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var btn = document.getElementById('modalSubmitBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Submitting...';
+      var data = {
+        name: document.getElementById('m_name').value,
+        dob: document.getElementById('m_dob').value,
+        fatherName: document.getElementById('m_fatherName').value,
+        motherName: document.getElementById('m_motherName').value,
+        phone: document.getElementById('m_phone').value
+      };
+      fetch('/api/admission', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      .then(r=>r.json())
+      .then(res=>{
+        if (res.success) {
+          document.getElementById('admissionModalForm').style.display = 'none';
+          document.getElementById('admissionModalSuccess').style.display = 'block';
+        } else {
+          alert(res.message);
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fa fa-send" style="margin-right:8px;"></i>Submit Application';
+        }
+      })
+      .catch(()=>{
+        alert('Network error. Please try again.');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa fa-send" style="margin-right:8px;"></i>Submit Application';
+      });
+    });
+
+    // ── Load Home Settings ──────────
+    function loadHomeSettings() {
+      fetch('/api/home-settings')
+        .then(function(res) { return res.json(); })
+        .then(function(s) {
+          // Stats counters with animation
+          animateCounter('counterStudents', s.statsStudents || 90);
+          animateCounter('counterUstads', s.statsUstads || 6);
+          animateCounter('counterYears', s.statsYears || 50);
+          animateCounter('counterAlumni', s.statsAlumni || 25);
+
+          // Leadership
+          if (s.principalName) document.getElementById('principalNameEl').textContent = s.principalName;
+          if (s.principalTitle) document.getElementById('principalTitleEl').textContent = s.principalTitle;
+          if (s.principalBio) document.getElementById('principalBioEl').textContent = s.principalBio;
+          if (s.principalImageUrl) document.getElementById('principalImg').src = s.principalImageUrl;
+
+          // Assistant Mudarris
+          if (s.assistantMudarris && s.assistantMudarris.length > 0) {
+            var html = '';
+            s.assistantMudarris.forEach(function(a) {
+              html += '<div class="col-lg-3 col-md-4 col-6 text-center mb-4">' +
+                '<div style="background:#fff; border-radius:16px; padding:20px; box-shadow:0 4px 20px rgba(0,0,0,0.06);">' +
+                '<img src="' + (a.imageUrl || 'img/new_logo.png') + '" style="width:80px; height:80px; border-radius:50%; object-fit:cover; border:3px solid #d4af37; margin-bottom:10px;">' +
+                '<h6 style="color:#0a3d1f; font-weight:700; margin-bottom:4px;">' + a.name + '</h6>' +
+                '<small style="color:#888;">' + a.role + '</small>' +
+                '</div></div>';
+            });
+            document.getElementById('assistantList').innerHTML = html;
+          }
+
+          // Branches
+          if (s.branches && s.branches.length > 0) {
+            var bHtml = '';
+            s.branches.forEach(function(b) {
+              bHtml += '<div class="col-lg-4 col-md-6 mb-4">' +
+                '<div style="background:#f8f9fa; border-radius:14px; padding:24px; border-left:4px solid #0a4d2e; height:100%;">' +
+                '<h6 style="color:#0a3d1f; font-weight:700;"><i class="fa fa-map-marker" style="color:#d4af37; margin-right:8px;"></i>' + b.name + '</h6>' +
+                (b.location ? '<p style="color:#666; font-size:0.85rem; margin:0;">' + b.location + '</p>' : '') +
+                (b.description ? '<p style="color:#888; font-size:0.8rem; margin-top:6px;">' + b.description + '</p>' : '') +
+                '</div></div>';
+            });
+            document.getElementById('branchList').innerHTML = bHtml;
+          }
+
+          // Footer Mudarris
+          var fName = document.getElementById('footerMudarrisNameEl');
+          var fTitle = document.getElementById('footerMudarrisTitleEl');
+          var fDetail = document.getElementById('footerMudarrisDetailEl');
+          if (fName && s.footerMudarrisName) fName.textContent = s.footerMudarrisName;
+          if (fTitle && s.footerMudarrisTitle) fTitle.textContent = s.footerMudarrisTitle;
+          if (fDetail && s.footerMudarrisDetail) fDetail.textContent = s.footerMudarrisDetail;
+        })
+        .catch(function(err) { console.warn('Home settings load error', err); });
+    }
+
+    function animateCounter(id, target) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      var current = 0;
+      var step = Math.max(1, Math.floor(target / 60));
+      var timer = setInterval(function() {
+        current += step;
+        if (current >= target) {
+          current = target;
+          clearInterval(timer);
+        }
+        el.textContent = current + '+';
+      }, 30);
+    }
+
+    // ── Initialize ─────────────────────────────
+    document.addEventListener('DOMContentLoaded', function() {
+      loadSliders();
+      loadSections();
+      loadNews();
+      loadGallery();
+      loadHomeSettings();
+
+      // Check admission status
+      fetch('/api/settings/admission').then(r=>r.json()).then(d=>{ _admissionOpen = d.isOpen; }).catch(()=>{});
+
+      // Load admission poster
+      fetch('/api/settings/poster').then(r=>r.json()).then(d=>{
+        var posterEl = document.getElementById('admissionPosterImg');
+        var posterLink = document.getElementById('admissionPosterLink');
+        var noPoster = document.getElementById('admissionNoPoster');
+        if (d.posterUrl) {
+          if (posterEl) posterEl.src = d.posterUrl;
+          if (posterLink) posterLink.style.display = 'inline-block';
+          if (noPoster) noPoster.style.display = 'none';
+        } else {
+          if (posterLink) posterLink.style.display = 'none';
+          if (noPoster) noPoster.style.display = 'inline-block';
+        }
+      }).catch(()=>{
+        // On error keep no-poster visible
+        var noPoster = document.getElementById('admissionNoPoster');
+        if (noPoster) noPoster.style.display = 'inline-block';
+      });
+
+      // Load admission banner text (title + content)
+      fetch('/api/settings/admission-banner').then(r=>r.json()).then(d=>{
+        var titleEl = document.getElementById('admissionBannerTitle');
+        var contentEl = document.getElementById('admissionBannerContent');
+        if (d.title && titleEl) titleEl.textContent = d.title;
+        if (d.content && contentEl) contentEl.textContent = d.content;
+        else if (contentEl) contentEl.style.display = 'none';
+      }).catch(()=>{});
+
+      // Load Burda Team image
+      fetch('/api/settings/burda').then(r=>r.json()).then(d=>{
+        if (d.imageUrl) document.getElementById('burdaTeamImg').src = d.imageUrl;
+      }).catch(()=>{});
+    });
+  </script>
+
+</body>
+</html>

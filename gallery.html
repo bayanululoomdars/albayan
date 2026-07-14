@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Gallery | Bayanul Uloom Dars | Muttichira</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta content="AL BAYAN, Bayanul Uloom, Dars, Muttichira, Gallery" name="keywords">
+  <meta content="Explore the media gallery of Muttichira Bayanul Uloom Dars" name="description">
+  <meta property="og:title" content="Gallery | Bayanul Uloom Dars" />
+  <meta property="og:description" content="Explore the media gallery of Muttichira Bayanul Uloom Dars" />
+  <meta property="og:image" content="img/new_logo.png" />
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="img/favicon.png">
+  <link rel="apple-touch-icon" href="img/favicon.png">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- CSS Files -->
+  <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="lib/animate/animate.min.css" rel="stylesheet">
+  <link href="lib/ionicons/css/ionicons.min.css" rel="stylesheet">
+  <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+  
+  <!-- Main Stylesheet Files -->
+  <link href="css/style.css" rel="stylesheet">
+  <link href="css/custom.css" rel="stylesheet">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  
+  <style>
+    body {
+      background-color: #fafafa;
+      color: #262626;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Page Hero */
+    .page-hero {
+      background: linear-gradient(135deg, #0a4d2e 0%, #0d6b3f 100%);
+      padding: 40px 0;
+      color: #fff;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .page-hero h1 {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 2.2rem;
+      margin-bottom: 8px;
+    }
+    .page-hero p {
+      font-size: 0.95rem;
+      opacity: 0.9;
+    }
+
+    /* Story Bar */
+    .story-bar-container {
+      background: #fff;
+      border: 1px solid #dbdbdb;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 24px;
+      display: flex;
+      gap: 18px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+    }
+    .story-bar-container::-webkit-scrollbar {
+      height: 5px;
+    }
+    .story-bar-container::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border-radius: 4px;
+    }
+    .story-circle-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      min-width: 74px;
+    }
+    .story-ring {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      padding: 3px;
+      background: linear-gradient(135deg, #0a4d2e, #d4af37);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 6px;
+      transition: transform 0.2s;
+    }
+    .story-circle-wrapper:hover .story-ring {
+      transform: scale(1.05);
+    }
+    .story-ring img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #fff;
+      background: #eee;
+    }
+    .story-title {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #262626;
+      max-width: 74px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      text-align: center;
+    }
+
+    /* Story Fullscreen Viewer */
+    .story-viewer-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: 10000;
+      align-items: center;
+      justify-content: center;
+    }
+    .story-viewer-content {
+      position: relative;
+      width: 100%;
+      max-width: 450px;
+      height: 80vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: #000;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .story-viewer-content img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .story-viewer-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 2rem;
+      cursor: pointer;
+      z-index: 10002;
+    }
+    .story-viewer-title {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+      color: #fff;
+      background: rgba(0,0,0,0.6);
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    /* IG Profile Style Tabs */
+    .ig-tabs {
+      display: flex;
+      justify-content: center;
+      border-top: 1px solid #dbdbdb;
+      margin-bottom: 20px;
+    }
+    .ig-tab-btn {
+      background: none;
+      border: none;
+      padding: 16px 30px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #8e8e8e;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-top: 1px solid transparent;
+      margin-top: -1px;
+      transition: all 0.3s;
+    }
+    .ig-tab-btn i {
+      font-size: 1.1rem;
+    }
+    .ig-tab-btn.active {
+      color: #0a4d2e;
+      border-top: 1px solid #0a4d2e;
+    }
+
+    /* Instagram 3-Column Square Grid */
+    .ig-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 40px;
+    }
+    @media (max-width: 768px) {
+      .ig-grid {
+        gap: 3px;
+      }
+    }
+    .ig-grid-item {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      cursor: pointer;
+      background-color: #efefef;
+    }
+    .ig-grid-item img, .ig-grid-item video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    .ig-grid-item:hover img, .ig-grid-item:hover video {
+      transform: scale(1.03);
+    }
+    .ig-badge-overlay {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0, 0, 0, 0.6);
+      color: #fff;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      z-index: 2;
+    }
+    .ig-hover-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      color: #fff;
+      font-size: 1.2rem;
+      font-weight: 700;
+      opacity: 0;
+      transition: opacity 0.2s;
+      z-index: 1;
+    }
+    .ig-grid-item:hover .ig-hover-overlay {
+      opacity: 1;
+    }
+
+    /* Instagram-Style Detail Modal */
+    .ig-detail-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      z-index: 10000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .ig-detail-container {
+      background: #fff;
+      width: 100%;
+      max-width: 935px;
+      height: 80vh;
+      min-height: 450px;
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      position: relative;
+    }
+    @media (max-width: 768px) {
+      .ig-detail-container {
+        flex-direction: column;
+        height: auto;
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+    }
+    .ig-detail-media {
+      flex: 1.2;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .ig-detail-media img, .ig-detail-media video {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+    }
+    .ig-detail-info {
+      flex: 0.8;
+      display: flex;
+      flex-direction: column;
+      border-left: 1px solid #efefef;
+      background: #fff;
+      height: 100%;
+    }
+    @media (max-width: 768px) {
+      .ig-detail-info {
+        border-left: none;
+        height: auto;
+      }
+    }
+    .ig-info-header {
+      display: flex;
+      align-items: center;
+      padding: 14px;
+      border-bottom: 1px solid #efefef;
+    }
+    .ig-info-header img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      margin-right: 12px;
+    }
+    .ig-info-header strong {
+      font-size: 0.9rem;
+      color: #262626;
+    }
+    .ig-comments-box {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      border-bottom: 1px solid #efefef;
+      max-height: 400px;
+    }
+    .ig-caption-block {
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #f5f5f5;
+    }
+    .ig-caption-block p {
+      font-size: 0.88rem;
+      line-height: 1.4;
+      margin: 0;
+    }
+    .ig-hashtag {
+      color: #00376b;
+      text-decoration: none;
+      margin-right: 4px;
+    }
+    .ig-comment-item {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
+      font-size: 0.85rem;
+    }
+    .ig-comment-item img {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .ig-comment-content strong {
+      margin-right: 6px;
+    }
+    .ig-comment-date {
+      display: block;
+      font-size: 0.75rem;
+      color: #8e8e8e;
+      margin-top: 4px;
+    }
+    .ig-action-bar {
+      padding: 12px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      border-bottom: 1px solid #efefef;
+    }
+    .ig-action-buttons {
+      display: flex;
+      gap: 16px;
+      font-size: 1.5rem;
+    }
+    .ig-action-buttons button {
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      color: #262626;
+      transition: color 0.2s;
+    }
+    .ig-action-buttons button:hover {
+      color: #0a4d2e;
+    }
+    .ig-heart-btn.liked {
+      color: #ed4956 !important;
+      animation: heartBeat 0.3s ease-in-out;
+    }
+    .ig-likes-count {
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+    .ig-post-date {
+      font-size: 0.75rem;
+      color: #8e8e8e;
+      text-transform: uppercase;
+    }
+    .ig-comment-input-area {
+      padding: 12px 16px;
+      display: flex;
+      gap: 10px;
+    }
+    .ig-comment-input-area input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-size: 0.88rem;
+    }
+    .ig-comment-input-area button {
+      background: none;
+      border: none;
+      color: #0a4d2e;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+    }
+    .ig-comment-input-area button:disabled {
+      opacity: 0.4;
+    }
+    .ig-close-btn {
+      position: absolute;
+      top: -36px;
+      right: 0;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.8rem;
+      cursor: pointer;
+    }
+    @media (max-width: 768px) {
+      .ig-close-btn {
+        top: 10px;
+        right: 10px;
+        color: #000;
+        z-index: 10001;
+      }
+    }
+
+    /* Heart Pop Animation */
+    @keyframes heartBeat {
+      0% { transform: scale(1); }
+      25% { transform: scale(1.2); }
+      50% { transform: scale(1); }
+      75% { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Modern Header / Navbar -->
+  <header id="header" class="fixed-top">
+    <div class="navbar-container">
+      <a href="/home" class="navbar-logo">
+        <img src="img/new_logo.png" alt="BAYANUL ULOOM DARS Logo">
+        <div class="logo-text">
+          BAYANUL ULOOM DARS
+          <small>MUTTICHIRA</small>
+        </div>
+      </a>
+
+      <button class="mobile-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')">
+        <i class="fa fa-bars"></i>
+      </button>
+
+      <ul class="nav-links">
+        <li><a href="/home">Home</a></li>
+        <li><a href="/latest-news">Latest News</a></li>
+        <li><a href="/gallery" class="active">Gallery</a></li>
+        <li><a href="/admission" class="nav-btn-admission">Admission</a></li>
+        <li><a href="/about">About Us</a></li>
+        <li><a href="/contact">Contact Us</a></li>
+        <li id="authContainer" style="display:flex; align-items:center; color:#fff; font-size:0.9rem; padding-left:10px;"></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Login Modal Popup -->
+  <div id="loginPopupModal" style="display:none; position:fixed; inset:0; z-index:10000; background:rgba(0,0,0,0.6); align-items:center; justify-content:center;" onclick="if(event.target===this)this.style.display='none';">
+    <div style="background:#fff; border-radius:16px; padding:30px; max-width:360px; width:100%; text-align:center; box-shadow:0 10px 40px rgba(0,0,0,0.25);">
+      <h5 style="color:#0a3d1f; font-weight:700; margin-bottom:15px; font-family:'Outfit',sans-serif;">Authentication Required</h5>
+      <p style="font-size:0.9rem; color:#555; margin-bottom:20px;">Please sign in with your Google account to like and comment on our gallery items.</p>
+      <div id="googleBtnContainer" style="display:inline-block; margin-bottom:10px;"></div>
+      <button onclick="document.getElementById('loginPopupModal').style.display='none';" class="btn btn-outline-secondary btn-sm w-100" style="margin-top:10px; border-radius:8px;">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Page Hero Banner -->
+  <section class="page-hero">
+    <div class="container">
+      <h1>Gallery</h1>
+      <p>Explore the moments, achievements, and activities inside Bayanul Uloom Dars</p>
+    </div>
+  </section>
+
+  <!-- Main Content Container -->
+  <div class="container py-4">
+    
+    <!-- Active Stories Row -->
+    <div class="story-bar-container" id="storyBar" style="display:none;"></div>
+
+    <!-- Instagram Profile Style Filter Tabs -->
+    <div class="ig-tabs">
+      <button class="ig-tab-btn active" id="tab-all" onclick="filterGallery('all')">
+        <i class="fa fa-th"></i> All Posts
+      </button>
+      <button class="ig-tab-btn" id="tab-reels" onclick="filterGallery('reels')">
+        <i class="fa fa-play-circle"></i> Reels
+      </button>
+      <button class="ig-tab-btn" id="tab-pinned" onclick="filterGallery('pinned')">
+        <i class="fa fa-thumb-tack"></i> Pinned
+      </button>
+    </div>
+
+    <!-- Gallery Grid -->
+    <div class="ig-grid" id="galleryGrid"></div>
+  </div>
+
+  <!-- Story Viewer Modal -->
+  <div class="story-viewer-modal" id="storyViewer" onclick="if(event.target===this)closeStory()">
+    <button class="story-viewer-close" onclick="closeStory()">&times;</button>
+    <div class="story-viewer-content">
+      <img id="storyViewerImg" src="" alt="Story Image">
+      <div class="story-viewer-title" id="storyViewerTitle"></div>
+    </div>
+  </div>
+
+  <!-- Instagram-Style Post Detail Modal -->
+  <div class="ig-detail-modal" id="postDetailModal" onclick="if(event.target===this)closePostDetail()">
+    <div class="ig-detail-container">
+      <button class="ig-close-btn" onclick="closePostDetail()">&times;</button>
+      
+      <!-- Left side: Media -->
+      <div class="ig-detail-media" id="modalMediaContainer"></div>
+      
+      <!-- Right side: Info and Interactions -->
+      <div class="ig-detail-info">
+        
+        <!-- Header -->
+        <div class="ig-info-header">
+          <img src="img/new_logo.png" alt="Dars Logo">
+          <div>
+            <strong>muttichira_dars</strong>
+          </div>
+        </div>
+        
+        <!-- Caption, Hashtags & Comments -->
+        <div class="ig-comments-box">
+          <div class="ig-caption-block">
+            <p id="modalCaption"></p>
+            <div id="modalHashtags" style="margin-top:6px;"></div>
+          </div>
+          <div id="modalCommentsList"></div>
+        </div>
+        
+        <!-- Action Area -->
+        <div class="ig-action-bar">
+          <div class="ig-action-buttons">
+            <button onclick="likeCurrentPost()" class="ig-heart-btn" id="modalHeartBtn">
+              <i class="fa fa-heart"></i>
+            </button>
+            <button onclick="focusCommentInput()">
+              <i class="fa fa-comment-o"></i>
+            </button>
+            <button onclick="shareCurrentPost()">
+              <i class="fa fa-paper-plane-o"></i>
+            </button>
+          </div>
+          <div class="ig-likes-count"><span id="modalLikesCount">0</span> likes</div>
+          <div class="ig-post-date" id="modalPostDate"></div>
+        </div>
+        
+        <!-- Comment Input -->
+        <div class="ig-comment-input-area">
+          <input type="text" id="modalCommentInput" placeholder="Add a comment..." onkeypress="if(event.key==='Enter')postCommentCurrent()">
+          <button onclick="postCommentCurrent()">Post</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <!-- Modern Footer -->
+  <footer id="footer">
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4 col-md-6 footer-info">
+            <h3>BAYANUL ULOOM DARS</h3>
+            <p>Bayanul Uloom Sahithya Samajam is a platform for the literary and non literary activities of students. All extra curricular activities conducted by the Bayanul Uloom Dars are under the auspicious of Sahithya Samajam. It aims the Islamic literary and artistic development of the students.</p>
+          </div>
+
+          <div class="col-lg-2 col-md-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><a href="/home">Home</a></li>
+              <li><a href="/about">About us</a></li>
+              <li><a href="/latest-news">Latest News</a></li>
+              <li><a href="/admission">Admission</a></li>
+              <li><a href="/contact">Contact Us</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-3 col-md-6 footer-contact">
+            <h4>Contact Us</h4>
+            <p>
+              Thalappara <br>
+              Moonniyur P.O, PIN: 676311<br>
+              Kerala, India <br>
+              <strong>Phone:</strong> +91 9526 919 218<br>
+              <strong>Email:</strong> darsbayanululoom@gmail.com<br>
+            </p>
+            <div class="social-links">
+              <a href="https://wa.me/+919526919218/" class="twitter"><i class="fa fa-whatsapp"></i></a>
+              <a href="https://www.facebook.com/muttichiradars/" class="facebook"><i class="fa fa-facebook"></i></a>
+              <a href="https://www.instagram.com/muttichira_dars/" class="instagram"><i class="fa fa-instagram"></i></a>
+              <a href="https://www.youtube.com/channel/UCnfgm7rNEqGDN68loux5-JQ" class="google-plus"><i class="fa fa-youtube"></i></a>
+              <a href="tel:+919526919218" class="linkedin"><i class="fa fa-phone"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-6 footer-newsletter">
+            <h4 id="footerMudarrisNameEl">Principal Mudarris</h4>
+            <p id="footerMudarrisTitleEl" style="color:#d4af37; font-weight:600;"></p>
+            <p id="footerMudarrisDetailEl" style="color:rgba(255,255,255,0.6); font-size:0.85rem;"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="copyright">
+        &copy; Copyright <strong>BAYANUL ULOOM DARS</strong>. All Rights Reserved
+      </div>
+      <div class="credits">
+        Designed by <a href="/about">BAYANUL ULOOM DARS</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JavaScript Libraries -->
+  <script src="lib/jquery/jquery.min.js"></script>
+  <script src="lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="lib/mobile-nav/mobile-nav.js"></script>
+
+  <script>
+    let currentUser = null;
+    let googleClientId = '';
+    let allGalleryItems = [];
+    let currentFilter = 'all';
+    let activeDetailPost = null;
+
+    // Load google authentication client id
+    fetch('/api/auth/google/client-id')
+      .then(res => res.json())
+      .then(data => {
+        googleClientId = data.clientId;
+        google.accounts.id.initialize({
+          client_id: googleClientId,
+          callback: handleCredentialResponse
+        });
+        
+        google.accounts.id.renderButton(
+          document.getElementById('googleBtnContainer'),
+          { theme: 'outline', size: 'large', text: 'signin_with' }
+        );
+
+        var savedUser = sessionStorage.getItem('bud_user');
+        if (savedUser) {
+           currentUser = JSON.parse(savedUser);
+           showUserInNavbar();
+        }
+      });
+
+    function showUserInNavbar() {
+      var authLi = document.getElementById('authContainer');
+      authLi.innerHTML = '<span style="color:#fff; font-size:0.9rem; display:flex; align-items:center; gap:6px;"><img src="' + currentUser.picture + '" style="width:24px; border-radius:50%;">' + currentUser.name.split(' ')[0] + ' <button onclick="logout()" style="background:none;border:none;color:var(--accent);font-size:0.8rem;cursor:pointer;padding:0;">Logout</button></span>';
+    }
+
+    function handleCredentialResponse(response) {
+      fetch('/api/auth/google', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: response.credential })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          currentUser = data.user;
+          sessionStorage.setItem('bud_user', JSON.stringify(data.user));
+          showUserInNavbar();
+          document.getElementById('loginPopupModal').style.display = 'none';
+          if (activeDetailPost) {
+            // refresh active detail modal content
+            openPostDetail(activeDetailPost._id);
+          }
+        }
+      })
+      .catch(err => console.error('Auth error', err));
+    }
+
+    function logout() {
+      currentUser = null;
+      sessionStorage.removeItem('bud_user');
+      location.reload();
+    }
+
+    function triggerLoginPopup() {
+      document.getElementById('loginPopupModal').style.display = 'flex';
+      google.accounts.id.prompt();
+    }
+
+    // Load active stories
+    function loadStories() {
+      fetch('/api/stories')
+        .then(res => res.json())
+        .then(stories => {
+          if (stories && stories.length > 0) {
+            var container = document.getElementById('storyBar');
+            var html = '';
+            stories.forEach(s => {
+              html += '<div class="story-circle-wrapper" onclick="viewStory(\'' + s.imageUrl + '\', \'' + (s.title || '') + '\')">';
+              html += '  <div class="story-ring"><img src="' + s.imageUrl + '"></div>';
+              html += '  <div class="story-title">' + (s.title || 'Story') + '</div>';
+              html += '</div>';
+            });
+            container.innerHTML = html;
+            container.style.display = 'flex';
+          }
+        });
+    }
+
+    // View Story Fullscreen
+    function viewStory(url, title) {
+      document.getElementById('storyViewerImg').src = url;
+      document.getElementById('storyViewerTitle').textContent = title || 'Bayanul Uloom Dars Story';
+      document.getElementById('storyViewer').style.display = 'flex';
+    }
+    function closeStory() {
+      document.getElementById('storyViewer').style.display = 'none';
+    }
+
+    // Load Gallery Grid
+    function loadGallery() {
+      fetch('/api/gallery')
+        .then(res => res.json())
+        .then(items => {
+          allGalleryItems = items || [];
+          renderGrid();
+        });
+    }
+
+    // Render 3-Column Square Grid based on filter
+    function renderGrid() {
+      var grid = document.getElementById('galleryGrid');
+      var filtered = allGalleryItems;
+
+      if (currentFilter === 'reels') {
+        filtered = allGalleryItems.filter(item => item.mediaType === 'video');
+      } else if (currentFilter === 'pinned') {
+        filtered = allGalleryItems.filter(item => item.pinned === true);
+      }
+
+      // Sort: Pinned items first for "all" tab, then by date
+      if (currentFilter === 'all') {
+        filtered.sort((a, b) => {
+          if (a.pinned && !b.pinned) return -1;
+          if (!a.pinned && b.pinned) return 1;
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        });
+      }
+
+      var html = '';
+      filtered.forEach(item => {
+        html += '<div class="ig-grid-item" onclick="openPostDetail(\'' + item._id + '\')">';
+        
+        // Pin/Reels Badge overlays
+        if (item.pinned) {
+          html += '  <div class="ig-badge-overlay"><i class="fa fa-thumb-tack"></i></div>';
+        } else if (item.mediaType === 'video') {
+          html += '  <div class="ig-badge-overlay"><i class="fa fa-play"></i></div>';
+        }
+
+        // Media Element
+        if (item.mediaType === 'video') {
+          if (item.imageUrl.includes('youtube.com') || item.imageUrl.includes('youtu.be')) {
+            html += '<div style="background:#000; width:100%; height:100%; display:flex; align-items:center; justify-content:center;"><i class="fa fa-youtube-play" style="color:red; font-size:40px;"></i></div>';
+          } else {
+            html += '<video src="' + item.imageUrl + '" muted playsinline loop></video>';
+          }
+        } else {
+          html += '  <img src="' + item.imageUrl + '" alt="' + item.title + '">';
+        }
+
+        // Hover overlay
+        html += '  <div class="ig-hover-overlay">';
+        html += '    <span><i class="fa fa-heart"></i> ' + (item.likes ? item.likes.length : 0) + '</span>';
+        html += '    <span><i class="fa fa-comment"></i> ' + (item.comments ? item.comments.length : 0) + '</span>';
+        html += '  </div>';
+
+        html += '</div>';
+      });
+
+      grid.innerHTML = html || '<div class="col-12 text-center py-5 text-muted">No posts available under this tab</div>';
+    }
+
+    // Filter Gallery Tabs
+    window.filterGallery = function(tabName) {
+      currentFilter = tabName;
+      document.querySelectorAll('.ig-tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.getElementById('tab-' + tabName).classList.add('active');
+      renderGrid();
+    };
+
+    // Open Instagram-Style Post Detail View
+    window.openPostDetail = function(postId) {
+      var item = allGalleryItems.find(i => i._id === postId);
+      if (!item) return;
+      activeDetailPost = item;
+
+      // Render Media
+      var mediaContainer = document.getElementById('modalMediaContainer');
+      var mediaHtml = '';
+      if (item.mediaType === 'video') {
+        if (item.imageUrl.includes('youtube.com') || item.imageUrl.includes('youtu.be')) {
+          var ytid = getYouTubeId(item.imageUrl);
+          mediaHtml = '<iframe src="https://www.youtube.com/embed/' + ytid + '" style="width:100%;height:100%;border:none;" allowfullscreen></iframe>';
+        } else {
+          mediaHtml = '<video src="' + item.imageUrl + '" controls autoplay loop style="max-height:80vh; max-width:100%;"></video>';
+        }
+      } else {
+        mediaHtml = '<img src="' + item.imageUrl + '" alt="' + item.title + '" ondblclick="likeCurrentPost()">';
+      }
+      mediaContainer.innerHTML = mediaHtml;
+
+      // Caption & Title
+      document.getElementById('modalCaption').innerHTML = '<strong>muttichira_dars</strong> ' + item.title + (item.description ? '<br><span style="color:#555;font-size:0.85rem;">' + item.description + '</span>' : '');
+      
+      // Hashtags
+      var hashtagsContainer = document.getElementById('modalHashtags');
+      var tagHtml = '';
+      if (item.hashtags && item.hashtags.length > 0) {
+        item.hashtags.forEach(tag => {
+          tagHtml += '<a href="#" class="ig-hashtag">#' + tag + '</a> ';
+        });
+      }
+      hashtagsContainer.innerHTML = tagHtml;
+
+      // Likes count
+      document.getElementById('modalLikesCount').textContent = item.likes ? item.likes.length : 0;
+      
+      // Post Date
+      var dateText = new Date(item.createdAt).toLocaleDateString('en-IN', { month: 'long', day: 'numeric', year: 'numeric' });
+      document.getElementById('modalPostDate').textContent = dateText;
+
+      // Like Button (Heart) Red state
+      var heartBtn = document.getElementById('modalHeartBtn');
+      if (currentUser && item.likes && item.likes.includes(currentUser._id)) {
+        heartBtn.classList.add('liked');
+      } else {
+        heartBtn.classList.remove('liked');
+      }
+
+      // Comments List
+      renderModalComments(item.comments);
+
+      // Open Modal
+      document.getElementById('postDetailModal').style.display = 'flex';
+    };
+
+    function renderModalComments(comments) {
+      var container = document.getElementById('modalCommentsList');
+      var html = '';
+      if (comments && comments.length > 0) {
+        comments.forEach(c => {
+          var name = c.user ? c.user.name : 'User';
+          var pic = (c.user && c.user.picture) ? c.user.picture : 'img/new_logo.png';
+          html += '<div class="ig-comment-item">';
+          html += '  <img src="' + pic + '" alt="user">';
+          html += '  <div class="ig-comment-content">';
+          html += '    <strong>' + name + '</strong> ' + c.text;
+          html += '    <span class="ig-comment-date">' + new Date(c.date).toLocaleDateString() + '</span>';
+          html += '  </div>';
+          html += '</div>';
+        });
+      }
+      container.innerHTML = html;
+    }
+
+    // Like Action inside modal
+    window.likeCurrentPost = function() {
+      if (!currentUser) {
+        triggerLoginPopup();
+        return;
+      }
+      if (!activeDetailPost) return;
+      var id = activeDetailPost._id;
+
+      fetch('/api/gallery/' + id + '/like', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: currentUser._id })
+      })
+      .then(r => r.json())
+      .then(res => {
+        if (res.success) {
+          // Toggle inside local state
+          var item = allGalleryItems.find(i => i._id === id);
+          if (item) {
+            var index = item.likes.indexOf(currentUser._id);
+            if (index === -1) {
+              item.likes.push(currentUser._id);
+            } else {
+              item.likes.splice(index, 1);
+            }
+            // Update modal heart state & count
+            document.getElementById('modalLikesCount').textContent = item.likes.length;
+            var heartBtn = document.getElementById('modalHeartBtn');
+            if (item.likes.includes(currentUser._id)) {
+              heartBtn.classList.add('liked');
+            } else {
+              heartBtn.classList.remove('liked');
+            }
+            renderGrid();
+          }
+        }
+      });
+    };
+
+    // Post comment inside modal
+    window.postCommentCurrent = function() {
+      if (!currentUser) {
+        triggerLoginPopup();
+        return;
+      }
+      if (!activeDetailPost) return;
+      var input = document.getElementById('modalCommentInput');
+      var text = input.value.trim();
+      if (!text) return;
+
+      var id = activeDetailPost._id;
+      fetch('/api/gallery/' + id + '/comment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: currentUser._id, text: text })
+      })
+      .then(r => r.json())
+      .then(res => {
+        if (res.success) {
+          input.value = '';
+          // Update local state comments
+          var item = allGalleryItems.find(i => i._id === id);
+          if (item) {
+            item.comments = res.comments;
+            renderModalComments(res.comments);
+            renderGrid();
+          }
+        }
+      });
+    };
+
+    window.shareCurrentPost = function() {
+      if (!activeDetailPost) return;
+      if (navigator.share) {
+        navigator.share({
+          title: activeDetailPost.title,
+          text: 'Check out this post from Bayanul Uloom Dars Gallery!',
+          url: window.location.origin + '/gallery'
+        });
+      } else {
+        alert('Sharing url: ' + window.location.origin + '/gallery');
+      }
+    };
+
+    window.focusCommentInput = function() {
+      document.getElementById('modalCommentInput').focus();
+    };
+
+    window.closePostDetail = function() {
+      document.getElementById('postDetailModal').style.display = 'none';
+      document.getElementById('modalMediaContainer').innerHTML = '';
+      activeDetailPost = null;
+    };
+
+    function getYouTubeId(url) {
+      var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+      var match = url.match(regExp);
+      return (match && match[2].length === 11) ? match[2] : null;
+    }
+
+    // Load home page settings (mudarris details) for footer
+    function loadFooterSettings() {
+      fetch('/api/home-settings')
+        .then(res => res.json())
+        .then(s => {
+          var fName = document.getElementById('footerMudarrisNameEl');
+          var fTitle = document.getElementById('footerMudarrisTitleEl');
+          var fDetail = document.getElementById('footerMudarrisDetailEl');
+          if (fName && s.footerMudarrisName) fName.textContent = s.footerMudarrisName;
+          if (fTitle && s.footerMudarrisTitle) fTitle.textContent = s.footerMudarrisTitle;
+          if (fDetail && s.footerMudarrisDetail) fDetail.textContent = s.footerMudarrisDetail;
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      loadStories();
+      loadGallery();
+      loadFooterSettings();
+    });
+  </script>
+
+</body>
+</html>
