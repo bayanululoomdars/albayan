@@ -569,6 +569,93 @@ router.delete('/settings/poster', async (req, res) => {
   }
 });
 
+// ── COMMITTEE SETTINGS ──────────────────────────────────────
+
+// GET /api/settings/committee - Get committee settings
+router.get('/settings/committee', async (req, res) => {
+  try {
+    let posterSetting = await Settings.findOne({ key: 'committeePosterUrl' });
+    let titleSetting = await Settings.findOne({ key: 'committeeTitle' });
+    let detailsSetting = await Settings.findOne({ key: 'committeeDetails' });
+    res.json({
+      posterUrl: posterSetting ? posterSetting.value : null,
+      title: titleSetting ? titleSetting.value : 'THE NEW COMMITTEE 2026-27',
+      details: detailsSetting ? detailsSetting.value : ''
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// POST /api/settings/committee - Update committee title & details
+router.post('/settings/committee', async (req, res) => {
+  try {
+    const { title, details } = req.body;
+    let titleSetting = await Settings.findOne({ key: 'committeeTitle' });
+    if (!titleSetting) {
+      titleSetting = new Settings({ key: 'committeeTitle', value: title || 'THE NEW COMMITTEE 2026-27' });
+    } else {
+      titleSetting.value = title || 'THE NEW COMMITTEE 2026-27';
+    }
+    await titleSetting.save();
+
+    let detailsSetting = await Settings.findOne({ key: 'committeeDetails' });
+    if (!detailsSetting) {
+      detailsSetting = new Settings({ key: 'committeeDetails', value: details || '' });
+    } else {
+      detailsSetting.value = details || '';
+    }
+    await detailsSetting.save();
+
+    res.json({ success: true, title: titleSetting.value, details: detailsSetting.value });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// POST /api/settings/committee/poster - Upload committee poster
+router.post('/settings/committee/poster', (req, res) => {
+  const uploader = getUploader();
+  uploader.single('poster')(req, res, async (uploadErr) => {
+    if (uploadErr) return res.status(500).json({ success: false, message: 'Poster upload failed' });
+    try {
+      if (!req.file) return res.status(400).json({ success: false, message: 'No file uploaded' });
+      const posterUrl = isCloudinaryConfigured() ? req.file.path : '/img/uploads/' + req.file.filename;
+      let setting = await Settings.findOne({ key: 'committeePosterUrl' });
+      if (!setting) {
+        setting = new Settings({ key: 'committeePosterUrl', value: posterUrl });
+      } else {
+        setting.value = posterUrl;
+      }
+      await setting.save();
+      res.json({ success: true, posterUrl });
+    } catch (err) {
+      res.status(500).json({ success: false, message: err.message });
+    }
+  });
+});
+
+// DELETE /api/settings/committee/poster - Remove committee poster
+router.delete('/api/settings/committee/poster', async (req, res) => {
+  try {
+    const posterSetting = await Settings.findOne({ key: 'committeePosterUrl' });
+    if (posterSetting) {
+      if (isCloudinaryConfigured() && posterSetting.value) {
+        try {
+          const publicId = posterSetting.value.split('/').slice(-1)[0].split('.')[0];
+          await cloudinary.uploader.destroy(publicId);
+        } catch (e) { /* ignore */ }
+      }
+      posterSetting.value = null;
+      await posterSetting.save();
+    }
+    res.json({ success: true, message: 'Committee poster removed' });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+
 // GET /api/settings/gallery-categories — Get custom categories
 router.get('/settings/gallery-categories', async (req, res) => {
   try {
