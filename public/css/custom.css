@@ -578,16 +578,16 @@
 
 @media (max-width: 767px) {
   .banner-img {
-    height: 55vw;
-    min-height: 220px;
-    max-height: 420px;
+    height: auto;
+    min-height: unset;
+    max-height: unset;
   }
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
   .banner-img {
-    height: 60vw;
-    max-height: 520px;
+    height: auto;
+    max-height: unset;
   }
 }
 
@@ -619,4 +619,51 @@
 
 .btn-explore-more i {
   font-size: 1rem;
+}
+
+/* ── STATS COUNTER ROW – always 4-in-a-row ────────── */
+.counter-row {
+  display: flex;
+  flex-wrap: nowrap !important;
+  justify-content: center;
+}
+
+.counter-card {
+  padding: 20px 8px;
+}
+
+.counter-icon {
+  font-size: 2.5rem;
+  color: #d4af37;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.counter-number {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.counter-label {
+  color: rgba(255,255,255,0.7);
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+/* Scale down on tablets */
+@media (max-width: 767px) {
+  .counter-card { padding: 10px 4px; }
+  .counter-icon { font-size: 1.5rem; margin-bottom: 6px; }
+  .counter-number { font-size: 1.6rem; }
+  .counter-label { font-size: 0.65rem; }
+}
+
+/* Extra-small phones */
+@media (max-width: 400px) {
+  .counter-icon { font-size: 1.2rem; margin-bottom: 4px; }
+  .counter-number { font-size: 1.3rem; }
+  .counter-label { font-size: 0.58rem; }
 }
