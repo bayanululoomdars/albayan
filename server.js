@@ -26,8 +26,8 @@ app.get('/home', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.get(['/latest-news', '/lastest-news', '/lastest news', '/latestnews'], (req, res) => {
-  res.redirect('/home');
+app.get(['/latest-news', '/lastest-news', '/latestnews', '/news'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'news.html'));
 });
 
 app.get('/gallery', (req, res) => {

@@ -226,18 +226,33 @@ router.post('/gallery', (req, res) => {
       if (req.file) {
         itemData.imageUrl = isCloudinaryConfigured() ? req.file.path : '/img/uploads/' + req.file.filename;
         itemData.cloudinaryId = req.file.filename || '';
-      } else if (mediaType === 'video' && mediaUrl) {
+      } else if (mediaUrl) {
         itemData.imageUrl = mediaUrl; // Store external URL here
       } else {
-         return res.status(400).json({ success: false, message: 'Image/Video file or Video URL is required' });
+         return res.status(400).json({ success: false, message: 'Image/Video file or Media URL is required' });
+      }
+
+      // Auto-add new category to galleryCategories setting if not present
+      try {
+        let catSetting = await Settings.findOne({ key: 'galleryCategories' });
+        if (!catSetting) {
+          catSetting = new Settings({ key: 'galleryCategories', value: ['Programme', 'Collections', 'Design'] });
+        }
+        if (!catSetting.value.includes(category)) {
+          catSetting.value.push(category);
+          catSetting.markModified('value');
+          await catSetting.save();
+        }
+      } catch (catErr) {
+        console.warn('Category auto-save warning:', catErr);
       }
 
       const item = new GalleryItem(itemData);
       await item.save();
-      res.json({ success: true, message: 'Gallery image added!', data: item });
+      res.json({ success: true, message: 'Gallery item added successfully!', data: item });
     } catch (err) {
       console.error('Gallery save error:', err);
-      res.status(500).json({ success: false, message: 'Failed to add gallery image' });
+      res.status(500).json({ success: false, message: 'Failed to add gallery item' });
     }
   });
 });
@@ -770,6 +785,48 @@ router.delete('/settings/gallery-categories/:name', async (req, res) => {
     res.json({ success: true, categories: setting.value });
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+});
+
+// GET /api/settings/home-gallery — Get homepage gallery display settings
+router.get('/settings/home-gallery', async (req, res) => {
+  try {
+    let limitSetting = await Settings.findOne({ key: 'homeGalleryLimit' });
+    let categorySetting = await Settings.findOne({ key: 'homeGalleryCategory' });
+    let modeSetting = await Settings.findOne({ key: 'homeGalleryMode' });
+    res.json({
+      limit: limitSetting ? parseInt(limitSetting.value) || 3 : 3,
+      category: categorySetting ? categorySetting.value : 'all',
+      mode: modeSetting ? modeSetting.value : 'all'
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// POST /api/settings/home-gallery — Save homepage gallery display settings
+router.post('/settings/home-gallery', async (req, res) => {
+  try {
+    const { limit, category, mode } = req.body;
+
+    let limitSetting = await Settings.findOne({ key: 'homeGalleryLimit' });
+    if (!limitSetting) limitSetting = new Settings({ key: 'homeGalleryLimit', value: limit || 3 });
+    else limitSetting.value = limit !== undefined ? limit : 3;
+    await limitSetting.save();
+
+    let categorySetting = await Settings.findOne({ key: 'homeGalleryCategory' });
+    if (!categorySetting) categorySetting = new Settings({ key: 'homeGalleryCategory', value: category || 'all' });
+    else categorySetting.value = category || 'all';
+    await categorySetting.save();
+
+    let modeSetting = await Settings.findOne({ key: 'homeGalleryMode' });
+    if (!modeSetting) modeSetting = new Settings({ key: 'homeGalleryMode', value: mode || 'all' });
+    else modeSetting.value = mode || 'all';
+    await modeSetting.save();
+
+    res.json({ success: true, limit: limitSetting.value, category: categorySetting.value, mode: modeSetting.value });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
   }
 });
 

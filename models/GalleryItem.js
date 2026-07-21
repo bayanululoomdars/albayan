@@ -6,7 +6,6 @@ const galleryItemSchema = new mongoose.Schema({
   hashtags: [{ type: String }],
   category: { 
     type: String, 
-    enum: ['Programme', 'Collections', 'Design'],
     required: true 
   },
   imageUrl: { type: String, required: true },

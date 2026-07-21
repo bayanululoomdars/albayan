@@ -69,7 +69,6 @@
 
       <ul class="nav-links">
         <li><a href="/home" class="active">Home</a></li>
-
         <li><a href="/gallery">Gallery</a></li>
         <li><a href="/admission" class="nav-btn-admission">Admission</a></li>
         <li><a href="/about">About Us</a></li>
@@ -138,20 +137,32 @@
     <!--==========================
       Gallery Section (Dynamic from MongoDB)
     ============================-->
-    <section id="portfolio" class="clearfix">
+    <!--==========================
+      Gallery Section (Dynamic Intro & Teaser from MongoDB)
+    ============================-->
+    <section id="portfolio" class="clearfix" style="padding:60px 0; background:linear-gradient(180deg, #ffffff 0%, #f4f8f5 100%);">
       <div class="container">
-        <header class="section-header" id="gallerySecHeader">
-          <h3 class="section-title">Gallery</h3>
-          <p>Explore our latest moments and activities</p>
+        <header class="section-header" id="gallerySecHeader" style="text-align:center; margin-bottom:30px;">
+          <h3 class="section-title" style="font-family:'Outfit',sans-serif; font-weight:700; color:#0a3d1f;">Gallery Highlights / ഗാലറി തിളക്കങ്ങൾ</h3>
+          <p style="max-width:700px; margin:0 auto; color:#555; font-size:0.95rem; line-height:1.6;">
+            Explore the memorable moments, academic programs, Sahithya Samajam activities, and student achievements of Muttichira Bayanul Uloom Dars.
+          </p>
         </header>
 
-        <!-- Dynamic gallery from MongoDB (homepage preview: 3 items) -->
+        <!-- Dynamic Category Filter Pills (All / എല്ലാം + custom categories) -->
+        <div id="homeGalleryCategoriesBar" style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:30px;">
+          <button class="btn btn-sm home-cat-pill active" onclick="filterHomeGallery('all', this)" style="border-radius:20px; font-weight:600; padding:6px 18px; border:1px solid #0a4d2e; background:#0a4d2e; color:#fff;">
+            All (എല്ലാം)
+          </button>
+        </div>
+
+        <!-- Dynamic gallery cards from MongoDB (configured by admin "ethra mathi" limit & settings) -->
         <div class="row" id="homeGalleryRow" style="justify-content:center;"></div>
 
         <!-- Explore More Button -->
         <div class="text-center mt-4">
-          <a href="/gallery" class="btn-explore-more">
-            <i class="fa fa-th"></i> Explore More
+          <a href="/gallery" class="btn-explore-more" style="display:inline-flex; align-items:center; gap:8px; padding:12px 28px; background:linear-gradient(135deg, #0a4d2e, #106b3f); color:#fff; border-radius:30px; font-weight:700; text-decoration:none; box-shadow:0 4px 15px rgba(10,77,46,0.25); transition:transform 0.3s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+            <i class="fa fa-th"></i> Explore Full Gallery / സമ്പൂർണ്ണ ഗാലറി കാണുക
           </a>
         </div>
       </div>
@@ -291,55 +302,110 @@
     <!--==========================
       Why Us Section
     ============================-->
-    <section id="why-us" style="padding: 60px 0; background: #fff;">
-      <div class="container">
-        <header class="section-header">
-          <h3>Why Bayanul Uloom Dars?</h3>
-          <p>Key highlights and course features of our institution</p>
-        </header>
-        <div class="row align-items-center" style="margin-top: 30px;">
-          <!-- Left: Usthad Photo/Video -->
-          <div class="col-lg-5 col-md-12 mb-4 mb-lg-0 text-center">
-            <div id="whyUsMediaContainer" style="position:relative; display:inline-block; width:100%; max-width:380px;">
-              <!-- Rendered via JS -->
-            </div>
-          </div>
-          <!-- Right: 4 Cards -->
-          <div class="col-lg-7 col-md-12">
-            <div class="row">
-              <div class="col-sm-6 mb-3">
-                <div style="background:#fff; border-radius:12px; padding:18px; box-shadow:0 4px 15px rgba(0,0,0,0.06); border-left:4px solid #0a4d2e; height:100%;">
-                  <i class="fa fa-graduation-cap" style="color:#0a4d2e; font-size:1.5rem; margin-bottom:8px;"></i>
-                  <h6 style="font-weight:700; color:#0a3d1f;">Eligibility</h6>
-                  <p id="whyUsEligibilityEl" style="font-size:0.88rem; color:#555; margin:0;"></p>
-                </div>
-              </div>
-              <div class="col-sm-6 mb-3">
-                <div style="background:#fff; border-radius:12px; padding:18px; box-shadow:0 4px 15px rgba(0,0,0,0.06); border-left:4px solid #d4af37; height:100%;">
-                  <i class="fa fa-book" style="color:#d4af37; font-size:1.5rem; margin-bottom:8px;"></i>
-                  <h6 style="font-weight:700; color:#0a3d1f;">Curriculum</h6>
-                  <p id="whyUsCurriculumEl" style="font-size:0.88rem; color:#555; margin:0;"></p>
-                </div>
-              </div>
-              <div class="col-sm-6 mb-3">
-                <div style="background:#fff; border-radius:12px; padding:18px; box-shadow:0 4px 15px rgba(0,0,0,0.06); border-left:4px solid #0a4d2e; height:100%;">
-                  <i class="fa fa-university" style="color:#0a4d2e; font-size:1.5rem; margin-bottom:8px;"></i>
-                  <h6 style="font-weight:700; color:#0a3d1f;">Facilities</h6>
-                  <p id="whyUsFacilitiesEl" style="font-size:0.88rem; color:#555; margin:0;"></p>
-                </div>
-              </div>
-              <div class="col-sm-6 mb-3">
-                <div style="background:#fff; border-radius:12px; padding:18px; box-shadow:0 4px 15px rgba(0,0,0,0.06); border-left:4px solid #d4af37; height:100%;">
-                  <i class="fa fa-phone" style="color:#d4af37; font-size:1.5rem; margin-bottom:8px;"></i>
-                  <h6 style="font-weight:700; color:#0a3d1f;">Enquiry</h6>
-                  <p id="whyUsEnquiryEl" style="font-size:0.88rem; color:#555; margin:0; white-space:pre-line;"></p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+<div class="row" style="margin-top:40px;">
+
+  <div class="col-md-6 mb-4">
+    <div style="
+      background:rgba(255,255,255,0.08);
+      backdrop-filter:blur(20px);
+      border:1px solid rgba(10,77,46,0.15);
+      border-radius:30px;
+      padding:35px;
+      min-height:220px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.08);">
+
+      <i class="fa fa-graduation-cap"
+         style="font-size:2rem;color:#0a4d2e;margin-bottom:15px;"></i>
+
+      <h4 style="font-weight:700;color:#0a3d1f;">
+        Eligibility
+      </h4>
+
+      <p id="whyUsEligibilityEl"
+         style="color:#555;line-height:1.8;margin:0;">
+         Students who completed basic Islamic education are welcome to apply for advanced religious studies.
+      </p>
+
+    </div>
+  </div>
+
+  <div class="col-md-6 mb-4">
+    <div style="
+      background:rgba(255,255,255,0.08);
+      backdrop-filter:blur(20px);
+      border:1px solid rgba(212,175,55,0.2);
+      border-radius:30px;
+      padding:35px;
+      min-height:220px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.08);">
+
+      <i class="fa fa-book"
+         style="font-size:2rem;color:#d4af37;margin-bottom:15px;"></i>
+
+      <h4 style="font-weight:700;color:#0a3d1f;">
+        Curriculum
+      </h4>
+
+      <p id="whyUsCurriculumEl"
+         style="color:#555;line-height:1.8;margin:0;">
+         Quran, Hadith, Fiqh, Arabic language, and modern subjects guided by experienced Usthadh.
+      </p>
+
+    </div>
+  </div>
+
+  <div class="col-md-6 mb-4">
+    <div style="
+      background:rgba(255,255,255,0.08);
+      backdrop-filter:blur(20px);
+      border:1px solid rgba(10,77,46,0.15);
+      border-radius:30px;
+      padding:35px;
+      min-height:220px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.08);">
+
+      <i class="fa fa-university"
+         style="font-size:2rem;color:#0a4d2e;margin-bottom:15px;"></i>
+
+      <h4 style="font-weight:700;color:#0a3d1f;">
+        Facilities
+      </h4>
+
+      <p id="whyUsFacilitiesEl"
+         style="color:#555;line-height:1.8;margin:0;">
+         Library, Computer Lab, Smart Class, Medical Wing & Store for holistic student development.
+      </p>
+
+    </div>
+  </div>
+
+  <div class="col-md-6 mb-4">
+    <div style="
+      background:rgba(255,255,255,0.08);
+      backdrop-filter:blur(20px);
+      border:1px solid rgba(212,175,55,0.2);
+      border-radius:30px;
+      padding:35px;
+      min-height:220px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.08);">
+
+      <i class="fa fa-phone"
+         style="font-size:2rem;color:#d4af37;margin-bottom:15px;"></i>
+
+      <h4 style="font-weight:700;color:#0a3d1f;">
+        Enquiry
+      </h4>
+
+      <p id="whyUsEnquiryEl"
+         style="color:#555;line-height:1.8;margin:0;">
+         +91 9526 919 218<br>
+         darsbayanululoom@gmail.com
+      </p>
+
+    </div>
+  </div>
+
+</div>
 
     <!--==========================
       Admission Section
@@ -388,65 +454,6 @@
         </div>
       </div>
     </section><!-- #admission -->
-
-    <!-- Admission Modal (Popup Form) -->
-    <div id="admissionModal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.7); overflow-y:auto;" onclick="if(event.target===this)closeAdmissionModal()">
-      <div style="background:#fff; border-radius:20px; max-width:520px; margin:40px auto; padding:36px 30px; position:relative; box-shadow:0 20px 60px rgba(0,0,0,0.3);">
-        <button onclick="closeAdmissionModal()" style="position:absolute; top:14px; right:18px; background:none; border:none; font-size:1.6rem; color:#999; cursor:pointer; line-height:1;">&times;</button>
-        <div class="text-center mb-3">
-          <img src="img/new_logo.png" style="width:50px; margin-bottom:8px;">
-          <h4 style="color:#0a3d1f; font-family:'Outfit',sans-serif; font-weight:700;">Admission Application</h4>
-          <p style="color:#1a6b3a; font-size:0.88rem; font-weight:600;">Bayanul Uloom Dars, Muttichira</p>
-        </div>
-        <div id="admissionClosedBanner" style="display:none;" class="alert alert-warning text-center">
-          <i class="fa fa-exclamation-triangle"></i> Admissions are currently <strong>CLOSED</strong>. Please check back later.
-        </div>
-        <form id="admissionModalForm" style="">
-          <div class="form-group mb-3">
-            <label style="font-weight:600;">Student Name / വിദ്യാർത്ഥിയുടെ പേർ <span class="text-danger">*</span></label>
-            <input type="text" id="m_name" class="form-control" placeholder="Full Name" required>
-          </div>
-          <div class="form-group mb-3">
-            <label style="font-weight:600;">Date of Birth / ജനനതീയതി</label>
-            <input type="date" id="m_dob" class="form-control">
-          </div>
-          <div class="form-group mb-3">
-            <label style="font-weight:600;">Father's Name / പിതാവിന്റെ പേർ <span class="text-danger">*</span></label>
-            <input type="text" id="m_fatherName" class="form-control" placeholder="Father's Name" required>
-          </div>
-          <div class="form-group mb-3">
-            <label style="font-weight:600;">Mother's Name / മാതാവിന്റെ പേർ <span class="text-danger">*</span></label>
-            <input type="text" id="m_motherName" class="form-control" placeholder="Mother's Name" required>
-          </div>
-          <div class="form-group mb-3">
-            <label style="font-weight:600;">Phone Number / ഫോണ്് നംബർ <span class="text-danger">*</span></label>
-            <input type="tel" id="m_phone" class="form-control" placeholder="+91 XXXXX XXXXX" required>
-          </div>
-          <button type="submit" id="modalSubmitBtn" class="btn btn-success w-100" style="border-radius:10px; padding:12px; font-weight:700;"><i class="fa fa-send" style="margin-right:8px;"></i>Submit Application</button>
-        </form>
-        <div id="admissionModalSuccess" style="display:none; text-align:center; padding:20px;">
-          <i class="fa fa-check-circle" style="color:#1a6b3a; font-size:3rem; margin-bottom:12px;"></i>
-          <h5 style="color:#0a3d1f;">Application Submitted!</h5>
-          <p style="color:#555;">We will contact you soon. جزاك الله خيرا</p>
-          <button onclick="closeAdmissionModal()" class="btn btn-outline-success mt-2">Close</button>
-        </div>
-      </div>
-    </div>
-
-
-    <!-- Leadership Section -->
-    <section id="leadership" style="padding: 70px 0; background: #f8f9fa;">
-      <div class="container">
-        <header class="section-header">
-          <h3>Current Leadership</h3>
-          <p>The guiding lights of Muttichira Bayanul Uloom Dars</p>
-        </header>
-        <div class="row justify-content-center" id="leadershipContent">
-        </div>
-        <!-- Assistant Mudarris -->
-        <div class="row justify-content-center mt-4" id="assistantList"></div>
-      </div>
-    </section>
 
     <!--==========================
       Contact Section
@@ -536,16 +543,7 @@
             <p>Bayanul Uloom Sahithya Samajam is a platform for the literary and non literary activities of students. The activities of the Samajam begin after the official inauguration every year. All extra curricular activities conducted by the Bayanul Uloom Dars are under the auspicious of Sahithya Samajam. It aims the Islamic literary and artistic development of the students</p>
           </div>
 
-          <div class="col-lg-2 col-md-6 footer-links">
-            <h4>Useful Links</h4>
-            <ul>
-              <li><a href="/home">Home</a></li>
-              <li><a href="/about">About us</a></li>
 
-              <li><a href="/admission">Admission</a></li>
-              <li><a href="/contact">Contact Us</a></li>
-            </ul>
-          </div>
 
           <div class="col-lg-3 col-md-6 footer-contact">
             <h4>Contact Us</h4>
@@ -1093,92 +1091,37 @@
           
           <!-- PAGE 1: COVER -->
           <div class="book-page page-cover">
-            <span style="letter-spacing: 4px; color: #d4af37; font-size: 0.8rem; font-weight: 600;">OFFICIAL BOOKLET</span>
-            <h1 class="cover-title">BAYANUL ULOOM<br>DARS</h1>
-            <p style="opacity: 0.7; font-size: 0.8rem; letter-spacing: 2px;">MUTTICHIRA</p>
-            <p style="opacity: 0.5; font-size: 0.7rem; letter-spacing: 1px; margin-top: 15px;">CLICK ARROWS TO FLIP</p>
+            <div class="book-page page-features">
+               <img src="img/dars-brousher-page-1.jpg" alt="Dars Brochure Page 4" style="width:100%;height:100%;object-fit:cover;">
+            </div>
           </div>
 
           <!-- PAGE 2: HISTORY -->
           <div class="book-page page-history">
-            <div>
-              <div class="page-header">
-                <h2 class="page-title">സ്ഥാപന ചരിത്രം</h2>
-                <span class="page-num">02</span>
-              </div>
-              <div class="content-box" style="margin-top: 20px;">
-                <strong>Muttichira Bayanul Uloom Dars</strong><br><br>
-                സുസ്ഥിരവും ഗുണമേന്മയുള്ളതുമായ ഇസ്ലാമിക വിദ്യാഭ്യാസ ലക്ഷ്യങ്ങളോടെ പ്രവർത്തിക്കുന്ന ഞങ്ങളുടെ സ്ഥാപനം, അതിന്റെ ഉന്നതമായ മൂല്യങ്ങൾക്കൊപ്പമാണ് മുന്നോട്ട് പോകുന്നത്. മട്ടിച്ചിറ ശുഹദാ ജുമാ മസ്ജിദിനോട് ചേർന്ന് മികച്ച അടിസ്ഥാന സൗകര്യങ്ങളും പരിചയസമ്പന്നരായ ഉസ്താദുമാരുടെ നേതൃത്വവുമാണ് ഞങ്ങളുടെ കരുത്ത്.
-              </div>
+            <div class="book-page page-features">
+               <img src="img/dars-brousher-page-2.jpg" alt="Dars Brochure Page 4" style="width:100%;height:100%;object-fit:cover;">
             </div>
-            <div class="footer-line"><span>Institution Profile</span><span>Page 02</span></div>
           </div>
 
           <!-- PAGE 3: VISION (CORE DARSANAM) -->
           <div class="book-page page-vision">
-            <div>
-              <div class="page-header">
-                <h2 class="page-title">മുഖ്യ ദർശനം</h2>
-                <span class="page-num">03</span>
-              </div>
-              <div style="margin-top: 20px;">
-                <div class="vision-card">
-                  <h4>നമ്മുടെ ലക്ഷ്യം (Our Vision)</h4>
-                  <p style="font-size: 0.88rem; color: #555;">സാമൂഹികവും ധാർമ്മികവുമായ പുരോഗതി കൈവരിക്കാൻ തക്കവണ്ണം വിദ്യാർത്ഥികളെ ഇസ്ലാമിക വിജ്ഞാനത്തിൽ പ്രാപ്തരാക്കുക.</p>
-                </div>
-                <div class="vision-card">
-                  <h4>പ്രവർത്തന ശൈലി (Core Values)</h4>
-                  <p style="font-size: 0.88rem; color: #555;">വിശ്വാസ്യത, സമർപ്പണം, സുതാര്യത എന്നിവ മുൻനിർത്തിയുള്ള മാതൃകാപരമായ പഠന അന്തരീക്ഷം ഉറപ്പാക്കുന്നു.</p>
-                </div>
-              </div>
+            <div class="book-page page-features">
+               <img src="img/dars-brousher-page-3.jpg" alt="Dars Brochure Page 4" style="width:100%;height:100%;object-fit:cover;">
             </div>
-            <div class="footer-line"><span>Core Philosophy</span><span>Page 03</span></div>
           </div>
 
           <!-- PAGE 4: FEATURES GRID -->
           <div class="book-page page-features">
-            <div>
-              <div class="page-header">
-                <h2 class="page-title">പ്രധാന മേഖലകൾ</h2>
-                <span class="page-num" style="color: #d4af37">04</span>
-              </div>
-              <div class="grid-features" style="margin-top: 20px;">
-                <div class="grid-item">
-                  <h4>Curriculum</h4>
-                  <p>ഖുർആൻ, ഹദീസ്, ഫിഖ്ഹ്, അറബിക് ഭാഷാ പഠനം.</p>
-                </div>
-                <div class="grid-item">
-                  <h4>Facilities</h4>
-                  <p>ലൈബ്രറി, കമ്പ്യൂട്ടർ ലാബ്, സ്മാർട്ട് ക്ലാസ് സജ്ജീകരണം.</p>
-                </div>
-                <div class="grid-item">
-                  <h4>Eligibility</h4>
-                  <p>അടിസ്ഥാന മതവിദ്യാഭ്യാസം പൂർത്തിയാക്കിയവർക്ക് അവസരം.</p>
-                </div>
-                <div class="grid-item">
-                  <h4>Leadership</h4>
-                  <p>പരിചയസമ്പന്നരായ ഉസ്താദുമാരുടെ നിരീക്ഷണവും മാർഗ്ഗനിർദ്ദേശവും.</p>
-                </div>
-              </div>
+            <div class="book-page page-features">
+               <img src="img/dars-brousher-page-4.jpg" alt="Dars Brochure Page 4" style="width:100%;height:100%;object-fit:cover;">
             </div>
-            <div class="footer-line"><span>Frameworks</span><span>Page 04</span></div>
           </div>
 
           <!-- PAGE 5: BACK COVER / CONTACT -->
           <div class="book-page page-contact">
-            <div>
-              <div class="page-header">
-                <h2 class="page-title">ബന്ധപ്പെടുക</h2>
-                <span class="page-num">05</span>
-              </div>
-              <div class="contact-box">
-                <h4 style="margin-bottom: 15px; color: #0a3d1f;">കൂടുതൽ വിവരങ്ങൾക്ക്</h4>
-                <div class="contact-tag">✉ darsbayanululoom@gmail.com</div>
-                <div class="contact-tag">☏ +91 9526 919 218</div>
-                <div class="contact-tag">📍 Muttichira, Kerala, India</div>
-              </div>
+             <div class="book-page page-features">
+               <img src="img/dars-brousher-page-5.jpg" alt="Dars Brochure Page 4" style="width:100%;height:100%;object-fit:cover;">
             </div>
-            <div class="footer-line"><span>End of Booklet</span><span>Page 05</span></div>
           </div>
 
         </div>
