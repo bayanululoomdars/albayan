@@ -263,41 +263,7 @@
       </div>
     </section><!-- #about -->
 
-    <!-- Stats Counter Section -->
-    <section id="stats" style="background: linear-gradient(135deg, #0a3d1f 0%, #0d5a2e 50%, #0a3d1f 100%); padding: 70px 0; position: relative; overflow: hidden;">
-      <div class="container" style="position:relative;z-index:1;">
-        <div class="row text-center counter-row flex-nowrap justify-content-center">
-          <div class="col-3 mb-2">
-            <div class="counter-card">
-              <i class="fa fa-graduation-cap counter-icon"></i>
-              <div id="counterStudents" class="counter-number">103</div>
-              <div class="counter-label">Students</div>
-            </div>
-          </div>
-          <div class="col-3 mb-2">
-            <div class="counter-card">
-              <i class="fa fa-users counter-icon"></i>
-              <div id="counterUstads" class="counter-number">8</div>
-              <div class="counter-label">Usthads</div>
-            </div>
-          </div>
-          <div class="col-3 mb-2">
-            <div class="counter-card">
-              <i class="fa fa-book counter-icon"></i>
-              <div id="counterYears" class="counter-number">25</div>
-              <div class="counter-label">Years of Tradition</div>
-            </div>
-          </div>
-          <div class="col-3 mb-2">
-            <div class="counter-card">
-              <i class="fa fa-trophy counter-icon"></i>
-              <div id="counterAlumni" class="counter-number">52</div>
-              <div class="counter-label">Distinguished Alumni</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+
 
     <!--==========================
       Why Us Section
@@ -454,7 +420,41 @@
         </div>
       </div>
     </section><!-- #admission -->
-
+    <!-- Stats Counter Section -->
+    <section id="stats" style="background: linear-gradient(135deg, #0a3d1f 0%, #0d5a2e 50%, #0a3d1f 100%); padding: 70px 0; position: relative; overflow: hidden;">
+      <div class="container" style="position:relative;z-index:1;">
+        <div class="row text-center counter-row flex-nowrap justify-content-center">
+          <div class="col-3 mb-2">
+            <div class="counter-card">
+              <i class="fa fa-graduation-cap counter-icon"></i>
+              <div id="counterStudents" class="counter-number">100+</div>
+              <div class="counter-label">Students</div>
+            </div>
+          </div>
+          <div class="col-3 mb-2">
+            <div class="counter-card">
+              <i class="fa fa-users counter-icon"></i>
+              <div id="counterUstads" class="counter-number">8</div>
+              <div class="counter-label">Usthads</div>
+            </div>
+          </div>
+          <div class="col-3 mb-2">
+            <div class="counter-card">
+              <i class="fa fa-book counter-icon"></i>
+              <div id="counterYears" class="counter-number">20+</div>
+              <div class="counter-label">Years of Tradition</div>
+            </div>
+          </div>
+          <div class="col-3 mb-2">
+            <div class="counter-card">
+              <i class="fa fa-trophy counter-icon"></i>
+              <div id="counterAlumni" class="counter-number">50+</div>
+              <div class="counter-label">Distinguished Alumni</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
     <!--==========================
       Contact Section
     ============================-->
@@ -698,45 +698,86 @@
         .catch(function() { /* Keep static news visible */ });
     }
 
+    let allHomeGalleryItems = [];
+    let homeGalleryLimit = 3;
+
+    function filterHomeGallery(cat, btnElement) {
+      if (btnElement) {
+        document.querySelectorAll('.home-cat-pill').forEach(function(btn) { btn.classList.remove('active'); });
+        btnElement.classList.add('active');
+      }
+      var container = document.getElementById('homeGalleryRow');
+      if (!container) return;
+      
+      var filtered = allHomeGalleryItems;
+      if (cat !== 'all') {
+        filtered = allHomeGalleryItems.filter(function(i) { return i.category === cat; });
+      }
+      var displayItems = filtered.slice(0, homeGalleryLimit);
+      
+      var html = '';
+      if (displayItems.length === 0) {
+        container.innerHTML = '<div class="col-12 text-center" style="color:#999;padding:30px;">No gallery items found for this category.</div>';
+        return;
+      }
+
+      displayItems.forEach(function(item) {
+        var mediaHtml = '';
+        if (item.mediaType === 'video') {
+          if (item.imageUrl && (item.imageUrl.includes('youtube.com') || item.imageUrl.includes('youtu.be'))) {
+            mediaHtml = '<div style="background:#000; height:220px; display:flex; align-items:center; justify-content:center; border-radius:12px 12px 0 0;"><i class="fa fa-play-circle" style="color:#fff; font-size:48px;"></i></div>';
+          } else {
+            mediaHtml = '<video src="' + item.imageUrl + '" style="width:100%; height:220px; object-fit:cover; border-radius:12px 12px 0 0;"></video>';
+          }
+        } else {
+          mediaHtml = '<img src="' + item.imageUrl + '" class="img-fluid" alt="' + item.title + '" style="width:100%; height:220px; object-fit:cover; border-radius:12px 12px 0 0;">';
+        }
+        var descHtml = item.description ? '<p style="color:#666; font-size:0.8rem; margin:8px 0 0 0; line-height:1.4;">' + item.description + '</p>' : '';
+        html += '<div class="col-lg-4 col-md-6 col-sm-12 mb-4">' +
+          '<div class="portfolio-wrap" style="border-radius:12px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.1); cursor:pointer;" onclick="window.location.href=\'/gallery\';">' +
+          mediaHtml +
+          '<div class="portfolio-info" style="background:#fff; padding:14px 16px;">' +
+          '<h4 style="font-size:1rem; margin:0 0 4px;"><a href="/gallery" style="color:#0a3d1f;">' + item.title + '</a></h4>' +
+          '<p style="color:#888; font-size:0.8rem; margin:0;">' + (item.category || '') + '</p>' +
+          descHtml +
+          '</div></div></div>';
+      });
+      container.innerHTML = html;
+    }
+
     // ── Load Dynamic Gallery from MongoDB ──────────
     function loadGallery() {
-      fetch('/api/gallery')
+      fetch('/api/settings/home-gallery')
         .then(function(res) { return res.json(); })
-        .then(function(items) {
-          var container = document.getElementById('homeGalleryRow');
-          if (!container) return;
-          if (items.length === 0) {
-            // Show placeholder message if no DB items
-            container.innerHTML = '<div class="col-12 text-center" style="color:#999;padding:30px;">No gallery items yet.</div>';
-            return;
-          }
-          var html = '';
-          // Sort by newest first
-          items.sort(function(a, b) { return new Date(b.createdAt) - new Date(a.createdAt); });
-          // Limit to 3 items for homepage preview
-          var displayItems = items.slice(0, 3);
-          displayItems.forEach(function(item) {
-            var mediaHtml = '';
-            if (item.mediaType === 'video') {
-              if (item.imageUrl && (item.imageUrl.includes('youtube.com') || item.imageUrl.includes('youtu.be'))) {
-                mediaHtml = '<div style="background:#000; height:220px; display:flex; align-items:center; justify-content:center; border-radius:12px 12px 0 0;"><i class="fa fa-play-circle" style="color:#fff; font-size:48px;"></i></div>';
-              } else {
-                mediaHtml = '<video src="' + item.imageUrl + '" style="width:100%; height:220px; object-fit:cover; border-radius:12px 12px 0 0;"></video>';
+        .then(function(settings) {
+          homeGalleryLimit = settings.limit || 3;
+          var defaultCategory = settings.category || 'all';
+
+          fetch('/api/gallery')
+            .then(function(res) { return res.json(); })
+            .then(function(items) {
+              if (items.length === 0) {
+                var container = document.getElementById('homeGalleryRow');
+                if(container) container.innerHTML = '<div class="col-12 text-center" style="color:#999;padding:30px;">No gallery items yet.</div>';
+                return;
               }
-            } else {
-              mediaHtml = '<img src="' + item.imageUrl + '" class="img-fluid" alt="' + item.title + '" style="width:100%; height:220px; object-fit:cover; border-radius:12px 12px 0 0;">';
-            }
-            html += '<div class="col-lg-4 col-md-6 col-sm-12 mb-4">' +
-              '<div class="portfolio-wrap" style="border-radius:12px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.1);">' +
-              mediaHtml +
-              '<div class="portfolio-info" style="background:#fff; padding:14px 16px;">' +
-              '<h4 style="font-size:1rem; margin:0 0 4px;"><a href="/gallery" style="color:#0a3d1f;">' + item.title + '</a></h4>' +
-              '<p style="color:#888; font-size:0.8rem; margin:0;">' + item.category + '</p>' +
-              '</div></div></div>';
-          });
-          container.innerHTML = html;
-        })
-        .catch(function() { /* Keep container empty, Explore More button still shows */ });
+              items.sort(function(a, b) { return new Date(b.createdAt) - new Date(a.createdAt); });
+              allHomeGalleryItems = items;
+              
+              // Highlight the active pill
+              var pills = document.querySelectorAll('.home-cat-pill');
+              var foundActive = false;
+              pills.forEach(function(p) {
+                 if (p.textContent.includes(defaultCategory) || p.getAttribute('onclick').includes(defaultCategory)) {
+                    pills.forEach(function(btn) { btn.classList.remove('active'); });
+                    p.classList.add('active');
+                    foundActive = true;
+                 }
+              });
+              
+              filterHomeGallery(defaultCategory, null);
+            });
+        });
     }
 
     // ── Smooth scroll for nav links ──────────────────
@@ -1092,35 +1133,35 @@
           <!-- PAGE 1: COVER -->
           <div class="book-page page-cover">
             <div class="book-page page-features">
-               <img src="img/dars-brousher-page-1.jpg" alt="Dars Brochure Page 4" style="width:100%;height:100%;object-fit:cover;">
+               <img src="img\dars brousher page 4.jpg" alt="Dars Brochure Page 4" style="width:100%;height:100%;object-fit:cover;">
             </div>
           </div>
 
           <!-- PAGE 2: HISTORY -->
           <div class="book-page page-history">
             <div class="book-page page-features">
-               <img src="img/dars-brousher-page-2.jpg" alt="Dars Brochure Page 4" style="width:100%;height:100%;object-fit:cover;">
+               <img src="img\dars brousher page 2.jpg" alt="Dars Brochure Page 4" style="width:100%;height:100%;object-fit:cover;">
             </div>
           </div>
 
           <!-- PAGE 3: VISION (CORE DARSANAM) -->
           <div class="book-page page-vision">
             <div class="book-page page-features">
-               <img src="img/dars-brousher-page-3.jpg" alt="Dars Brochure Page 4" style="width:100%;height:100%;object-fit:cover;">
+               <img src="img\dars brousher page 3.jpg" alt="Dars Brochure Page 4" style="width:100%;height:100%;object-fit:cover;">
             </div>
           </div>
 
           <!-- PAGE 4: FEATURES GRID -->
           <div class="book-page page-features">
             <div class="book-page page-features">
-               <img src="img/dars-brousher-page-4.jpg" alt="Dars Brochure Page 4" style="width:100%;height:100%;object-fit:cover;">
+               <img src="img\dars brousher page 4.jpg" alt="Dars Brochure Page 4" style="width:100%;height:100%;object-fit:cover;">
             </div>
           </div>
 
           <!-- PAGE 5: BACK COVER / CONTACT -->
           <div class="book-page page-contact">
              <div class="book-page page-features">
-               <img src="img/dars-brousher-page-5.jpg" alt="Dars Brochure Page 4" style="width:100%;height:100%;object-fit:cover;">
+               <img src="img\dars brousher page 5.jpg" alt="Dars Brochure Page 4" style="width:100%;height:100%;object-fit:cover;">
             </div>
           </div>
 
