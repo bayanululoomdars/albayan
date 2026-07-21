@@ -564,3 +564,59 @@
   font-weight: 500;
   margin-top: 5px;
 }
+
+/* ── BANNER CAROUSEL RESPONSIVE FIX ────────────────── */
+#intro { position: relative; }
+
+.banner-img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+@media (max-width: 767px) {
+  .banner-img {
+    height: 55vw;
+    min-height: 220px;
+    max-height: 420px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .banner-img {
+    height: 60vw;
+    max-height: 520px;
+  }
+}
+
+/* ── EXPLORE MORE BUTTON ───────────────────────────── */
+.btn-explore-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 12px 36px;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(10,77,46,0.25);
+  margin-top: 10px;
+}
+
+.btn-explore-more:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(10,77,46,0.4);
+  color: #fff;
+  text-decoration: none;
+  background: linear-gradient(135deg, var(--primary-light), var(--primary));
+}
+
+.btn-explore-more i {
+  font-size: 1rem;
+}

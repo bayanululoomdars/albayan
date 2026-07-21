@@ -484,26 +484,30 @@
 
         <button class="btn" style="max-width:240px; margin-bottom:20px;" onclick="saveBannerText()"><i class="fa fa-save"></i> Save Title &amp; Content</button>
 
-        <!-- Poster Upload -->
+        <!-- Poster Upload or URL -->
         <div style="border-top:1px solid var(--border); padding-top:20px; margin-top:4px;">
-          <h4 style="font-size:0.95rem; color:var(--text-muted); margin-bottom:16px;"><i class="fa fa-image"></i> Admission Poster Image</h4>
+          <h4 style="font-size:0.95rem; color:var(--text-muted); margin-bottom:16px;"><i class="fa fa-image"></i> Admission Poster Image / Video / URL</h4>
           <div style="display:flex; align-items:flex-start; gap:20px; flex-wrap:wrap;">
             <!-- Poster preview -->
             <div id="adminPosterPreviewWrap" style="display:none; flex-direction:column; align-items:center; gap:8px;">
-              <img id="currentPosterPreview" src="" alt="Poster Preview" style="width:150px; border-radius:10px; border:2px solid var(--accent);">
+              <div id="currentPosterPreviewContainer"></div>
               <button class="btn btn-danger btn-sm" onclick="removePoster()"><i class="fa fa-trash"></i> Remove Poster</button>
             </div>
             <!-- No poster notice -->
             <div id="adminNoPosterNotice" style="color:var(--text-muted); font-size:0.85rem; padding:12px 16px; background:rgba(255,255,255,0.04); border-radius:8px; border:1px dashed var(--border);">
               <i class="fa fa-image" style="margin-right:6px;"></i> No poster uploaded yet — the banner will show a stylish placeholder.
             </div>
-            <div style="flex:1;">
+            <div style="flex:1; min-width:250px;">
               <form id="posterUploadForm" enctype="multipart/form-data">
                 <div class="form-group">
-                  <label>Upload New Poster Image</label>
-                  <input type="file" id="posterFile" accept="image/*" required>
+                  <label>Upload Poster File (Image or Video)</label>
+                  <input type="file" id="posterFile" accept="image/*,video/*">
                 </div>
-                <button type="submit" class="btn" style="max-width:200px;"><i class="fa fa-upload"></i> Upload Poster</button>
+                <div style="margin:10px 0; font-size:0.85rem; color:var(--text-muted); font-weight:600;">— OR PASTE MEDIA URL —</div>
+                <div class="form-group">
+                  <input type="text" id="posterUrlInput" placeholder="https://... image/video or YouTube URL">
+                </div>
+                <button type="submit" class="btn" style="max-width:200px;"><i class="fa fa-upload"></i> Save Poster</button>
               </form>
             </div>
           </div>
@@ -816,6 +820,60 @@
           </div>
         </div>
         <button class="btn" style="max-width:200px;" onclick="saveHomeStats()"><i class="fa fa-save"></i> Save Stats</button>
+      </div>
+
+      <!-- Why Us Section Settings -->
+      <div class="card">
+        <h3><i class="fa fa-info-circle"></i> Why Bayanul Uloom Dars? Settings</h3>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:20px;">
+          Manage Usthad photo/video (or URL) and the 4 highlight cards on the home page.
+        </p>
+
+        <!-- Media Upload/URL -->
+        <div style="margin-bottom:20px; border-bottom:1px solid var(--border); padding-bottom:20px;">
+          <h4 style="font-size:0.95rem; color:var(--text-muted); margin-bottom:12px;"><i class="fa fa-picture-o"></i> Usthad Photo / Section Media (Image, Video, or URL)</h4>
+          <div style="display:flex; gap:16px; flex-wrap:wrap; align-items:flex-start;">
+            <div id="whyUsMediaPreviewWrap" style="max-width:160px; display:none;">
+              <div id="whyUsAdminMediaPreview"></div>
+            </div>
+            <div style="flex:1; min-width:250px;">
+              <form id="whyUsMediaForm" enctype="multipart/form-data">
+                <div class="form-group">
+                  <label>Media File Upload (Image / Video)</label>
+                  <input type="file" id="whyUsFile" accept="image/*,video/*" style="margin-bottom:8px;">
+                  <button type="submit" class="btn btn-sm" style="max-width:180px;"><i class="fa fa-upload"></i> Upload File</button>
+                </div>
+              </form>
+              <div style="margin:15px 0; text-align:center; color:var(--text-muted); font-size:0.85rem; font-weight:600;">— OR PASTE URL —</div>
+              <div class="form-group">
+                <label>Media Direct URL or YouTube Embed Link</label>
+                <input type="text" id="whyUsMediaUrlInput" placeholder="https://... image/video link or youtube link">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Card Text Editors -->
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+          <div class="form-group">
+            <label>Eligibility Text</label>
+            <textarea id="whyUsEligibility" rows="3" placeholder="Students who completed basic Islamic education..."></textarea>
+          </div>
+          <div class="form-group">
+            <label>Curriculum Text</label>
+            <textarea id="whyUsCurriculum" rows="3" placeholder="Quran, Hadith, Fiqh..."></textarea>
+          </div>
+          <div class="form-group">
+            <label>Facilities Text</label>
+            <textarea id="whyUsFacilities" rows="3" placeholder="Library, Computer Lab..."></textarea>
+          </div>
+          <div class="form-group">
+            <label>Enquiry Details</label>
+            <textarea id="whyUsEnquiry" rows="3" placeholder="+91 9526 919 218..."></textarea>
+          </div>
+        </div>
+
+        <button class="btn" style="max-width:250px; margin-top:10px;" onclick="saveWhyUsSettings()"><i class="fa fa-save"></i> Save Why Us Settings</button>
       </div>
 
       <!-- Principal Mudarris -->
@@ -1186,6 +1244,7 @@
       loadSectionEditor();
       loadStories();
       loadHomeSettings();
+      loadWhyUsSettings();
       loadPosterAndBanner();
       loadCommitteeSettings();
     }
@@ -1380,11 +1439,21 @@
       fetch('/api/settings/poster')
         .then(r => r.json())
         .then(d => {
-          var preview = document.getElementById('currentPosterPreview');
+          var container = document.getElementById('currentPosterPreviewContainer');
           var previewWrap = document.getElementById('adminPosterPreviewWrap');
           var noNotice = document.getElementById('adminNoPosterNotice');
           if (d.posterUrl) {
-            preview.src = d.posterUrl;
+            if (container) {
+              var isVideo = d.posterUrl.endsWith('.mp4') || d.posterUrl.endsWith('.webm') || d.posterUrl.includes('youtube.com') || d.posterUrl.includes('youtu.be');
+              if (isVideo) {
+                container.innerHTML = '<video src="' + d.posterUrl + '" controls style="width:150px; border-radius:10px; border:2px solid var(--accent);"></video>';
+              } else {
+                container.innerHTML = '<img src="' + d.posterUrl + '" alt="Poster Preview" style="width:150px; height:auto; border-radius:10px; border:2px solid var(--accent);">';
+              }
+            }
+            if (document.getElementById('posterUrlInput')) {
+              document.getElementById('posterUrlInput').value = d.posterUrl.startsWith('http') ? d.posterUrl : '';
+            }
             if (previewWrap) previewWrap.style.display = 'flex';
             if (noNotice) noNotice.style.display = 'none';
           } else {
@@ -1439,6 +1508,87 @@
         .catch(() => showAdminToast('Network error', true));
     };
 
+    // ── WHY US SETTINGS ─────────────────
+    function loadWhyUsSettings() {
+      fetch('/api/settings/why-us')
+        .then(r => r.json())
+        .then(d => {
+          if (d.whyUsEligibility) document.getElementById('whyUsEligibility').value = d.whyUsEligibility;
+          if (d.whyUsCurriculum) document.getElementById('whyUsCurriculum').value = d.whyUsCurriculum;
+          if (d.whyUsFacilities) document.getElementById('whyUsFacilities').value = d.whyUsFacilities;
+          if (d.whyUsEnquiry) document.getElementById('whyUsEnquiry').value = d.whyUsEnquiry;
+          if (d.whyUsMediaUrl) {
+            document.getElementById('whyUsMediaUrlInput').value = d.whyUsMediaUrl.startsWith('http') ? d.whyUsMediaUrl : '';
+            var previewWrap = document.getElementById('whyUsMediaPreviewWrap');
+            var previewContainer = document.getElementById('whyUsAdminMediaPreview');
+            if (previewContainer) {
+              var isVideo = d.whyUsMediaUrl.endsWith('.mp4') || d.whyUsMediaUrl.endsWith('.webm') || d.whyUsMediaUrl.includes('youtube.com') || d.whyUsMediaUrl.includes('youtu.be');
+              if (isVideo) {
+                previewContainer.innerHTML = '<video src="' + d.whyUsMediaUrl + '" controls style="width:140px; border-radius:8px; border:2px solid var(--accent);"></video>';
+              } else {
+                previewContainer.innerHTML = '<img src="' + d.whyUsMediaUrl + '" style="width:140px; height:auto; border-radius:8px; border:2px solid var(--accent);">';
+              }
+            }
+            if (previewWrap) previewWrap.style.display = 'block';
+          }
+        })
+        .catch(() => {});
+    }
+
+    window.saveWhyUsSettings = function() {
+      var data = {
+        whyUsEligibility: document.getElementById('whyUsEligibility').value.trim(),
+        whyUsCurriculum: document.getElementById('whyUsCurriculum').value.trim(),
+        whyUsFacilities: document.getElementById('whyUsFacilities').value.trim(),
+        whyUsEnquiry: document.getElementById('whyUsEnquiry').value.trim()
+      };
+      var mediaUrlVal = document.getElementById('whyUsMediaUrlInput').value.trim();
+      if (mediaUrlVal) {
+        data.whyUsMediaUrl = mediaUrlVal;
+      }
+      fetch('/api/settings/why-us', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      .then(r => r.json())
+      .then(res => {
+        if (res.success) {
+          showAdminToast('Why Us section settings saved!', false);
+          loadWhyUsSettings();
+        } else {
+          showAdminToast(res.message || 'Failed to save settings', true);
+        }
+      })
+      .catch(() => showAdminToast('Network error', true));
+    };
+
+    document.getElementById('whyUsMediaForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var file = document.getElementById('whyUsFile').files[0];
+      if (!file) { showAdminToast('Please choose a file to upload', true); return; }
+      var fd = new FormData();
+      fd.append('media', file);
+      var btn = this.querySelector('button[type=submit]');
+      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Uploading...'; }
+      fetch('/api/settings/why-us/media', { method: 'POST', body: fd })
+        .then(r => r.json())
+        .then(res => {
+          if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Upload File'; }
+          if (res.success) {
+            showAdminToast('Media uploaded successfully!', false);
+            document.getElementById('whyUsMediaForm').reset();
+            loadWhyUsSettings();
+          } else {
+            showAdminToast(res.message || 'Upload failed', true);
+          }
+        })
+        .catch(() => {
+          if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Upload File'; }
+          showAdminToast('Network error', true);
+        });
+    });
+
     // Admin toast notification helper
     function showAdminToast(message, isError) {
       var existing = document.getElementById('adminToastContainer');
@@ -1460,24 +1610,34 @@
       e.preventDefault();
       var fd = new FormData();
       var posterFile = document.getElementById('posterFile').files[0];
-      if (!posterFile) { showAdminToast('Please select an image file', true); return; }
-      fd.append('poster', posterFile);
+      var posterUrlInput = document.getElementById('posterUrlInput') ? document.getElementById('posterUrlInput').value.trim() : '';
+
+      if (!posterFile && !posterUrlInput) {
+        showAdminToast('Please select a file or enter a media URL', true);
+        return;
+      }
+      if (posterFile) {
+        fd.append('poster', posterFile);
+      }
+      if (posterUrlInput) {
+        fd.append('posterUrl', posterUrlInput);
+      }
       var btn = this.querySelector('button[type=submit]');
-      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Uploading...'; }
+      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Saving...'; }
       fetch('/api/settings/poster', { method: 'POST', body: fd })
         .then(function(r) { return r.json(); })
         .then(function(data) {
-          if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Upload Poster'; }
+          if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Save Poster'; }
           if (data.success) {
-            showAdminToast('Poster uploaded successfully!', false);
+            showAdminToast('Poster saved successfully!', false);
             document.getElementById('posterUploadForm').reset();
             loadPosterAndBanner();
           } else {
-            showAdminToast(data.message || 'Upload failed', true);
+            showAdminToast(data.message || 'Saving failed', true);
           }
         })
         .catch(function() {
-          if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Upload Poster'; }
+          if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Save Poster'; }
           showAdminToast('Network error. Please try again.', true);
         });
     });
@@ -1593,13 +1753,21 @@
       if (document.getElementById('newsImage').files[0]) {
         fd.append('image', document.getElementById('newsImage').files[0]);
       }
+      var btn = this.querySelector('button[type=submit]');
+      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Uploading...'; }
       fetch('/api/news', { method: 'POST', body: fd })
         .then(function(r) { return r.json(); })
         .then(function(data) {
+          if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-plus"></i> Add News'; }
+          showAdminToast(data.message, !data.success);
           if (data.success) { document.getElementById('newsForm').reset(); loadNewsAdmin(); }
-          alert(data.message);
+        })
+        .catch(function() {
+          if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-plus"></i> Add News'; }
+          showAdminToast('Network error. Please try again.', true);
         });
     });
+
 
     // ── GALLERY ────────────────────────────────────
     function loadGalleryAdmin() {
@@ -1661,26 +1829,27 @@
       fd.append('mediaType', document.getElementById('galleryMediaType').value);
       fd.append('description', document.getElementById('galleryDesc').value);
       fd.append('hashtags', document.getElementById('galleryHashtags').value);
-      
       var file = document.getElementById('galleryImage').files[0];
-      if (file) {
-        fd.append('image', file);
-      }
-      
+      if (file) { fd.append('image', file); }
       var mediaUrl = document.getElementById('galleryVideoUrl').value;
-      if (mediaUrl) {
-         fd.append('mediaUrl', mediaUrl);
-      }
-
+      if (mediaUrl) { fd.append('mediaUrl', mediaUrl); }
+      var btn = this.querySelector('button[type=submit]');
+      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Uploading...'; }
       fetch('/api/gallery', { method: 'POST', body: fd })
         .then(function(r) { return r.json(); })
         .then(function(data) {
+          if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Upload'; }
+          showAdminToast(data.message, !data.success);
           if (data.success) { document.getElementById('galleryForm').reset(); loadGalleryAdmin(); toggleGalleryMediaInputs(); }
-          alert(data.message);
+        })
+        .catch(function() {
+          if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Upload'; }
+          showAdminToast('Network error. Please try again.', true);
         });
     });
 
     // ── CONTACTS ───────────────────────────────────
+
     function loadContacts() {
       fetch('/api/contacts').then(function(r) { return r.json(); }).then(function(data) {
         document.getElementById('statContacts').textContent = data.length;

@@ -486,14 +486,18 @@ router.get('/settings/poster', async (req, res) => {
   }
 });
 
-// POST /api/settings/poster — Upload admission poster
+// POST /api/settings/poster — Upload admission poster or save URL
 router.post('/settings/poster', (req, res) => {
   const uploader = getUploader();
   uploader.single('poster')(req, res, async (uploadErr) => {
-    if (uploadErr) return res.status(500).json({ success: false, message: 'Poster upload failed' });
     try {
-      if (!req.file) return res.status(400).json({ success: false, message: 'No file uploaded' });
-      const posterUrl = isCloudinaryConfigured() ? req.file.path : '/img/uploads/' + req.file.filename;
+      let posterUrl = req.body.posterUrl;
+      if (req.file) {
+        posterUrl = isCloudinaryConfigured() ? req.file.path : '/img/uploads/' + req.file.filename;
+      }
+      if (!posterUrl) {
+        return res.status(400).json({ success: false, message: 'No file or URL provided' });
+      }
       let setting = await Settings.findOne({ key: 'admissionPosterUrl' });
       if (!setting) {
         setting = new Settings({ key: 'admissionPosterUrl', value: posterUrl });
@@ -507,6 +511,73 @@ router.post('/settings/poster', (req, res) => {
     }
   });
 });
+
+// GET /api/settings/why-us — Get Why Us section settings
+router.get('/settings/why-us', async (req, res) => {
+  try {
+    const keys = ['whyUsMediaUrl', 'whyUsEligibility', 'whyUsCurriculum', 'whyUsFacilities', 'whyUsEnquiry'];
+    const settings = await Settings.find({ key: { $in: keys } });
+    const result = {
+      whyUsMediaUrl: '/img/usthad.jpg',
+      whyUsEligibility: 'Students who completed basic Islamic education are welcome to apply for advanced religious studies.',
+      whyUsCurriculum: 'Quran, Hadith, Fiqh, Arabic language, and modern subjects guided by experienced Usthads.',
+      whyUsFacilities: 'Library, Computer Lab, Smart Class, Medical Wing & Store for holistic student development.',
+      whyUsEnquiry: '+91 9526 919 218\ndarsbayanululoom@gmail.com'
+    };
+    settings.forEach(s => {
+      if (s.value !== undefined && s.value !== null) {
+        result[s.key] = s.value;
+      }
+    });
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// POST /api/settings/why-us — Update Why Us section settings
+router.post('/settings/why-us', async (req, res) => {
+  try {
+    const fields = ['whyUsMediaUrl', 'whyUsEligibility', 'whyUsCurriculum', 'whyUsFacilities', 'whyUsEnquiry'];
+    for (const f of fields) {
+      if (req.body[f] !== undefined) {
+        let setting = await Settings.findOne({ key: f });
+        if (!setting) {
+          setting = new Settings({ key: f, value: req.body[f] });
+        } else {
+          setting.value = req.body[f];
+        }
+        await setting.save();
+      }
+    }
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// POST /api/settings/why-us/media — Upload Why Us section media file
+router.post('/settings/why-us/media', (req, res) => {
+  const uploader = getUploader();
+  uploader.single('media')(req, res, async (uploadErr) => {
+    if (uploadErr) return res.status(500).json({ success: false, message: 'Media upload failed' });
+    try {
+      if (!req.file) return res.status(400).json({ success: false, message: 'No file uploaded' });
+      const mediaUrl = isCloudinaryConfigured() ? req.file.path : '/img/uploads/' + req.file.filename;
+      let setting = await Settings.findOne({ key: 'whyUsMediaUrl' });
+      if (!setting) {
+        setting = new Settings({ key: 'whyUsMediaUrl', value: mediaUrl });
+      } else {
+        setting.value = mediaUrl;
+      }
+      await setting.save();
+      res.json({ success: true, mediaUrl });
+    } catch (err) {
+      res.status(500).json({ success: false, message: err.message });
+    }
+  });
+});
+
 
 // GET /api/settings/admission-banner — Get admission banner text settings
 router.get('/settings/admission-banner', async (req, res) => {
