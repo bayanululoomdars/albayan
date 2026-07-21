@@ -564,3 +564,106 @@
   font-weight: 500;
   margin-top: 5px;
 }
+
+/* ── BANNER CAROUSEL RESPONSIVE FIX ────────────────── */
+#intro { position: relative; }
+
+.banner-img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+@media (max-width: 767px) {
+  .banner-img {
+    height: auto;
+    min-height: unset;
+    max-height: unset;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .banner-img {
+    height: auto;
+    max-height: unset;
+  }
+}
+
+/* ── EXPLORE MORE BUTTON ───────────────────────────── */
+.btn-explore-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 12px 36px;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(10,77,46,0.25);
+  margin-top: 10px;
+}
+
+.btn-explore-more:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(10,77,46,0.4);
+  color: #fff;
+  text-decoration: none;
+  background: linear-gradient(135deg, var(--primary-light), var(--primary));
+}
+
+.btn-explore-more i {
+  font-size: 1rem;
+}
+
+/* ── STATS COUNTER ROW – always 4-in-a-row ────────── */
+.counter-row {
+  display: flex;
+  flex-wrap: nowrap !important;
+  justify-content: center;
+}
+
+.counter-card {
+  padding: 20px 8px;
+}
+
+.counter-icon {
+  font-size: 2.5rem;
+  color: #d4af37;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.counter-number {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.counter-label {
+  color: rgba(255,255,255,0.7);
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+/* Scale down on tablets */
+@media (max-width: 767px) {
+  .counter-card { padding: 10px 4px; }
+  .counter-icon { font-size: 1.5rem; margin-bottom: 6px; }
+  .counter-number { font-size: 1.6rem; }
+  .counter-label { font-size: 0.65rem; }
+}
+
+/* Extra-small phones */
+@media (max-width: 400px) {
+  .counter-icon { font-size: 1.2rem; margin-bottom: 4px; }
+  .counter-number { font-size: 1.3rem; }
+  .counter-label { font-size: 0.58rem; }
+}
