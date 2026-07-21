@@ -111,6 +111,12 @@
     </div>
   </section><!-- #intro -->
 
+  <!-- DIGITAL BROCHURE LAUNCHER BAR -->
+  <div class="brochure-launcher-bar">
+    <div class="bar-logo"><i class="fa fa-book" style="color:#d4af37; margin-right:8px;"></i>Bayanul Uloom Dars Brochure</div>
+    <button class="launch-btn" onclick="toggleBook(true)"><i class="fa fa-book-open" style="margin-right:6px;"></i>Open Brochure</button>
+  </div>
+
   <main id="main">
 
     <!--==========================
@@ -330,11 +336,6 @@
                 </div>
               </div>
             </div>
-            <div style="margin-top:20px;">
-              <button onclick="openAdmissionModal()" class="btn-admission" style="display:inline-flex; align-items:center; gap:8px;">
-                <i class="fa fa-edit"></i> Apply for Admission
-              </button>
-            </div>
           </div>
         </div>
       </div>
@@ -355,7 +356,6 @@
             <!-- Poster image (shown when poster is uploaded) -->
             <a href="/admission" id="admissionPosterLink" style="display:none; position:relative; text-decoration:none; display:inline-block;">
               <div id="admissionPosterMedia"></div>
-              <div style="position:absolute; bottom:16px; left:50%; transform:translateX(-50%); background:rgba(26,107,58,0.95); color:#fff; padding:8px 22px; border-radius:30px; font-size:0.9rem; font-weight:600; white-space:nowrap; z-index:10;"><i class="fa fa-edit" style="margin-right:6px;"></i>Apply Now</div>
             </a>
             <!-- No-poster placeholder (shown when no poster is uploaded) -->
             <a href="/admission" id="admissionNoPoster" style="display:inline-block; text-decoration:none;">
@@ -442,15 +442,6 @@
           <p>The guiding lights of Muttichira Bayanul Uloom Dars</p>
         </header>
         <div class="row justify-content-center" id="leadershipContent">
-          <!-- Principal Mudarris -->
-          <div class="col-lg-4 col-md-6 text-center mb-4" id="principalCard">
-            <div style="background:#fff; border-radius:20px; padding:30px; box-shadow:0 8px 30px rgba(0,0,0,0.08); border:2px solid #e8e8e8; transition:all 0.3s;" onmouseover="this.style.transform='translateY(-5px)';this.style.boxShadow='0 15px 40px rgba(0,0,0,0.12)'" onmouseout="this.style.transform='';this.style.boxShadow='0 8px 30px rgba(0,0,0,0.08)'">
-              <img id="principalImg" src="img/AL_USTHAD.jpg" alt="Principal" style="width:120px; height:120px; border-radius:50%; object-fit:cover; border:4px solid #0a4d2e; margin-bottom:16px;">
-              <h5 id="principalNameEl" style="color:#0a3d1f; font-family:'Outfit',sans-serif; font-weight:700;">Sheikhuna Ibrahim Baqavi Al Haithami</h5>
-              <p id="principalTitleEl" style="color:#d4af37; font-weight:600; font-size:0.9rem;">Principal Mudarris</p>
-              <p id="principalBioEl" style="color:#666; font-size:0.85rem;"></p>
-            </div>
-          </div>
         </div>
         <!-- Assistant Mudarris -->
         <div class="row justify-content-center mt-4" id="assistantList"></div>
@@ -1085,6 +1076,148 @@
         if (d.imageUrl) document.getElementById('burdaTeamImg').src = d.imageUrl;
       }).catch(()=>{});
     });
+  </script>
+
+  <!-- DIGITAL BOOK BROCHURE MODAL WITH BLURRED BACKDROP -->
+  <div class="book-overlay" id="bookOverlay">
+    <button class="close-brochure" onclick="toggleBook(false)">&times;</button>
+    
+    <!-- Navigation Arrow Triggers -->
+    <button class="nav-arrow arrow-left" id="prevBtn" onclick="movePage(-1)">&#10094;</button>
+    <button class="nav-arrow arrow-right" id="nextBtn" onclick="movePage(1)">&#10095;</button>
+
+    <!-- 1:1 SQUARE DIGITAL BOOK -->
+    <div class="book-wrapper">
+      <div class="book-window">
+        <div class="book-slider" id="bookSlider">
+          
+          <!-- PAGE 1: COVER -->
+          <div class="book-page page-cover">
+            <span style="letter-spacing: 4px; color: #d4af37; font-size: 0.8rem; font-weight: 600;">OFFICIAL BOOKLET</span>
+            <h1 class="cover-title">BAYANUL ULOOM<br>DARS</h1>
+            <p style="opacity: 0.7; font-size: 0.8rem; letter-spacing: 2px;">MUTTICHIRA</p>
+            <p style="opacity: 0.5; font-size: 0.7rem; letter-spacing: 1px; margin-top: 15px;">CLICK ARROWS TO FLIP</p>
+          </div>
+
+          <!-- PAGE 2: HISTORY -->
+          <div class="book-page page-history">
+            <div>
+              <div class="page-header">
+                <h2 class="page-title">സ്ഥാപന ചരിത്രം</h2>
+                <span class="page-num">02</span>
+              </div>
+              <div class="content-box" style="margin-top: 20px;">
+                <strong>Muttichira Bayanul Uloom Dars</strong><br><br>
+                സുസ്ഥിരവും ഗുണമേന്മയുള്ളതുമായ ഇസ്ലാമിക വിദ്യാഭ്യാസ ലക്ഷ്യങ്ങളോടെ പ്രവർത്തിക്കുന്ന ഞങ്ങളുടെ സ്ഥാപനം, അതിന്റെ ഉന്നതമായ മൂല്യങ്ങൾക്കൊപ്പമാണ് മുന്നോട്ട് പോകുന്നത്. മട്ടിച്ചിറ ശുഹദാ ജുമാ മസ്ജിദിനോട് ചേർന്ന് മികച്ച അടിസ്ഥാന സൗകര്യങ്ങളും പരിചയസമ്പന്നരായ ഉസ്താദുമാരുടെ നേതൃത്വവുമാണ് ഞങ്ങളുടെ കരുത്ത്.
+              </div>
+            </div>
+            <div class="footer-line"><span>Institution Profile</span><span>Page 02</span></div>
+          </div>
+
+          <!-- PAGE 3: VISION (CORE DARSANAM) -->
+          <div class="book-page page-vision">
+            <div>
+              <div class="page-header">
+                <h2 class="page-title">മുഖ്യ ദർശനം</h2>
+                <span class="page-num">03</span>
+              </div>
+              <div style="margin-top: 20px;">
+                <div class="vision-card">
+                  <h4>നമ്മുടെ ലക്ഷ്യം (Our Vision)</h4>
+                  <p style="font-size: 0.88rem; color: #555;">സാമൂഹികവും ധാർമ്മികവുമായ പുരോഗതി കൈവരിക്കാൻ തക്കവണ്ണം വിദ്യാർത്ഥികളെ ഇസ്ലാമിക വിജ്ഞാനത്തിൽ പ്രാപ്തരാക്കുക.</p>
+                </div>
+                <div class="vision-card">
+                  <h4>പ്രവർത്തന ശൈലി (Core Values)</h4>
+                  <p style="font-size: 0.88rem; color: #555;">വിശ്വാസ്യത, സമർപ്പണം, സുതാര്യത എന്നിവ മുൻനിർത്തിയുള്ള മാതൃകാപരമായ പഠന അന്തരീക്ഷം ഉറപ്പാക്കുന്നു.</p>
+                </div>
+              </div>
+            </div>
+            <div class="footer-line"><span>Core Philosophy</span><span>Page 03</span></div>
+          </div>
+
+          <!-- PAGE 4: FEATURES GRID -->
+          <div class="book-page page-features">
+            <div>
+              <div class="page-header">
+                <h2 class="page-title">പ്രധാന മേഖലകൾ</h2>
+                <span class="page-num" style="color: #d4af37">04</span>
+              </div>
+              <div class="grid-features" style="margin-top: 20px;">
+                <div class="grid-item">
+                  <h4>Curriculum</h4>
+                  <p>ഖുർആൻ, ഹദീസ്, ഫിഖ്ഹ്, അറബിക് ഭാഷാ പഠനം.</p>
+                </div>
+                <div class="grid-item">
+                  <h4>Facilities</h4>
+                  <p>ലൈബ്രറി, കമ്പ്യൂട്ടർ ലാബ്, സ്മാർട്ട് ക്ലാസ് സജ്ജീകരണം.</p>
+                </div>
+                <div class="grid-item">
+                  <h4>Eligibility</h4>
+                  <p>അടിസ്ഥാന മതവിദ്യാഭ്യാസം പൂർത്തിയാക്കിയവർക്ക് അവസരം.</p>
+                </div>
+                <div class="grid-item">
+                  <h4>Leadership</h4>
+                  <p>പരിചയസമ്പന്നരായ ഉസ്താദുമാരുടെ നിരീക്ഷണവും മാർഗ്ഗനിർദ്ദേശവും.</p>
+                </div>
+              </div>
+            </div>
+            <div class="footer-line"><span>Frameworks</span><span>Page 04</span></div>
+          </div>
+
+          <!-- PAGE 5: BACK COVER / CONTACT -->
+          <div class="book-page page-contact">
+            <div>
+              <div class="page-header">
+                <h2 class="page-title">ബന്ധപ്പെടുക</h2>
+                <span class="page-num">05</span>
+              </div>
+              <div class="contact-box">
+                <h4 style="margin-bottom: 15px; color: #0a3d1f;">കൂടുതൽ വിവരങ്ങൾക്ക്</h4>
+                <div class="contact-tag">✉ darsbayanululoom@gmail.com</div>
+                <div class="contact-tag">☏ +91 9526 919 218</div>
+                <div class="contact-tag">📍 Muttichira, Kerala, India</div>
+              </div>
+            </div>
+            <div class="footer-line"><span>End of Booklet</span><span>Page 05</span></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentPage = 0;
+    const totalPages = 5;
+
+    function toggleBook(open) {
+      const overlay = document.getElementById('bookOverlay');
+      if (open) {
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        currentPage = 0;
+        updateSlide();
+      } else {
+        overlay.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      }
+    }
+
+    function movePage(direction) {
+      currentPage += direction;
+      if (currentPage < 0) currentPage = 0;
+      if (currentPage >= totalPages) currentPage = totalPages - 1;
+      updateSlide();
+    }
+
+    function updateSlide() {
+      const slider = document.getElementById('bookSlider');
+      if (slider) slider.style.transform = `translateX(-${currentPage * 100}%)`;
+      const prev = document.getElementById('prevBtn');
+      const next = document.getElementById('nextBtn');
+      if (prev) prev.style.opacity = currentPage === 0 ? '0.3' : '1';
+      if (next) next.style.opacity = currentPage === totalPages - 1 ? '0.3' : '1';
+    }
   </script>
 
 </body>
