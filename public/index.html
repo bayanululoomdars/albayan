@@ -723,14 +723,17 @@
 
       displayItems.forEach(function(item) {
         var mediaHtml = '';
+        var imgUrl = item.imageUrl || '';
         if (item.mediaType === 'video') {
-          if (item.imageUrl && (item.imageUrl.includes('youtube.com') || item.imageUrl.includes('youtu.be'))) {
-            mediaHtml = '<div style="background:#000; height:220px; display:flex; align-items:center; justify-content:center; border-radius:12px 12px 0 0;"><i class="fa fa-play-circle" style="color:#fff; font-size:48px;"></i></div>';
+          if (imgUrl.includes('youtube.com') || imgUrl.includes('youtu.be') || imgUrl.includes('shorts')) {
+            mediaHtml = '<div style="background:#000; height:220px; display:flex; align-items:center; justify-content:center; border-radius:12px 12px 0 0;"><i class="fa fa-youtube-play" style="color:red; font-size:48px;"></i></div>';
+          } else if (imgUrl.includes('instagram.com')) {
+            mediaHtml = '<div style="background:#000; height:220px; display:flex; align-items:center; justify-content:center; border-radius:12px 12px 0 0;"><i class="fa fa-instagram" style="color:#e1306c; font-size:48px;"></i></div>';
           } else {
-            mediaHtml = '<video src="' + item.imageUrl + '" style="width:100%; height:220px; object-fit:cover; border-radius:12px 12px 0 0;"></video>';
+            mediaHtml = '<video src="' + imgUrl + '" style="width:100%; height:220px; object-fit:cover; border-radius:12px 12px 0 0;" muted playsinline loop></video>';
           }
         } else {
-          mediaHtml = '<img src="' + item.imageUrl + '" class="img-fluid" alt="' + item.title + '" style="width:100%; height:220px; object-fit:cover; border-radius:12px 12px 0 0;">';
+          mediaHtml = '<img src="' + imgUrl + '" class="img-fluid" alt="' + (item.title || '') + '" style="width:100%; height:220px; object-fit:cover; border-radius:12px 12px 0 0;" onerror="this.src=\'/img/placeholder.jpg\'">';
         }
         var descHtml = item.description ? '<p style="color:#666; font-size:0.8rem; margin:8px 0 0 0; line-height:1.4;">' + item.description + '</p>' : '';
         html += '<div class="col-lg-4 col-md-6 col-sm-12 mb-4">' +
@@ -1133,7 +1136,7 @@
           <!-- PAGE 1: COVER -->
           <div class="book-page page-cover">
             <div class="book-page page-features">
-               <img src="img\dars brousher page 4.jpg" alt="Dars Brochure Page 4" style="width:100%;height:100%;object-fit:cover;">
+               <img src="img\dars brousher page 1.jpg" alt="Dars Brochure Page 4" style="width:100%;height:100%;object-fit:cover;">
             </div>
           </div>
 
@@ -1164,7 +1167,18 @@
                <img src="img\dars brousher page 5.jpg" alt="Dars Brochure Page 4" style="width:100%;height:100%;object-fit:cover;">
             </div>
           </div>
-
+          <!-- PAGE 6: BACK COVER / CONTACT -->
+          <div class="book-page page-contact">
+             <div class="book-page page-features">
+               <img src="img\dars brousher page 5.jpg" alt="Dars Brochure Page 4" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+          </div>
+          <!-- PAGE 7: BACK COVER / CONTACT -->
+          <div class="book-page page-contact">
+             <div class="book-page page-features">
+               <img src="img\dars brousher page 5.jpg" alt="Dars Brochure Page 4" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+          </div>
         </div>
       </div>
     </div>
