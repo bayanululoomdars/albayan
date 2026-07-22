@@ -475,19 +475,63 @@ router.get('/admissions', async (req, res) => {
   }
 });
 
-// POST /api/admission — Submit simplified admission (5 fields only)
-router.post('/admission', async (req, res) => {
-  try {
-    const { name, dob, fatherName, motherName, phone } = req.body;
-    if (!name || !fatherName || !motherName || !phone) {
-      return res.status(400).json({ success: false, message: 'Name, Father Name, Mother Name, and Phone are required' });
+// POST /api/admission — Submit full admission form with duplicate check
+router.post('/admission', (req, res) => {
+  const uploader = (() => {
+    try { return require('../config/cloudinary').uploadLocal || require('../config/cloudinary').upload; } catch(e) { return null; }
+  })();
+  const handler = async () => {
+    try {
+      const {
+        name, dob, fatherName, motherName, phone, email,
+        houseName, homePhone, place, postOffice, district, pincode,
+        bloodGroup, educationReligious, educationSecular,
+        guardianName, relationship, guardianPhone
+      } = req.body;
+
+      if (!name || !fatherName || !motherName || !phone) {
+        return res.status(400).json({ success: false, message: 'Name, Father Name, Mother Name, and Phone are required' });
+      }
+
+      // Duplicate check — one submission per phone or email
+      const dupQuery = [{ phone: phone.trim() }];
+      if (email && email.trim()) dupQuery.push({ email: email.trim() });
+      const existing = await Admission.findOne({ $or: dupQuery });
+      if (existing) {
+        return res.status(409).json({ success: false, message: 'An application with this phone number or email already exists. Only one submission is allowed per person.' });
+      }
+
+      let imageUrl = '';
+      if (req.file) {
+        const { isCloudinaryConfigured } = require('../config/cloudinary');
+        imageUrl = isCloudinaryConfigured() ? req.file.path : '/img/uploads/' + req.file.filename;
+      }
+
+      const admission = new Admission({
+        name, dob: dob || '', fatherName, motherName,
+        phone: phone.trim(), email: (email || '').trim(),
+        houseName: houseName || '', homePhone: homePhone || '',
+        place: place || '', postOffice: postOffice || '',
+        district: district || '', pincode: pincode || '',
+        bloodGroup: bloodGroup || '',
+        educationReligious: educationReligious || '',
+        educationSecular: educationSecular || '',
+        guardianName: guardianName || '',
+        relationship: relationship || '',
+        guardianPhone: guardianPhone || '',
+        imageUrl
+      });
+      await admission.save();
+      res.json({ success: true, message: 'Admission application submitted successfully!' });
+    } catch (err) {
+      console.error('Admission save error:', err);
+      res.status(500).json({ success: false, message: 'Failed to submit admission application' });
     }
-    const admission = new Admission({ name, dob: dob || '', fatherName, motherName, phone });
-    await admission.save();
-    res.json({ success: true, message: 'Admission application submitted successfully!' });
-  } catch (err) {
-    console.error('Admission save error:', err);
-    res.status(500).json({ success: false, message: 'Failed to submit admission application' });
+  };
+  if (uploader) {
+    uploader.single('photo')(req, res, handler);
+  } else {
+    handler();
   }
 });
 
@@ -1079,6 +1123,34 @@ router.delete('/api/home-settings/branch/:id', async (req, res) => {
     res.json({ success: true, data: settings });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// POST /api/admin/reset — Full admin reset (clears all data)
+router.post('/admin/reset', async (req, res) => {
+  const { token } = req.body;
+  const RESET_TOKEN = process.env.ADMIN_PASSWORD || 'admin123';
+  if (!token || token !== RESET_TOKEN) {
+    return res.status(401).json({ success: false, message: 'Invalid reset token' });
+  }
+  try {
+    // Import all models
+    await Promise.all([
+      require('../models/News').deleteMany({}),
+      require('../models/GalleryItem').deleteMany({}),
+      require('../models/Admission').deleteMany({}),
+      require('../models/Settings').deleteMany({}),
+      require('../models/HomeSettings').deleteMany({}),
+      require('../models/Slider').deleteMany({}),
+      require('../models/SectionContent').deleteMany({}),
+      require('../models/Story').deleteMany({}),
+      require('../models/Contact').deleteMany({}),
+      require('../models/Subscriber').deleteMany({}),
+    ]);
+    res.json({ success: true, message: 'All data has been reset successfully.' });
+  } catch (err) {
+    console.error('Reset error:', err);
+    res.status(500).json({ success: false, message: 'Reset failed: ' + err.message });
   }
 });
 
