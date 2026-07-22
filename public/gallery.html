@@ -520,15 +520,9 @@
     <div class="story-bar-container" id="storyBar" style="display:none;"></div>
 
     <!-- Instagram Profile Style Filter Tabs -->
-    <div class="ig-tabs">
+    <div class="ig-tabs" id="igTabs">
       <button class="ig-tab-btn active" id="tab-all" onclick="filterGallery('all')">
         <i class="fa fa-th"></i> All Posts
-      </button>
-      <button class="ig-tab-btn" id="tab-reels" onclick="filterGallery('reels')">
-        <i class="fa fa-play-circle"></i> Reels
-      </button>
-      <button class="ig-tab-btn" id="tab-pinned" onclick="filterGallery('pinned')">
-        <i class="fa fa-thumb-tack"></i> Pinned
       </button>
     </div>
 
@@ -631,9 +625,9 @@
           </div>
 
           <div class="col-lg-5 col-md-12 footer-mudarris">
-            <h4>Mudarris</h4>
-            <p style="margin-bottom: 8px;"><strong>Principal Mudarris:</strong><br><span style="color:#d4af37; font-weight:600; font-size:1.1rem;">Sheikhuna Ibrahim Baqavi Al Haithami</span></p>
-            <p><strong>Assistant Mudarris:</strong><br><span style="color:#e0e0e0; font-size:0.95rem; line-height:1.6; display:inline-block; margin-top:4px;">Usthad Mansoor Faizy, Usthad Musthafa Baqavi, Usthad Jahfar Jalali, Usthad Abdulla Faizy, Usthad Shameem Jalali, Usthad Rashid Baqavi, Usthad Shan Baqavi</span></p>
+            <h4>Principal Mudarris:</h4>
+            <p style="margin-bottom: 8px;"><strong><span style="font: size 15px;">Sheikhuna Ibrahim Baqavi Al Haithami </span></strong><br><span style="color:#d4af37; font-weight:600; font-size:1.1rem;">Assistant Mudarris:</span></p>
+            <p><strong>Usthad Mansoor Faizy<br> Usthad Musthafa Baqavi<br> Usthad Jahfar Jalali<br> Usthad Abdulla Faizy<br> Usthad Shameem Jalali<br>Usthad Rashid Baqavi<br> Usthad Shan Baqavi</strong><span style="color:#e0e0e0; font-size:0.95rem; line-height:1.6; display:inline-block; margin-top:4px;"></span></p>
           </div>
         </div>
       </div>
@@ -753,11 +747,25 @@
 
     // Load Gallery Grid
     function loadGallery() {
-      fetch('/api/gallery')
+      fetch('/api/settings/gallery-categories')
         .then(res => res.json())
-        .then(items => {
-          allGalleryItems = items || [];
-          renderGrid();
+        .then(data => {
+          if(data.categories) {
+             var tabsHtml = '<button class="ig-tab-btn active" id="tab-all" onclick="filterGallery(\'all\')"><i class="fa fa-th"></i> All Posts</button>';
+             data.categories.forEach(cat => {
+                tabsHtml += '<button class="ig-tab-btn" id="tab-' + cat + '" onclick="filterGallery(\'' + cat + '\')">' + cat + '</button>';
+             });
+             var igTabs = document.getElementById('igTabs');
+             if(igTabs) igTabs.innerHTML = tabsHtml;
+          }
+        })
+        .finally(() => {
+          fetch('/api/gallery')
+            .then(res => res.json())
+            .then(items => {
+              allGalleryItems = items || [];
+              renderGrid();
+            });
         });
     }
 
@@ -766,10 +774,8 @@
       var grid = document.getElementById('galleryGrid');
       var filtered = allGalleryItems;
 
-      if (currentFilter === 'reels') {
-        filtered = allGalleryItems.filter(item => item.mediaType === 'video');
-      } else if (currentFilter === 'pinned') {
-        filtered = allGalleryItems.filter(item => item.pinned === true);
+      if (currentFilter !== 'all') {
+        filtered = allGalleryItems.filter(item => item.category === currentFilter);
       }
 
       // Sort: Pinned items first for "all" tab, then by date
@@ -800,7 +806,7 @@
           } else if (imgUrl.includes('instagram.com')) {
             html += '<div style="background:#000; width:100%; height:100%; display:flex; align-items:center; justify-content:center;"><i class="fa fa-instagram" style="color:#e1306c; font-size:40px;"></i></div>';
           } else {
-            html += '<video src="' + imgUrl + '" muted playsinline loop></video>';
+            html += '<video src="' + imgUrl + '" autoplay muted playsinline loop></video>';
           }
         } else {
           html += '  <img src="' + imgUrl + '" alt="' + (item.title || '') + '" onerror="this.src=\'/img/placeholder.jpg\'">';

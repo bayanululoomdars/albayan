@@ -564,9 +564,9 @@
           </div>
 
           <div class="col-lg-5 col-md-12 footer-mudarris">
-            <h4>Mudarris</h4>
-            <p style="margin-bottom: 8px;"><strong>Principal Mudarris:</strong><br><span style="color:#d4af37; font-weight:600; font-size:1.1rem;">Sheikhuna Ibrahim Baqavi Al Haithami</span></p>
-            <p><strong>Assistant Mudarris:</strong><br><span style="color:#e0e0e0; font-size:0.95rem; line-height:1.6; display:inline-block; margin-top:4px;">Usthad Mansoor Faizy, Usthad Musthafa Baqavi, Usthad Jahfar Jalali, Usthad Abdulla Faizy, Usthad Shameem Jalali, Usthad Rashid Baqavi, Usthad Shan Baqavi</span></p>
+            <h4>Principal Mudarris:</h4>
+            <p style="margin-bottom: 8px;"><strong><span style="font: size 15px;">Sheikhuna Ibrahim Baqavi Al Haithami </span></strong><br><span style="color:#d4af37; font-weight:600; font-size:1.1rem;">Assistant Mudarris:</span></p>
+            <p><strong>Usthad Mansoor Faizy<br> Usthad Musthafa Baqavi<br> Usthad Jahfar Jalali<br> Usthad Abdulla Faizy<br> Usthad Shameem Jalali<br>Usthad Rashid Baqavi<br> Usthad Shan Baqavi</strong><span style="color:#e0e0e0; font-size:0.95rem; line-height:1.6; display:inline-block; margin-top:4px;"></span></p>
           </div>
         </div>
       </div>
@@ -671,28 +671,34 @@
         .then(function(res) { return res.json(); })
         .then(function(news) {
           if (news.length > 0) {
-            // Ticker bar hidden intentionally
-
-            // Show dynamic cards (hide static)
             var container = document.getElementById('dynamicNews');
             var html = '';
+            var tickerHtml = '<div style="background:#0a3d1f; color:#fff; padding:10px 15px; border-radius:8px; margin-bottom:25px; display:flex; align-items:center; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,0.1);"><strong style="min-width:90px; margin-right:15px; border-right:1px solid rgba(255,255,255,0.3); padding-right:15px; color:#d4af37;">UPDATES</strong> <marquee scrollamount="6" style="font-weight:500; font-size:1.05rem;">';
+            
             news.forEach(function(item) {
+              tickerHtml += '<span style="margin-right:50px;">&bull; ' + item.title + '</span>';
+              
               var date = new Date(item.createdAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' });
               html += '<div class="col-lg-4 col-md-6">' +
                 '<div class="news-card-dynamic wow fadeInUp">' +
-                (item.imageUrl ? '<img src="' + item.imageUrl + '" alt="' + item.title + '" style="width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:12px 12px 0 0;">' : '') +
+                (item.imageUrl ? '<img src="' + item.imageUrl + '" alt="' + item.title + '" style="width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:12px 12px 0 0;" onerror="this.src=\'/img/placeholder.jpg\'">' : '') +
                 '<div class="card-body">' +
                 '<span class="card-date"><i class="fa fa-calendar"></i> ' + date + '</span>' +
                 '<h4>' + item.title + '</h4>' +
                 '<p>' + item.description + '</p>' +
                 '</div></div></div>';
             });
-            container.innerHTML = html;
+            tickerHtml += '</marquee></div>';
+            
+            container.innerHTML = tickerHtml + html;
             container.style.display = 'flex';
             container.style.flexWrap = 'wrap';
             // Hide static news
             var staticNews = document.getElementById('staticNews');
             if (staticNews) staticNews.style.display = 'none';
+          } else {
+            var container = document.getElementById('dynamicNews');
+            if(container) container.innerHTML = '<div class="col-12 text-center" style="color:#999; padding:40px;">No latest news available right now.</div>';
           }
         })
         .catch(function() { /* Keep static news visible */ });
@@ -730,7 +736,7 @@
           } else if (imgUrl.includes('instagram.com')) {
             mediaHtml = '<div style="background:#000; height:220px; display:flex; align-items:center; justify-content:center; border-radius:12px 12px 0 0;"><i class="fa fa-instagram" style="color:#e1306c; font-size:48px;"></i></div>';
           } else {
-            mediaHtml = '<video src="' + imgUrl + '" style="width:100%; height:220px; object-fit:cover; border-radius:12px 12px 0 0;" muted playsinline loop></video>';
+            mediaHtml = '<video src="' + imgUrl + '" style="width:100%; height:220px; object-fit:cover; border-radius:12px 12px 0 0;" autoplay muted playsinline loop></video>';
           }
         } else {
           mediaHtml = '<img src="' + imgUrl + '" class="img-fluid" alt="' + (item.title || '') + '" style="width:100%; height:220px; object-fit:cover; border-radius:12px 12px 0 0;" onerror="this.src=\'/img/placeholder.jpg\'">';
@@ -1170,13 +1176,19 @@
           <!-- PAGE 6: BACK COVER / CONTACT -->
           <div class="book-page page-contact">
              <div class="book-page page-features">
-               <img src="img\dars brousher page 5.jpg" alt="Dars Brochure Page 4" style="width:100%;height:100%;object-fit:cover;">
+               <img src="img\dars brousher page 6.jpg" alt="Dars Brochure Page 4" style="width:100%;height:100%;object-fit:cover;">
             </div>
           </div>
           <!-- PAGE 7: BACK COVER / CONTACT -->
           <div class="book-page page-contact">
              <div class="book-page page-features">
-               <img src="img\dars brousher page 5.jpg" alt="Dars Brochure Page 4" style="width:100%;height:100%;object-fit:cover;">
+               <img src="img\dars brousher page 7.jpg" alt="Dars Brochure Page 4" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+          </div>
+          <!-- PAGE 8: BACK COVER / CONTACT -->
+          <div class="book-page page-contact">
+             <div class="book-page page-features">
+               <img src="img\dars brousher page 8.jpg" alt="Dars Brochure Page 4" style="width:100%;height:100%;object-fit:cover;">
             </div>
           </div>
         </div>
