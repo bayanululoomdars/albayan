@@ -303,31 +303,41 @@
       nextSibling.innerText = fileName;
     });
 
-    // Check for previous submission using localStorage
-    var alreadySubmitted = localStorage.getItem('admission_submitted');
-    if (alreadySubmitted) {
-      document.getElementById('admissionForm').style.display = 'none';
-      document.getElementById('admissionClosedMsg').innerHTML = 
-        '<i class="fa fa-check-circle fa-2x mb-3 text-success"></i>' +
-        '<h4>You have already submitted an application.</h4>' +
-        '<p>We have received your application. Our team will contact you soon.</p>';
-      document.getElementById('admissionClosedMsg').style.display = 'block';
-    }
-
-    // Check Admission Status
+    // Check Admission Status first, then check localStorage
     fetch('/api/settings/admission')
       .then(res => res.json())
       .then(data => {
-        if (!data.isOpen) {
+        if (data.isOpen === false) {
+          // Admission is explicitly closed by admin
           document.getElementById('admissionForm').style.display = 'none';
           document.getElementById('admissionClosedMsg').innerHTML =
             '<i class="fa fa-exclamation-triangle fa-2x mb-3 text-warning"></i>' +
             '<h4>Admissions are currently closed.</h4>' +
             '<p>Please check back later or contact the administration for more details.</p>';
           document.getElementById('admissionClosedMsg').style.display = 'block';
+        } else {
+          // Admission is open — now check if user already submitted
+          var alreadySubmitted = localStorage.getItem('admission_submitted');
+          if (alreadySubmitted) {
+            document.getElementById('admissionForm').style.display = 'none';
+            document.getElementById('admissionClosedMsg').innerHTML = 
+              '<i class="fa fa-check-circle fa-2x mb-3 text-success"></i>' +
+              '<h4>You have already submitted an application.</h4>' +
+              '<p>We have received your application. Our team will contact you soon.</p>';
+            document.getElementById('admissionClosedMsg').style.display = 'block';
+          } else {
+            // Make sure form is visible
+            document.getElementById('admissionForm').style.display = '';
+            document.getElementById('admissionClosedMsg').style.display = 'none';
+          }
         }
       })
-      .catch(err => console.error('Error fetching admission status:', err));
+      .catch(err => {
+        console.error('Error fetching admission status:', err);
+        // On error, show the form as fallback (don't hide it)
+        document.getElementById('admissionForm').style.display = '';
+        document.getElementById('admissionClosedMsg').style.display = 'none';
+      });
 
     // Toast Notification helper
     function showToast(message, isError) {
