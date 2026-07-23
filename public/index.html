@@ -704,62 +704,77 @@
         .catch(function() { /* Keep static news visible */ });
     }
 
-    let allHomeGalleryItems = [];
-    let homeGalleryLimit = 3;
-
-    function filterHomeGallery(cat, btnElement) {
-      if (btnElement) {
-        document.querySelectorAll('.home-cat-pill').forEach(function(btn) { btn.classList.remove('active'); });
-        btnElement.classList.add('active');
-      }
-      var container = document.getElementById('homeGalleryRow');
-      if (!container) return;
-      
-      var filtered = allHomeGalleryItems;
-      if (cat !== 'all') {
-        filtered = allHomeGalleryItems.filter(function(i) { return i.category === cat; });
-      }
-      var displayItems = filtered.slice(0, homeGalleryLimit);
-      
-      var html = '';
-      if (displayItems.length === 0) {
-        container.innerHTML = '<div class="col-12 text-center" style="color:#999;padding:30px;">No gallery items found for this category.</div>';
-        return;
-      }
-
-      displayItems.forEach(function(item) {
-        var mediaHtml = '';
-        var imgUrl = item.imageUrl || '';
-        if (item.mediaType === 'video') {
-          if (imgUrl.includes('youtube.com') || imgUrl.includes('youtu.be') || imgUrl.includes('shorts')) {
-            mediaHtml = '<div style="background:#000; height:220px; display:flex; align-items:center; justify-content:center; border-radius:12px 12px 0 0;"><i class="fa fa-youtube-play" style="color:red; font-size:48px;"></i></div>';
-          } else if (imgUrl.includes('instagram.com')) {
-            mediaHtml = '<div style="background:#000; height:220px; display:flex; align-items:center; justify-content:center; border-radius:12px 12px 0 0;"><i class="fa fa-instagram" style="color:#e1306c; font-size:48px;"></i></div>';
-          } else {
-            mediaHtml = '<video src="' + imgUrl + '" style="width:100%; height:220px; object-fit:cover; border-radius:12px 12px 0 0;" autoplay muted playsinline loop></video>';
-          }
-        } else {
-          mediaHtml = '<img src="' + imgUrl + '" class="img-fluid" alt="' + (item.title || '') + '" style="width:100%; height:220px; object-fit:cover; border-radius:12px 12px 0 0;" onerror="this.src=\'/img/placeholder.jpg\'">';
+      let allHomeGalleryItems = [];
+      let homeGalleryLimit = 3;
+      let homeGalleryMode = 'all';
+  
+      function filterHomeGallery(cat, btnElement) {
+        if (btnElement) {
+          document.querySelectorAll('.home-cat-pill').forEach(function(btn) { btn.classList.remove('active'); });
+          btnElement.classList.add('active');
         }
-        var descHtml = item.description ? '<p style="color:#666; font-size:0.8rem; margin:8px 0 0 0; line-height:1.4;">' + item.description + '</p>' : '';
-        html += '<div class="col-lg-4 col-md-6 col-sm-12 mb-4">' +
-          '<div class="portfolio-wrap" style="border-radius:12px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.1); cursor:pointer;" onclick="window.location.href=\'/gallery\';">' +
-          mediaHtml +
-          '<div class="portfolio-info" style="background:#fff; padding:14px 16px;">' +
-          '<h4 style="font-size:1rem; margin:0 0 4px;"><a href="/gallery" style="color:#0a3d1f;">' + item.title + '</a></h4>' +
-          '<p style="color:#888; font-size:0.8rem; margin:0;">' + (item.category || '') + '</p>' +
-          descHtml +
-          '</div></div></div>';
-      });
-      container.innerHTML = html;
-    }
+        var container = document.getElementById('homeGalleryRow');
+        if (!container) return;
+        
+        // Always start with a shallow copy to avoid mutating the original array when sorting
+        var filtered = allHomeGalleryItems.slice();
+        if (cat !== 'all') {
+          filtered = filtered.filter(function(i) { return i.category === cat; });
+        }
+
+        if (homeGalleryMode === 'pinned') {
+          filtered = filtered.filter(function(i) { return i.pinned === true; });
+        } else if (homeGalleryMode === 'popular') {
+          filtered.sort(function(a, b) {
+            var aScore = (a.likes ? a.likes.length : 0) + (a.comments ? a.comments.length : 0);
+            var bScore = (b.likes ? b.likes.length : 0) + (b.comments ? b.comments.length : 0);
+            if (bScore === aScore) return new Date(b.createdAt) - new Date(a.createdAt); // fallback to latest
+            return bScore - aScore;
+          });
+        }
+        
+        var displayItems = (homeGalleryLimit === 0) ? filtered : filtered.slice(0, homeGalleryLimit);
+        
+        var html = '';
+        if (displayItems.length === 0) {
+          container.innerHTML = '<div class="col-12 text-center" style="color:#999;padding:30px;">No gallery items found for this category.</div>';
+          return;
+        }
+
+        displayItems.forEach(function(item) {
+          var mediaHtml = '';
+          var imgUrl = item.imageUrl || '';
+          if (item.mediaType === 'video') {
+            if (imgUrl.includes('youtube.com') || imgUrl.includes('youtu.be') || imgUrl.includes('shorts')) {
+              mediaHtml = '<div style="background:#000; height:220px; display:flex; align-items:center; justify-content:center; border-radius:12px 12px 0 0;"><i class="fa fa-youtube-play" style="color:red; font-size:48px;"></i></div>';
+            } else if (imgUrl.includes('instagram.com')) {
+              mediaHtml = '<div style="background:#000; height:220px; display:flex; align-items:center; justify-content:center; border-radius:12px 12px 0 0;"><i class="fa fa-instagram" style="color:#e1306c; font-size:48px;"></i></div>';
+            } else {
+              mediaHtml = '<video src="' + imgUrl + '" style="width:100%; height:220px; object-fit:cover; border-radius:12px 12px 0 0;" autoplay muted playsinline loop></video>';
+            }
+          } else {
+            mediaHtml = '<img src="' + imgUrl + '" class="img-fluid" alt="' + (item.title || '') + '" style="width:100%; height:220px; object-fit:cover; border-radius:12px 12px 0 0;" onerror="this.src=\'/img/placeholder.jpg\'">';
+          }
+          var descHtml = item.description ? '<p style="color:#666; font-size:0.8rem; margin:8px 0 0 0; line-height:1.4;">' + item.description + '</p>' : '';
+          html += '<div class="col-lg-4 col-md-6 col-sm-12 mb-4">' +
+            '<div class="portfolio-wrap" style="border-radius:12px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.1); cursor:pointer;" onclick="window.location.href=\'/gallery\';">' +
+            mediaHtml +
+            '<div class="portfolio-info" style="background:#fff; padding:14px 16px;">' +
+            '<h4 style="font-size:1rem; margin:0 0 4px;"><a href="/gallery" style="color:#0a3d1f;">' + item.title + '</a></h4>' +
+            '<p style="color:#888; font-size:0.8rem; margin:0;">' + (item.category || '') + '</p>' +
+            descHtml +
+            '</div></div></div>';
+        });
+        container.innerHTML = html;
+      }
 
     // ── Load Dynamic Gallery from MongoDB ──────────
     function loadGallery() {
       fetch('/api/settings/home-gallery')
         .then(function(res) { return res.json(); })
         .then(function(settings) {
-          homeGalleryLimit = settings.limit || 3;
+          homeGalleryLimit = settings.limit !== undefined ? parseInt(settings.limit) : 3;
+          homeGalleryMode = settings.mode || 'all';
           var defaultCategory = settings.category || 'all';
 
           fetch('/api/gallery')
