@@ -665,6 +665,8 @@
     });
 
     // ── Load Dynamic News from MongoDB ──────────
+    var allLoadedNewsItems = [];
+
     function loadNews() {
       fetch('/api/news')
         .then(function(res) { return res.json(); })
@@ -673,6 +675,7 @@
           if (!container) return;
 
           if (Array.isArray(news) && news.length > 0) {
+            allLoadedNewsItems = news;
             var cardsHtml = '';
             var tickerTitles = [];
 
@@ -695,12 +698,23 @@
               }
 
               cardsHtml += '<div class="col-12 mb-4">' +
-                '<div class="news-bar-card achievement-card d-flex flex-column flex-md-row bg-white overflow-hidden" style="border-radius:16px; box-shadow:0 8px 24px rgba(0,0,0,0.06); border-left:6px solid #0a4d2e; transition:all 0.3s; background:#fff;">' +
+                '<div class="news-bar-card achievement-card d-flex flex-column flex-md-row bg-white overflow-hidden">' +
                 imgHtml +
-                '<div class="p-4 achievement-content" style="flex:1; display:flex; flex-direction:column; justify-content:center; min-width:0;">' +
-                (date ? '<span style="color:#888; font-size:0.8rem; margin-bottom:8px; font-weight:600;"><i class="fa fa-calendar" style="color:#d4af37; margin-right:5px;"></i>' + date + '</span>' : '') +
-                '<h4 style="font-family:\'Outfit\',sans-serif; color:#0a4d2e; font-weight:700; font-size:1.2rem; margin:0 0 10px 0; word-wrap:break-word;">' + item.title + '</h4>' +
-                '<p style="color:#555; font-size:0.92rem; margin:0; line-height:1.6;">' + (item.description || '') + '</p>' +
+                '<div class="p-3 p-md-4 achievement-content" style="flex:1; display:flex; flex-direction:column; justify-content:space-between; min-width:0;">' +
+                '  <div>' +
+                '    <h4 style="font-family:\'Outfit\',sans-serif; color:#0a4d2e; font-weight:700; font-size:1.25rem; margin:0 0 8px 0; display:flex; align-items:center; gap:8px;">' +
+                '      <span style="color:#d4af37; font-size:1.3rem;">🏆</span>' +
+                '      <span>' + item.title + '</span>' +
+                '    </h4>' +
+                '    <p style="color:#4a5568; font-size:0.95rem; line-height:1.6; margin:0 0 14px 0; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">' + (item.description || '') + '</p>' +
+                '  </div>' +
+                '  <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; border-top:1px solid #edf2f7; padding-top:10px; margin-top:6px;">' +
+                '    <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">' +
+                '      <span style="background:rgba(212,175,55,0.15); color:#967718; border:1px solid rgba(212,175,55,0.3); padding:4px 12px; border-radius:20px; font-size:0.8rem; font-weight:600;">🥇 Achievement</span>' +
+                (date ? '      <span style="color:#718096; font-size:0.85rem; font-weight:500;"><i class="fa fa-calendar" style="color:#d4af37; margin-right:5px;"></i>' + date + '</span>' : '') +
+                '    </div>' +
+                '    <button class="btn btn-sm" style="background:#0a4d2e; color:#fff; border-radius:20px; padding:6px 18px; font-size:0.85rem; font-weight:600; transition:all 0.3s;" onclick="openNewsModal(\'' + item._id + '\')">Read More <i class="fa fa-arrow-right" style="margin-left:4px;"></i></button>' +
+                '  </div>' +
                 '</div></div></div>';
             });
 
@@ -729,6 +743,43 @@
           var container = document.getElementById('dynamicNews');
           if (container) container.innerHTML = '<div class="col-12 text-center" style="color:#999; padding:40px;">No latest news available right now.</div>';
         });
+    }
+
+    function openNewsModal(id) {
+      var item = allLoadedNewsItems.find(function(n) { return n._id === id; });
+      if (!item) return;
+      var date = item.createdAt ? new Date(item.createdAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
+      
+      var modalTitle = document.getElementById('newsModalTitle');
+      var modalDate = document.getElementById('newsModalDate');
+      var modalImg = document.getElementById('newsModalImg');
+      var modalBody = document.getElementById('newsModalBody');
+      
+      if (modalTitle) modalTitle.textContent = item.title;
+      if (modalDate) modalDate.textContent = date;
+      if (modalImg) {
+        if (item.imageUrl) {
+          modalImg.src = item.imageUrl;
+          modalImg.style.display = 'block';
+        } else {
+          modalImg.style.display = 'none';
+        }
+      }
+      if (modalBody) modalBody.textContent = item.description || '';
+
+      var modal = document.getElementById('newsDetailModal');
+      if (modal) {
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeNewsModal() {
+      var modal = document.getElementById('newsDetailModal');
+      if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+      }
     }
 
       let allHomeGalleryItems = [];
@@ -1296,6 +1347,30 @@
       if (next) next.style.opacity = currentPage === totalPages - 1 ? '0.3' : '1';
     }
   </script>
+
+  <!-- NEWS DETAIL MODAL -->
+  <div class="modal" id="newsDetailModal" style="display:none; position:fixed; z-index:10000; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.7); backdrop-filter:blur(5px); overflow:auto;">
+    <div style="background:#fff; margin:5% auto; padding:30px; width:90%; max-width:700px; border-radius:20px; position:relative; box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+      <span onclick="closeNewsModal()" style="position:absolute; right:20px; top:15px; font-size:28px; font-weight:bold; color:#888; cursor:pointer;">&times;</span>
+      
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+        <span style="color:#d4af37; font-size:1.5rem;">🏆</span>
+        <h3 id="newsModalTitle" style="font-family:'Outfit',sans-serif; color:#0a4d2e; margin:0; font-weight:700; font-size:1.4rem;"></h3>
+      </div>
+      
+      <div style="color:#888; font-size:0.85rem; font-weight:600; margin-bottom:20px; display:flex; align-items:center; gap:6px;">
+        <i class="fa fa-calendar" style="color:#d4af37;"></i> <span id="newsModalDate"></span>
+      </div>
+
+      <img id="newsModalImg" src="" alt="News Image" style="width:100%; max-height:350px; object-fit:cover; border-radius:12px; margin-bottom:20px; display:none; border:1px solid #edf2f7;">
+
+      <p id="newsModalBody" style="color:#4a5568; line-height:1.8; font-size:1rem; white-space:pre-line; margin:0;"></p>
+      
+      <div style="margin-top:25px; text-align:right;">
+        <button class="btn btn-secondary" onclick="closeNewsModal()" style="border-radius:10px; padding:8px 22px; font-weight:600;">Close</button>
+      </div>
+    </div>
+  </div>
 
 </body>
 </html>

@@ -1548,7 +1548,7 @@ h6 {
 .counter-icon {
   font-size: 3.2rem;
   margin-bottom: 12px;
-  color: #0a4d2e;
+  color: #dda625;
   transition: all 0.3s ease;
 }
 
@@ -1566,36 +1566,56 @@ h6 {
   }
 }
 
-/* Latest News / Achievement Card Styling */
-.news-bar-img-wrapper, .achievement-image {
-  width: 260px;
-  min-width: 260px;
-  height: 200px;
+/* Latest News / Achievement Bar Card Styling */
+.news-bar-card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(10, 77, 46, 0.12);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.news-bar-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 35px rgba(10, 77, 46, 0.14);
+  border-color: rgba(212, 175, 55, 0.4);
+}
+
+.news-bar-img-wrapper {
+  width: 220px;
+  min-width: 220px;
+  height: 180px;
   flex-shrink: 0;
   overflow: hidden;
   position: relative;
+  border-radius: 12px;
+  margin: 15px;
   background: #f4f7f5;
 }
 
-.news-bar-img-wrapper img, .achievement-image img {
+.news-bar-img-wrapper img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 10px;
   transition: transform 0.4s ease;
 }
 
-.news-bar-card:hover .news-bar-img-wrapper img,
-.achievement-card:hover .achievement-image img {
+.news-bar-card:hover .news-bar-img-wrapper img {
   transform: scale(1.06);
 }
 
 @media (max-width: 767px) {
-  .news-bar-img-wrapper, .achievement-image {
-    width: 100%;
-    min-width: 100%;
-    height: 210px;
+  .news-bar-img-wrapper {
+    width: calc(100% - 30px);
+    min-width: calc(100% - 30px);
+    height: 200px;
+    margin: 15px 15px 0 15px;
   }
 }
+
 
 
 
