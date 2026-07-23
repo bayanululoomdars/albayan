@@ -122,17 +122,41 @@
       Latest News Section (Dynamic from MongoDB)
     ============================-->
     <section id="services" class="section-bg">
-      <div class="container">
-        <header class="section-header" id="newsSecHeader">
-          <h3>Latest News</h3>
-          <p>All the news that are relevant for our small community</p>
-          <a href="#" class="btn btn-outline-success btn-sm mt-3" style="display:none;" id="newsReadMore">Read more...</a>
-        </header>
-
-        <!-- Dynamic news from MongoDB -->
-        <div class="row" id="dynamicNews"></div>
-      </div>
-    </section><!-- #services -->
+  <div class="container">
+    <header class="section-header" id="newsSecHeader">
+      <h3>Latest News</h3>
+      <p>All the news that are relevant for our small community</p>
+      <a href="#" class="btn btn-outline-success btn-sm mt-3" style="display:none;" id="newsReadMore">Read more...</a>
+    </header>
+    <!-- Upload form for admin to add news items -->
+    <div id="servicesUpload" style="margin:20px 0; display:flex; align-items:center; gap:10px;">
+      <input type="file" id="serviceFileInput" accept="image/*,application/pdf" style="flex:1;" />
+      <button class="btn btn-success" onclick="uploadServiceFile()" style="flex:none;">Upload</button>
+    </div>
+    <!-- Dynamic news from MongoDB -->
+    <div class="row" id="dynamicNews"></div>
+  </div>
+</section>
+<script>
+function uploadServiceFile() {
+  var fileInput = document.getElementById('serviceFileInput');
+  if (!fileInput.files.length) { showToast('Please select a file to upload.', true); return; }
+  var fd = new FormData();
+  fd.append('file', fileInput.files[0]);
+  fetch('/api/services/upload', { method: 'POST', body: fd })
+    .then(r => r.json())
+    .then(res => {
+      if (res.success) {
+        showToast('File uploaded successfully.', false);
+        fileInput.value = '';
+        loadNews(); // Reload news after upload
+      } else {
+        showToast(res.message || 'Upload failed.', true);
+      }
+    })
+    .catch(() => showToast('Network error during upload.', true));
+}
+</script>
 
     <!--==========================
       Gallery Section (Dynamic from MongoDB)
