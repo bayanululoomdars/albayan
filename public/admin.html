@@ -2519,13 +2519,12 @@
           toast.addEventListener('transitionend', () => toast.remove());
         }, 3000);
       }
-    </script>
 
-    var _origSwitchTab = switchTab;
-    switchTab = function(tab) {
-      _origSwitchTab(tab);
-      if (tab === 'comments') loadAllComments();
-    };
-  </script>
+      var _origSwitchTab = switchTab;
+      switchTab = function(tab) {
+        _origSwitchTab(tab);
+        if (tab === 'comments') loadAllComments();
+      };
+    </script>
 </body>
 </html>
