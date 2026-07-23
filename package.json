@@ -23,5 +23,9 @@
     "bayanululoom"
   ],
   "author": "AL BAYAN MEDIA WING",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.7.0"
+  }
 }
