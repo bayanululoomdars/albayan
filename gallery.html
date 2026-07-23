@@ -485,7 +485,7 @@
 
       <ul class="nav-links">
         <li><a href="/home">Home</a></li>
-        <li><a href="/latest-news">Latest News</a></li>
+
         <li><a href="/gallery" class="active">Gallery</a></li>
         <li><a href="/admission" class="nav-btn-admission">Admission</a></li>
         <li><a href="/about">About Us</a></li>
@@ -520,15 +520,9 @@
     <div class="story-bar-container" id="storyBar" style="display:none;"></div>
 
     <!-- Instagram Profile Style Filter Tabs -->
-    <div class="ig-tabs">
+    <div class="ig-tabs" id="igTabs">
       <button class="ig-tab-btn active" id="tab-all" onclick="filterGallery('all')">
         <i class="fa fa-th"></i> All Posts
-      </button>
-      <button class="ig-tab-btn" id="tab-reels" onclick="filterGallery('reels')">
-        <i class="fa fa-play-circle"></i> Reels
-      </button>
-      <button class="ig-tab-btn" id="tab-pinned" onclick="filterGallery('pinned')">
-        <i class="fa fa-thumb-tack"></i> Pinned
       </button>
     </div>
 
@@ -610,16 +604,7 @@
             <p>Bayanul Uloom Sahithya Samajam is a platform for the literary and non literary activities of students. All extra curricular activities conducted by the Bayanul Uloom Dars are under the auspicious of Sahithya Samajam. It aims the Islamic literary and artistic development of the students.</p>
           </div>
 
-          <div class="col-lg-2 col-md-6 footer-links">
-            <h4>Useful Links</h4>
-            <ul>
-              <li><a href="/home">Home</a></li>
-              <li><a href="/about">About us</a></li>
-              <li><a href="/latest-news">Latest News</a></li>
-              <li><a href="/admission">Admission</a></li>
-              <li><a href="/contact">Contact Us</a></li>
-            </ul>
-          </div>
+          
 
           <div class="col-lg-3 col-md-6 footer-contact">
             <h4>Contact Us</h4>
@@ -639,10 +624,10 @@
             </div>
           </div>
 
-          <div class="col-lg-3 col-md-6 footer-newsletter">
-            <h4 id="footerMudarrisNameEl">Principal Mudarris</h4>
-            <p id="footerMudarrisTitleEl" style="color:#d4af37; font-weight:600;"></p>
-            <p id="footerMudarrisDetailEl" style="color:rgba(255,255,255,0.6); font-size:0.85rem;"></p>
+          <div class="col-lg-5 col-md-12 footer-mudarris">
+            <h4>PRINCIPAL MUDARRIS:</h4>
+            <p style="margin-bottom: 8px;"><strong><span style="font: size 15px;">Sheikhuna Ibrahim Baqavi Al Haithami </span></strong><br><span style="color:#d4af37; font-weight:600; font-size:1.1rem;">ASSISTANT MUDARRIS:</span></p>
+            <p><strong>Usthad Mansoor Faizy<br> Usthad Musthafa Baqavi<br> Usthad Jahfar Jalali<br> Usthad Abdulla Faizy<br> Usthad Shameem Jalali<br>Usthad Rashid Baqavi<br> Usthad Shan Baqavi</strong><span style="color:#e0e0e0; font-size:0.95rem; line-height:1.6; display:inline-block; margin-top:4px;"></span></p>
           </div>
         </div>
       </div>
@@ -762,11 +747,25 @@
 
     // Load Gallery Grid
     function loadGallery() {
-      fetch('/api/gallery')
+      fetch('/api/settings/gallery-categories')
         .then(res => res.json())
-        .then(items => {
-          allGalleryItems = items || [];
-          renderGrid();
+        .then(data => {
+          if(data.categories) {
+             var tabsHtml = '<button class="ig-tab-btn active" id="tab-all" onclick="filterGallery(\'all\')"><i class="fa fa-th"></i> All Posts</button>';
+             data.categories.forEach(cat => {
+                tabsHtml += '<button class="ig-tab-btn" id="tab-' + cat + '" onclick="filterGallery(\'' + cat + '\')">' + cat + '</button>';
+             });
+             var igTabs = document.getElementById('igTabs');
+             if(igTabs) igTabs.innerHTML = tabsHtml;
+          }
+        })
+        .finally(() => {
+          fetch('/api/gallery')
+            .then(res => res.json())
+            .then(items => {
+              allGalleryItems = items || [];
+              renderGrid();
+            });
         });
     }
 
@@ -775,10 +774,8 @@
       var grid = document.getElementById('galleryGrid');
       var filtered = allGalleryItems;
 
-      if (currentFilter === 'reels') {
-        filtered = allGalleryItems.filter(item => item.mediaType === 'video');
-      } else if (currentFilter === 'pinned') {
-        filtered = allGalleryItems.filter(item => item.pinned === true);
+      if (currentFilter !== 'all') {
+        filtered = allGalleryItems.filter(item => item.category === currentFilter);
       }
 
       // Sort: Pinned items first for "all" tab, then by date
@@ -802,14 +799,17 @@
         }
 
         // Media Element
+        var imgUrl = item.imageUrl || '';
         if (item.mediaType === 'video') {
-          if (item.imageUrl.includes('youtube.com') || item.imageUrl.includes('youtu.be')) {
+          if (imgUrl.includes('youtube.com') || imgUrl.includes('youtu.be')) {
             html += '<div style="background:#000; width:100%; height:100%; display:flex; align-items:center; justify-content:center;"><i class="fa fa-youtube-play" style="color:red; font-size:40px;"></i></div>';
+          } else if (imgUrl.includes('instagram.com')) {
+            html += '<div style="background:#000; width:100%; height:100%; display:flex; align-items:center; justify-content:center;"><i class="fa fa-instagram" style="color:#e1306c; font-size:40px;"></i></div>';
           } else {
-            html += '<video src="' + item.imageUrl + '" muted playsinline loop></video>';
+            html += '<video src="' + imgUrl + '" autoplay muted playsinline loop></video>';
           }
         } else {
-          html += '  <img src="' + item.imageUrl + '" alt="' + item.title + '">';
+          html += '  <img src="' + imgUrl + '" alt="' + (item.title || '') + '" onerror="this.src=\'/img/placeholder.jpg\'">';
         }
 
         // Hover overlay
@@ -841,15 +841,23 @@
       // Render Media
       var mediaContainer = document.getElementById('modalMediaContainer');
       var mediaHtml = '';
+      var imgUrl = item.imageUrl || '';
+      
       if (item.mediaType === 'video') {
-        if (item.imageUrl.includes('youtube.com') || item.imageUrl.includes('youtu.be')) {
-          var ytid = getYouTubeId(item.imageUrl);
-          mediaHtml = '<iframe src="https://www.youtube.com/embed/' + ytid + '" style="width:100%;height:100%;border:none;" allowfullscreen></iframe>';
+        if (imgUrl.includes('youtube.com') || imgUrl.includes('youtu.be') || imgUrl.includes('shorts')) {
+          var ytid = getYouTubeId(imgUrl);
+          if (ytid) {
+             mediaHtml = '<iframe src="https://www.youtube.com/embed/' + ytid + '" style="width:100%;height:100%;border:none;" allowfullscreen></iframe>';
+          } else {
+             mediaHtml = '<a href="' + imgUrl + '" target="_blank" style="display:flex; align-items:center; justify-content:center; height:100%; color:#fff; text-decoration:none;"><i class="fa fa-youtube-play" style="font-size:50px; color:red; margin-right:10px;"></i> Watch on YouTube</a>';
+          }
+        } else if (imgUrl.includes('instagram.com')) {
+          mediaHtml = '<a href="' + imgUrl + '" target="_blank" style="display:flex; align-items:center; justify-content:center; height:100%; color:#fff; text-decoration:none;"><i class="fa fa-instagram" style="font-size:50px; color:#e1306c; margin-right:10px;"></i> Watch on Instagram</a>';
         } else {
-          mediaHtml = '<video src="' + item.imageUrl + '" controls autoplay loop style="max-height:80vh; max-width:100%;"></video>';
+          mediaHtml = '<video src="' + imgUrl + '" controls autoplay loop style="max-height:80vh; max-width:100%;"></video>';
         }
       } else {
-        mediaHtml = '<img src="' + item.imageUrl + '" alt="' + item.title + '" ondblclick="likeCurrentPost()">';
+        mediaHtml = '<img src="' + imgUrl + '" alt="' + (item.title || '') + '" style="max-height:80vh; max-width:100%; object-fit:contain;" onerror="this.src=\'/img/placeholder.jpg\'">';
       }
       mediaContainer.innerHTML = mediaHtml;
 
@@ -1003,7 +1011,8 @@
     };
 
     function getYouTubeId(url) {
-      var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+      if (!url) return null;
+      var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
       var match = url.match(regExp);
       return (match && match[2].length === 11) ? match[2] : null;
     }

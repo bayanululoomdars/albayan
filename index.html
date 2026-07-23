@@ -69,7 +69,6 @@
 
       <ul class="nav-links">
         <li><a href="/home" class="active">Home</a></li>
-
         <li><a href="/gallery">Gallery</a></li>
         <li><a href="/admission" class="nav-btn-admission">Admission</a></li>
         <li><a href="/about">About Us</a></li>
@@ -138,20 +137,32 @@
     <!--==========================
       Gallery Section (Dynamic from MongoDB)
     ============================-->
-    <section id="portfolio" class="clearfix">
+    <!--==========================
+      Gallery Section (Dynamic Intro & Teaser from MongoDB)
+    ============================-->
+    <section id="portfolio" class="clearfix" style="padding:60px 0; background:linear-gradient(180deg, #ffffff 0%, #f4f8f5 100%);">
       <div class="container">
-        <header class="section-header" id="gallerySecHeader">
-          <h3 class="section-title">Gallery</h3>
-          <p>Explore our latest moments and activities</p>
+        <header class="section-header" id="gallerySecHeader" style="text-align:center; margin-bottom:30px;">
+          <h3 class="section-title" style="font-family:'Outfit',sans-serif; font-weight:700; color:#0a3d1f;">Gallery Highlights / ഗാലറി തിളക്കങ്ങൾ</h3>
+          <p style="max-width:700px; margin:0 auto; color:#555; font-size:0.95rem; line-height:1.6;">
+            Explore the memorable moments, academic programs, Sahithya Samajam activities, and student achievements of Muttichira Bayanul Uloom Dars.
+          </p>
         </header>
 
-        <!-- Dynamic gallery from MongoDB (homepage preview: 3 items) -->
+        <!-- Dynamic Category Filter Pills (All / എല്ലാം + custom categories) -->
+        <div id="homeGalleryCategoriesBar" style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:30px;">
+          <button class="btn btn-sm home-cat-pill active" onclick="filterHomeGallery('all', this)" style="border-radius:20px; font-weight:600; padding:6px 18px; border:1px solid #0a4d2e; background:#0a4d2e; color:#fff;">
+            All (എല്ലാം)
+          </button>
+        </div>
+
+        <!-- Dynamic gallery cards from MongoDB (configured by admin "ethra mathi" limit & settings) -->
         <div class="row" id="homeGalleryRow" style="justify-content:center;"></div>
 
         <!-- Explore More Button -->
         <div class="text-center mt-4">
-          <a href="/gallery" class="btn-explore-more">
-            <i class="fa fa-th"></i> Explore More
+          <a href="/gallery" class="btn-explore-more" style="display:inline-flex; align-items:center; gap:8px; padding:12px 28px; background:linear-gradient(135deg, #0a4d2e, #106b3f); color:#fff; border-radius:30px; font-weight:700; text-decoration:none; box-shadow:0 4px 15px rgba(10,77,46,0.25); transition:transform 0.3s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
+            <i class="fa fa-th"></i> Explore Full Gallery / സമ്പൂർണ്ണ ഗാലറി കാണുക
           </a>
         </div>
       </div>
@@ -208,7 +219,7 @@
           <div class="icon-box wow fadeInUp" data-wow-delay="0.2s">
             <div class="icon"><i class="fa fa-users"></i></div>
             <h4 class="title"><a href="">Sahithya Samajam</a></h4>
-            <p class="description"><strong style="color: rgb(6, 46, 105);">Bayanul Uloom Sahithya Samajam is a platform for the literary and non literary activities of students. The activities of the Samajam begin after the official inauguration every year. All extra curricular activities conducted by the Bayanul Uloom Dars are under the auspicious of Sahithya Samajam. It aims the Islamic literary and artistic development of the students</p>
+            <p class="description"><strong style="color: rgb(6, 46, 105);">Bayanul Uloom Sahithya Samajam is a platform for the literary and non literary activities of students. The activities of the Samajam begin after the official inauguration every year. All extra curricular activities conducted by the Bayanul Uloom Dars are under the auspicious of Sahithya Samajam. It aims the Islamic literary and artistic development of the students.</strong></p>
           </div>
 
           <div class="icon-box wow fadeInUp" data-wow-delay="0.4s">
@@ -252,94 +263,115 @@
       </div>
     </section><!-- #about -->
 
-    <!-- Stats Counter Section -->
-    <section id="stats" style="background: linear-gradient(135deg, #0a3d1f 0%, #0d5a2e 50%, #0a3d1f 100%); padding: 70px 0; position: relative; overflow: hidden;">
-      <div class="container" style="position:relative;z-index:1;">
-        <div class="row text-center counter-row flex-nowrap justify-content-center">
-          <div class="col-3 mb-2">
-            <div class="counter-card">
-              <i class="fa fa-graduation-cap counter-icon"></i>
-              <div id="counterStudents" class="counter-number">103</div>
-              <div class="counter-label">Students</div>
-            </div>
-          </div>
-          <div class="col-3 mb-2">
-            <div class="counter-card">
-              <i class="fa fa-users counter-icon"></i>
-              <div id="counterUstads" class="counter-number">8</div>
-              <div class="counter-label">Usthads</div>
-            </div>
-          </div>
-          <div class="col-3 mb-2">
-            <div class="counter-card">
-              <i class="fa fa-book counter-icon"></i>
-              <div id="counterYears" class="counter-number">25</div>
-              <div class="counter-label">Years of Tradition</div>
-            </div>
-          </div>
-          <div class="col-3 mb-2">
-            <div class="counter-card">
-              <i class="fa fa-trophy counter-icon"></i>
-              <div id="counterAlumni" class="counter-number">52</div>
-              <div class="counter-label">Distinguished Alumni</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+
 
     <!--==========================
       Why Us Section
     ============================-->
-    <section id="why-us" style="padding: 60px 0; background: #fff;">
-      <div class="container">
-        <header class="section-header">
-          <h3>Why Bayanul Uloom Dars?</h3>
-          <p>Key highlights and course features of our institution</p>
-        </header>
-        <div class="row align-items-center" style="margin-top: 30px;">
-          <!-- Left: Usthad Photo/Video -->
-          <div class="col-lg-5 col-md-12 mb-4 mb-lg-0 text-center">
-            <div id="whyUsMediaContainer" style="position:relative; display:inline-block; width:100%; max-width:380px;">
-              <!-- Rendered via JS -->
-            </div>
-          </div>
-          <!-- Right: 4 Cards -->
-          <div class="col-lg-7 col-md-12">
-            <div class="row">
-              <div class="col-sm-6 mb-3">
-                <div style="background:#fff; border-radius:12px; padding:18px; box-shadow:0 4px 15px rgba(0,0,0,0.06); border-left:4px solid #0a4d2e; height:100%;">
-                  <i class="fa fa-graduation-cap" style="color:#0a4d2e; font-size:1.5rem; margin-bottom:8px;"></i>
-                  <h6 style="font-weight:700; color:#0a3d1f;">Eligibility</h6>
-                  <p id="whyUsEligibilityEl" style="font-size:0.88rem; color:#555; margin:0;"></p>
-                </div>
-              </div>
-              <div class="col-sm-6 mb-3">
-                <div style="background:#fff; border-radius:12px; padding:18px; box-shadow:0 4px 15px rgba(0,0,0,0.06); border-left:4px solid #d4af37; height:100%;">
-                  <i class="fa fa-book" style="color:#d4af37; font-size:1.5rem; margin-bottom:8px;"></i>
-                  <h6 style="font-weight:700; color:#0a3d1f;">Curriculum</h6>
-                  <p id="whyUsCurriculumEl" style="font-size:0.88rem; color:#555; margin:0;"></p>
-                </div>
-              </div>
-              <div class="col-sm-6 mb-3">
-                <div style="background:#fff; border-radius:12px; padding:18px; box-shadow:0 4px 15px rgba(0,0,0,0.06); border-left:4px solid #0a4d2e; height:100%;">
-                  <i class="fa fa-university" style="color:#0a4d2e; font-size:1.5rem; margin-bottom:8px;"></i>
-                  <h6 style="font-weight:700; color:#0a3d1f;">Facilities</h6>
-                  <p id="whyUsFacilitiesEl" style="font-size:0.88rem; color:#555; margin:0;"></p>
-                </div>
-              </div>
-              <div class="col-sm-6 mb-3">
-                <div style="background:#fff; border-radius:12px; padding:18px; box-shadow:0 4px 15px rgba(0,0,0,0.06); border-left:4px solid #d4af37; height:100%;">
-                  <i class="fa fa-phone" style="color:#d4af37; font-size:1.5rem; margin-bottom:8px;"></i>
-                  <h6 style="font-weight:700; color:#0a3d1f;">Enquiry</h6>
-                  <p id="whyUsEnquiryEl" style="font-size:0.88rem; color:#555; margin:0; white-space:pre-line;"></p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+<div class="row" style="margin-top:40px;">
+
+  <div class="col-md-6 mb-4">
+    <div style="
+      background:rgba(255,255,255,0.08);
+      backdrop-filter:blur(20px);
+      border:1px solid rgba(10,77,46,0.15);
+      border-radius:30px;
+      padding:35px;
+      min-height:220px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.08);">
+
+      <i class="fa fa-graduation-cap"
+         style="font-size:2rem;color:#0a4d2e;margin-bottom:15px;"></i>
+
+      <h4 style="font-weight:700;color:#0a3d1f;">
+        Eligibility
+      </h4>
+
+      <p id="whyUsEligibilityEl"
+         style="color:#555;line-height:1.8;margin:0;">
+         Students who completed basic Islamic education are welcome to apply for advanced religious studies.
+      </p>
+
+    </div>
+  </div>
+
+  <div class="col-md-6 mb-4">
+    <div style="
+      background:rgba(255,255,255,0.08);
+      backdrop-filter:blur(20px);
+      border:1px solid rgba(212,175,55,0.2);
+      border-radius:30px;
+      padding:35px;
+      min-height:220px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.08);">
+
+      <i class="fa fa-book"
+         style="font-size:2rem;color:#d4af37;margin-bottom:15px;"></i>
+
+      <h4 style="font-weight:700;color:#0a3d1f;">
+        Curriculum
+      </h4>
+
+      <p id="whyUsCurriculumEl"
+         style="color:#555;line-height:1.8;margin:0;">
+         Quran, Hadith, Fiqh, Arabic language, and modern subjects guided by experienced Usthadh.
+      </p>
+
+    </div>
+  </div>
+
+  <div class="col-md-6 mb-4">
+    <div style="
+      background:rgba(255,255,255,0.08);
+      backdrop-filter:blur(20px);
+      border:1px solid rgba(10,77,46,0.15);
+      border-radius:30px;
+      padding:35px;
+      min-height:220px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.08);">
+
+      <i class="fa fa-university"
+         style="font-size:2rem;color:#0a4d2e;margin-bottom:15px;"></i>
+
+      <h4 style="font-weight:700;color:#0a3d1f;">
+        Facilities
+      </h4>
+
+      <p id="whyUsFacilitiesEl"
+         style="color:#555;line-height:1.8;margin:0;">
+         Library, Computer Lab, Smart Class, Medical Wing & Store for holistic student development.
+      </p>
+
+    </div>
+  </div>
+
+  <div class="col-md-6 mb-4">
+    <div style="
+      background:rgba(255,255,255,0.08);
+      backdrop-filter:blur(20px);
+      border:1px solid rgba(212,175,55,0.2);
+      border-radius:30px;
+      padding:35px;
+      min-height:220px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.08);">
+
+      <i class="fa fa-phone"
+         style="font-size:2rem;color:#d4af37;margin-bottom:15px;"></i>
+
+      <h4 style="font-weight:700;color:#0a3d1f;">
+        Enquiry
+      </h4>
+
+      <p id="whyUsEnquiryEl"
+         style="color:#555;line-height:1.8;margin:0;">
+         +91 9526 919 218<br>
+         darsbayanululoom@gmail.com
+      </p>
+
+    </div>
+  </div>
+
+</div>
 
     <!--==========================
       Admission Section
@@ -388,66 +420,41 @@
         </div>
       </div>
     </section><!-- #admission -->
-
-    <!-- Admission Modal (Popup Form) -->
-    <div id="admissionModal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.7); overflow-y:auto;" onclick="if(event.target===this)closeAdmissionModal()">
-      <div style="background:#fff; border-radius:20px; max-width:520px; margin:40px auto; padding:36px 30px; position:relative; box-shadow:0 20px 60px rgba(0,0,0,0.3);">
-        <button onclick="closeAdmissionModal()" style="position:absolute; top:14px; right:18px; background:none; border:none; font-size:1.6rem; color:#999; cursor:pointer; line-height:1;">&times;</button>
-        <div class="text-center mb-3">
-          <img src="img/new_logo.png" style="width:50px; margin-bottom:8px;">
-          <h4 style="color:#0a3d1f; font-family:'Outfit',sans-serif; font-weight:700;">Admission Application</h4>
-          <p style="color:#1a6b3a; font-size:0.88rem; font-weight:600;">Bayanul Uloom Dars, Muttichira</p>
+    <!-- Stats Counter Section -->
+    <section id="stats" style="background: linear-gradient(135deg, #0a3d1f 0%, #0d5a2e 50%, #0a3d1f 100%); padding: 70px 0; position: relative; overflow: hidden;">
+      <div class="container" style="position:relative;z-index:1;">
+        <div class="row text-center counter-row flex-nowrap justify-content-center">
+          <div class="col-3 mb-2">
+            <div class="counter-card">
+              <i class="fa fa-graduation-cap counter-icon"></i>
+              <div id="counterStudents" class="counter-number">100+</div>
+              <div class="counter-label">Students</div>
+            </div>
+          </div>
+          <div class="col-3 mb-2">
+            <div class="counter-card">
+              <i class="fa fa-users counter-icon"></i>
+              <div id="counterUstads" class="counter-number">8</div>
+              <div class="counter-label">Usthads</div>
+            </div>
+          </div>
+          <div class="col-3 mb-2">
+            <div class="counter-card">
+              <i class="fa fa-book counter-icon"></i>
+              <div id="counterYears" class="counter-number">20+</div>
+              <div class="counter-label">Years of Tradition</div>
+            </div>
+          </div>
+          <div class="col-3 mb-2">
+            <div class="counter-card">
+              <i class="fa fa-trophy counter-icon"></i>
+              <div id="counterAlumni" class="counter-number">50+</div>
+              <div class="counter-label">Distinguished Alumni</div>
+            </div>
+          </div>
         </div>
-        <div id="admissionClosedBanner" style="display:none;" class="alert alert-warning text-center">
-          <i class="fa fa-exclamation-triangle"></i> Admissions are currently <strong>CLOSED</strong>. Please check back later.
-        </div>
-        <form id="admissionModalForm" style="">
-          <div class="form-group mb-3">
-            <label style="font-weight:600;">Student Name / വിദ്യാർത്ഥിയുടെ പേർ <span class="text-danger">*</span></label>
-            <input type="text" id="m_name" class="form-control" placeholder="Full Name" required>
-          </div>
-          <div class="form-group mb-3">
-            <label style="font-weight:600;">Date of Birth / ജനനതീയതി</label>
-            <input type="date" id="m_dob" class="form-control">
-          </div>
-          <div class="form-group mb-3">
-            <label style="font-weight:600;">Father's Name / പിതാവിന്റെ പേർ <span class="text-danger">*</span></label>
-            <input type="text" id="m_fatherName" class="form-control" placeholder="Father's Name" required>
-          </div>
-          <div class="form-group mb-3">
-            <label style="font-weight:600;">Mother's Name / മാതാവിന്റെ പേർ <span class="text-danger">*</span></label>
-            <input type="text" id="m_motherName" class="form-control" placeholder="Mother's Name" required>
-          </div>
-          <div class="form-group mb-3">
-            <label style="font-weight:600;">Phone Number / ഫോണ്് നംബർ <span class="text-danger">*</span></label>
-            <input type="tel" id="m_phone" class="form-control" placeholder="+91 XXXXX XXXXX" required>
-          </div>
-          <button type="submit" id="modalSubmitBtn" class="btn btn-success w-100" style="border-radius:10px; padding:12px; font-weight:700;"><i class="fa fa-send" style="margin-right:8px;"></i>Submit Application</button>
-        </form>
-        <div id="admissionModalSuccess" style="display:none; text-align:center; padding:20px;">
-          <i class="fa fa-check-circle" style="color:#1a6b3a; font-size:3rem; margin-bottom:12px;"></i>
-          <h5 style="color:#0a3d1f;">Application Submitted!</h5>
-          <p style="color:#555;">We will contact you soon. جزاك الله خيرا</p>
-          <button onclick="closeAdmissionModal()" class="btn btn-outline-success mt-2">Close</button>
-        </div>
-      </div>
-    </div>
-
-
-    <!-- Leadership Section -->
-    <section id="leadership" style="padding: 70px 0; background: #f8f9fa;">
-      <div class="container">
-        <header class="section-header">
-          <h3>Current Leadership</h3>
-          <p>The guiding lights of Muttichira Bayanul Uloom Dars</p>
-        </header>
-        <div class="row justify-content-center" id="leadershipContent">
-        </div>
-        <!-- Assistant Mudarris -->
-        <div class="row justify-content-center mt-4" id="assistantList"></div>
       </div>
     </section>
-
     <!--==========================
       Contact Section
     ============================-->
@@ -536,16 +543,7 @@
             <p>Bayanul Uloom Sahithya Samajam is a platform for the literary and non literary activities of students. The activities of the Samajam begin after the official inauguration every year. All extra curricular activities conducted by the Bayanul Uloom Dars are under the auspicious of Sahithya Samajam. It aims the Islamic literary and artistic development of the students</p>
           </div>
 
-          <div class="col-lg-2 col-md-6 footer-links">
-            <h4>Useful Links</h4>
-            <ul>
-              <li><a href="/home">Home</a></li>
-              <li><a href="/about">About us</a></li>
 
-              <li><a href="/admission">Admission</a></li>
-              <li><a href="/contact">Contact Us</a></li>
-            </ul>
-          </div>
 
           <div class="col-lg-3 col-md-6 footer-contact">
             <h4>Contact Us</h4>
@@ -565,10 +563,10 @@
             </div>
           </div>
 
-          <div class="col-lg-3 col-md-6 footer-newsletter">
-            <h4 id="footerMudarrisNameEl">Principal Mudarris</h4>
-            <p id="footerMudarrisTitleEl" style="color:#d4af37; font-weight:600;"></p>
-            <p id="footerMudarrisDetailEl" style="color:rgba(255,255,255,0.6); font-size:0.85rem;"></p>
+          <div class="col-lg-5 col-md-12 footer-mudarris">
+            <h4>PRINCIPAL MUDARRIS:</h4>
+            <p style="margin-bottom: 8px;"><strong><span style="font: size 15px;">Sheikhuna Ibrahim Baqavi Al Haithami </span></strong><br><span style="color:#d4af37; font-weight:600; font-size:1.1rem;">ASSISTANT MUDARRIS:</span></p>
+            <p><strong>Usthad Mansoor Faizy<br> Usthad Musthafa Baqavi<br> Usthad Jahfar Jalali<br> Usthad Abdulla Faizy<br> Usthad Shameem Jalali<br>Usthad Rashid Baqavi<br> Usthad Shan Baqavi</strong><span style="color:#e0e0e0; font-size:0.95rem; line-height:1.6; display:inline-block; margin-top:4px;"></span></p>
           </div>
         </div>
       </div>
@@ -673,72 +671,137 @@
         .then(function(res) { return res.json(); })
         .then(function(news) {
           if (news.length > 0) {
-            // Ticker bar hidden intentionally
-
-            // Show dynamic cards (hide static)
             var container = document.getElementById('dynamicNews');
             var html = '';
+            var tickerHtml = '<div style="background:#0a3d1f; color:#fff; padding:10px 15px; border-radius:8px; margin-bottom:25px; display:flex; align-items:center; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,0.1);"><strong style="min-width:90px; margin-right:15px; border-right:1px solid rgba(255,255,255,0.3); padding-right:15px; color:#d4af37;">UPDATES</strong> <marquee scrollamount="6" style="font-weight:500; font-size:1.05rem;">';
+            
             news.forEach(function(item) {
+              tickerHtml += '<span style="margin-right:50px;">&bull; ' + item.title + '</span>';
+              
               var date = new Date(item.createdAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' });
               html += '<div class="col-lg-4 col-md-6">' +
                 '<div class="news-card-dynamic wow fadeInUp">' +
-                (item.imageUrl ? '<img src="' + item.imageUrl + '" alt="' + item.title + '" style="width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:12px 12px 0 0;">' : '') +
+                (item.imageUrl ? '<img src="' + item.imageUrl + '" alt="' + item.title + '" style="width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:12px 12px 0 0;" onerror="this.src=\'/img/placeholder.jpg\'">' : '') +
                 '<div class="card-body">' +
                 '<span class="card-date"><i class="fa fa-calendar"></i> ' + date + '</span>' +
                 '<h4>' + item.title + '</h4>' +
                 '<p>' + item.description + '</p>' +
                 '</div></div></div>';
             });
-            container.innerHTML = html;
+            tickerHtml += '</marquee></div>';
+            
+            container.innerHTML = tickerHtml + html;
             container.style.display = 'flex';
             container.style.flexWrap = 'wrap';
             // Hide static news
             var staticNews = document.getElementById('staticNews');
             if (staticNews) staticNews.style.display = 'none';
+          } else {
+            var container = document.getElementById('dynamicNews');
+            if(container) container.innerHTML = '<div class="col-12 text-center" style="color:#999; padding:40px;">No latest news available right now.</div>';
           }
         })
         .catch(function() { /* Keep static news visible */ });
     }
 
+      let allHomeGalleryItems = [];
+      let homeGalleryLimit = 3;
+      let homeGalleryMode = 'all';
+  
+      function filterHomeGallery(cat, btnElement) {
+        if (btnElement) {
+          document.querySelectorAll('.home-cat-pill').forEach(function(btn) { btn.classList.remove('active'); });
+          btnElement.classList.add('active');
+        }
+        var container = document.getElementById('homeGalleryRow');
+        if (!container) return;
+        
+        // Always start with a shallow copy to avoid mutating the original array when sorting
+        var filtered = allHomeGalleryItems.slice();
+        if (cat !== 'all') {
+          filtered = filtered.filter(function(i) { return i.category === cat; });
+        }
+
+        if (homeGalleryMode === 'pinned') {
+          filtered = filtered.filter(function(i) { return i.pinned === true; });
+        } else if (homeGalleryMode === 'popular') {
+          filtered.sort(function(a, b) {
+            var aScore = (a.likes ? a.likes.length : 0) + (a.comments ? a.comments.length : 0);
+            var bScore = (b.likes ? b.likes.length : 0) + (b.comments ? b.comments.length : 0);
+            if (bScore === aScore) return new Date(b.createdAt) - new Date(a.createdAt); // fallback to latest
+            return bScore - aScore;
+          });
+        }
+        
+        var displayItems = (homeGalleryLimit === 0) ? filtered : filtered.slice(0, homeGalleryLimit);
+        
+        var html = '';
+        if (displayItems.length === 0) {
+          container.innerHTML = '<div class="col-12 text-center" style="color:#999;padding:30px;">No gallery items found for this category.</div>';
+          return;
+        }
+
+        displayItems.forEach(function(item) {
+          var mediaHtml = '';
+          var imgUrl = item.imageUrl || '';
+          if (item.mediaType === 'video') {
+            if (imgUrl.includes('youtube.com') || imgUrl.includes('youtu.be') || imgUrl.includes('shorts')) {
+              mediaHtml = '<div style="background:#000; height:220px; display:flex; align-items:center; justify-content:center; border-radius:12px 12px 0 0;"><i class="fa fa-youtube-play" style="color:red; font-size:48px;"></i></div>';
+            } else if (imgUrl.includes('instagram.com')) {
+              mediaHtml = '<div style="background:#000; height:220px; display:flex; align-items:center; justify-content:center; border-radius:12px 12px 0 0;"><i class="fa fa-instagram" style="color:#e1306c; font-size:48px;"></i></div>';
+            } else {
+              mediaHtml = '<video src="' + imgUrl + '" style="width:100%; height:220px; object-fit:cover; border-radius:12px 12px 0 0;" autoplay muted playsinline loop></video>';
+            }
+          } else {
+            mediaHtml = '<img src="' + imgUrl + '" class="img-fluid" alt="' + (item.title || '') + '" style="width:100%; height:220px; object-fit:cover; border-radius:12px 12px 0 0;" onerror="this.src=\'/img/placeholder.jpg\'">';
+          }
+          var descHtml = item.description ? '<p style="color:#666; font-size:0.8rem; margin:8px 0 0 0; line-height:1.4;">' + item.description + '</p>' : '';
+          html += '<div class="col-lg-4 col-md-6 col-sm-12 mb-4">' +
+            '<div class="portfolio-wrap" style="border-radius:12px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.1); cursor:pointer;" onclick="window.location.href=\'/gallery\';">' +
+            mediaHtml +
+            '<div class="portfolio-info" style="background:#fff; padding:14px 16px;">' +
+            '<h4 style="font-size:1rem; margin:0 0 4px;"><a href="/gallery" style="color:#0a3d1f;">' + item.title + '</a></h4>' +
+            '<p style="color:#888; font-size:0.8rem; margin:0;">' + (item.category || '') + '</p>' +
+            descHtml +
+            '</div></div></div>';
+        });
+        container.innerHTML = html;
+      }
+
     // ── Load Dynamic Gallery from MongoDB ──────────
     function loadGallery() {
-      fetch('/api/gallery')
+      fetch('/api/settings/home-gallery')
         .then(function(res) { return res.json(); })
-        .then(function(items) {
-          var container = document.getElementById('homeGalleryRow');
-          if (!container) return;
-          if (items.length === 0) {
-            // Show placeholder message if no DB items
-            container.innerHTML = '<div class="col-12 text-center" style="color:#999;padding:30px;">No gallery items yet.</div>';
-            return;
-          }
-          var html = '';
-          // Sort by newest first
-          items.sort(function(a, b) { return new Date(b.createdAt) - new Date(a.createdAt); });
-          // Limit to 3 items for homepage preview
-          var displayItems = items.slice(0, 3);
-          displayItems.forEach(function(item) {
-            var mediaHtml = '';
-            if (item.mediaType === 'video') {
-              if (item.imageUrl && (item.imageUrl.includes('youtube.com') || item.imageUrl.includes('youtu.be'))) {
-                mediaHtml = '<div style="background:#000; height:220px; display:flex; align-items:center; justify-content:center; border-radius:12px 12px 0 0;"><i class="fa fa-play-circle" style="color:#fff; font-size:48px;"></i></div>';
-              } else {
-                mediaHtml = '<video src="' + item.imageUrl + '" style="width:100%; height:220px; object-fit:cover; border-radius:12px 12px 0 0;"></video>';
+        .then(function(settings) {
+          homeGalleryLimit = settings.limit !== undefined ? parseInt(settings.limit) : 3;
+          homeGalleryMode = settings.mode || 'all';
+          var defaultCategory = settings.category || 'all';
+
+          fetch('/api/gallery')
+            .then(function(res) { return res.json(); })
+            .then(function(items) {
+              if (items.length === 0) {
+                var container = document.getElementById('homeGalleryRow');
+                if(container) container.innerHTML = '<div class="col-12 text-center" style="color:#999;padding:30px;">No gallery items yet.</div>';
+                return;
               }
-            } else {
-              mediaHtml = '<img src="' + item.imageUrl + '" class="img-fluid" alt="' + item.title + '" style="width:100%; height:220px; object-fit:cover; border-radius:12px 12px 0 0;">';
-            }
-            html += '<div class="col-lg-4 col-md-6 col-sm-12 mb-4">' +
-              '<div class="portfolio-wrap" style="border-radius:12px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.1);">' +
-              mediaHtml +
-              '<div class="portfolio-info" style="background:#fff; padding:14px 16px;">' +
-              '<h4 style="font-size:1rem; margin:0 0 4px;"><a href="/gallery" style="color:#0a3d1f;">' + item.title + '</a></h4>' +
-              '<p style="color:#888; font-size:0.8rem; margin:0;">' + item.category + '</p>' +
-              '</div></div></div>';
-          });
-          container.innerHTML = html;
-        })
-        .catch(function() { /* Keep container empty, Explore More button still shows */ });
+              items.sort(function(a, b) { return new Date(b.createdAt) - new Date(a.createdAt); });
+              allHomeGalleryItems = items;
+              
+              // Highlight the active pill
+              var pills = document.querySelectorAll('.home-cat-pill');
+              var foundActive = false;
+              pills.forEach(function(p) {
+                 if (p.textContent.includes(defaultCategory) || p.getAttribute('onclick').includes(defaultCategory)) {
+                    pills.forEach(function(btn) { btn.classList.remove('active'); });
+                    p.classList.add('active');
+                    foundActive = true;
+                 }
+              });
+              
+              filterHomeGallery(defaultCategory, null);
+            });
+        });
     }
 
     // ── Smooth scroll for nav links ──────────────────
@@ -1093,94 +1156,56 @@
           
           <!-- PAGE 1: COVER -->
           <div class="book-page page-cover">
-            <span style="letter-spacing: 4px; color: #d4af37; font-size: 0.8rem; font-weight: 600;">OFFICIAL BOOKLET</span>
-            <h1 class="cover-title">BAYANUL ULOOM<br>DARS</h1>
-            <p style="opacity: 0.7; font-size: 0.8rem; letter-spacing: 2px;">MUTTICHIRA</p>
-            <p style="opacity: 0.5; font-size: 0.7rem; letter-spacing: 1px; margin-top: 15px;">CLICK ARROWS TO FLIP</p>
+            <div class="book-page page-features">
+               <img src="img\dars brousher page 1.jpg" alt="Dars Brochure Page 4" style="width:100%;height:100%;object-fit:cover;">
+            </div>
           </div>
 
           <!-- PAGE 2: HISTORY -->
           <div class="book-page page-history">
-            <div>
-              <div class="page-header">
-                <h2 class="page-title">സ്ഥാപന ചരിത്രം</h2>
-                <span class="page-num">02</span>
-              </div>
-              <div class="content-box" style="margin-top: 20px;">
-                <strong>Muttichira Bayanul Uloom Dars</strong><br><br>
-                സുസ്ഥിരവും ഗുണമേന്മയുള്ളതുമായ ഇസ്ലാമിക വിദ്യാഭ്യാസ ലക്ഷ്യങ്ങളോടെ പ്രവർത്തിക്കുന്ന ഞങ്ങളുടെ സ്ഥാപനം, അതിന്റെ ഉന്നതമായ മൂല്യങ്ങൾക്കൊപ്പമാണ് മുന്നോട്ട് പോകുന്നത്. മട്ടിച്ചിറ ശുഹദാ ജുമാ മസ്ജിദിനോട് ചേർന്ന് മികച്ച അടിസ്ഥാന സൗകര്യങ്ങളും പരിചയസമ്പന്നരായ ഉസ്താദുമാരുടെ നേതൃത്വവുമാണ് ഞങ്ങളുടെ കരുത്ത്.
-              </div>
+            <div class="book-page page-features">
+               <img src="img\dars brousher page 2.jpg" alt="Dars Brochure Page 4" style="width:100%;height:100%;object-fit:cover;">
             </div>
-            <div class="footer-line"><span>Institution Profile</span><span>Page 02</span></div>
           </div>
 
           <!-- PAGE 3: VISION (CORE DARSANAM) -->
           <div class="book-page page-vision">
-            <div>
-              <div class="page-header">
-                <h2 class="page-title">മുഖ്യ ദർശനം</h2>
-                <span class="page-num">03</span>
-              </div>
-              <div style="margin-top: 20px;">
-                <div class="vision-card">
-                  <h4>നമ്മുടെ ലക്ഷ്യം (Our Vision)</h4>
-                  <p style="font-size: 0.88rem; color: #555;">സാമൂഹികവും ധാർമ്മികവുമായ പുരോഗതി കൈവരിക്കാൻ തക്കവണ്ണം വിദ്യാർത്ഥികളെ ഇസ്ലാമിക വിജ്ഞാനത്തിൽ പ്രാപ്തരാക്കുക.</p>
-                </div>
-                <div class="vision-card">
-                  <h4>പ്രവർത്തന ശൈലി (Core Values)</h4>
-                  <p style="font-size: 0.88rem; color: #555;">വിശ്വാസ്യത, സമർപ്പണം, സുതാര്യത എന്നിവ മുൻനിർത്തിയുള്ള മാതൃകാപരമായ പഠന അന്തരീക്ഷം ഉറപ്പാക്കുന്നു.</p>
-                </div>
-              </div>
+            <div class="book-page page-features">
+               <img src="img\dars brousher page 3.jpg" alt="Dars Brochure Page 4" style="width:100%;height:100%;object-fit:cover;">
             </div>
-            <div class="footer-line"><span>Core Philosophy</span><span>Page 03</span></div>
           </div>
 
           <!-- PAGE 4: FEATURES GRID -->
           <div class="book-page page-features">
-            <div>
-              <div class="page-header">
-                <h2 class="page-title">പ്രധാന മേഖലകൾ</h2>
-                <span class="page-num" style="color: #d4af37">04</span>
-              </div>
-              <div class="grid-features" style="margin-top: 20px;">
-                <div class="grid-item">
-                  <h4>Curriculum</h4>
-                  <p>ഖുർആൻ, ഹദീസ്, ഫിഖ്ഹ്, അറബിക് ഭാഷാ പഠനം.</p>
-                </div>
-                <div class="grid-item">
-                  <h4>Facilities</h4>
-                  <p>ലൈബ്രറി, കമ്പ്യൂട്ടർ ലാബ്, സ്മാർട്ട് ക്ലാസ് സജ്ജീകരണം.</p>
-                </div>
-                <div class="grid-item">
-                  <h4>Eligibility</h4>
-                  <p>അടിസ്ഥാന മതവിദ്യാഭ്യാസം പൂർത്തിയാക്കിയവർക്ക് അവസരം.</p>
-                </div>
-                <div class="grid-item">
-                  <h4>Leadership</h4>
-                  <p>പരിചയസമ്പന്നരായ ഉസ്താദുമാരുടെ നിരീക്ഷണവും മാർഗ്ഗനിർദ്ദേശവും.</p>
-                </div>
-              </div>
+            <div class="book-page page-features">
+               <img src="img\dars brousher page 4.jpg" alt="Dars Brochure Page 4" style="width:100%;height:100%;object-fit:cover;">
             </div>
-            <div class="footer-line"><span>Frameworks</span><span>Page 04</span></div>
           </div>
 
           <!-- PAGE 5: BACK COVER / CONTACT -->
           <div class="book-page page-contact">
-            <div>
-              <div class="page-header">
-                <h2 class="page-title">ബന്ധപ്പെടുക</h2>
-                <span class="page-num">05</span>
-              </div>
-              <div class="contact-box">
-                <h4 style="margin-bottom: 15px; color: #0a3d1f;">കൂടുതൽ വിവരങ്ങൾക്ക്</h4>
-                <div class="contact-tag">✉ darsbayanululoom@gmail.com</div>
-                <div class="contact-tag">☏ +91 9526 919 218</div>
-                <div class="contact-tag">📍 Muttichira, Kerala, India</div>
-              </div>
+             <div class="book-page page-features">
+               <img src="img\dars brousher page 5.jpg" alt="Dars Brochure Page 4" style="width:100%;height:100%;object-fit:cover;">
             </div>
-            <div class="footer-line"><span>End of Booklet</span><span>Page 05</span></div>
           </div>
-
+          <!-- PAGE 6: BACK COVER / CONTACT -->
+          <div class="book-page page-contact">
+             <div class="book-page page-features">
+               <img src="img\dars brousher page 6.jpg" alt="Dars Brochure Page 4" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+          </div>
+          <!-- PAGE 7: BACK COVER / CONTACT -->
+          <div class="book-page page-contact">
+             <div class="book-page page-features">
+               <img src="img\dars brousher page 7.jpg" alt="Dars Brochure Page 4" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+          </div>
+          <!-- PAGE 8: BACK COVER / CONTACT -->
+          <div class="book-page page-contact">
+             <div class="book-page page-features">
+               <img src="img\dars brousher page 8.jpg" alt="Dars Brochure Page 4" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1188,7 +1213,7 @@
 
   <script>
     let currentPage = 0;
-    const totalPages = 5;
+    const totalPages = 8;
 
     function toggleBook(open) {
       const overlay = document.getElementById('bookOverlay');

@@ -425,6 +425,8 @@
       <button class="tab-btn" onclick="switchTab('sections')"><i class="fa fa-edit"></i> Sections</button>
       <button class="tab-btn" onclick="switchTab('stories')"><i class="fa fa-camera"></i> Stories</button>
       <button class="tab-btn" onclick="switchTab('homepage')"><i class="fa fa-home"></i> Home Page</button>
+      <button class="tab-btn" onclick="switchTab('comments')"><i class="fa fa-comments"></i> Comments</button>
+      <button class="tab-btn" style="color:#e74c3c;" onclick="switchTab('reset')"><i class="fa fa-refresh"></i> Reset</button>
     </div>
 
     <!-- OVERVIEW TAB -->
@@ -535,130 +537,131 @@
       </div>
     </div>
 
-    <!-- NEWS TAB -->
-    <div class="tab-content" id="tab-news">
-      <div class="card">
-        <h3><i class="fa fa-plus-circle"></i> Add News</h3>
-        <form id="newsForm" enctype="multipart/form-data">
-          <div class="form-group">
-            <label>Title</label>
-            <input type="text" id="newsTitle" placeholder="News title" required>
-          </div>
-          <div class="form-group">
-            <label>Description</label>
-            <textarea id="newsDesc" placeholder="News description" required></textarea>
-          </div>
-          <div class="form-group">
-            <label>Image (optional)</label>
-            <input type="file" id="newsImage" accept="image/*">
-          </div>
-          <button type="submit" class="btn" style="max-width:200px;"><i class="fa fa-plus"></i> Add News</button>
-        </form>
-      </div>
-      <div class="card">
-        <h3><i class="fa fa-list"></i> All News</h3>
-        <div style="overflow-x:auto;">
-          <table class="data-table">
-            <thead><tr><th>Image</th><th>Title</th><th>Description</th><th>Date</th><th>Action</th></tr></thead>
-            <tbody id="newsTableBody"></tbody>
-          </table>
-        </div>
-      </div>
 
-      <!-- Committee Settings -->
-      <div class="card">
-        <h3><i class="fa fa-users"></i> Committee Settings</h3>
-        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:20px;"><i class="fa fa-info-circle"></i> Upload a committee poster and add details to enable the sidebar on the Home Page latest news section.</p>
-
-        <!-- Committee Title -->
-        <div class="form-group">
-          <label>Committee Title / കമ്മിറ്റി പേര്</label>
-          <input type="text" id="committeeTitle" placeholder="THE NEW COMMITTE 2026-27" style="font-size:0.95rem;">
-        </div>
-
-        <!-- Committee Details -->
-        <div class="form-group">
-          <label>Committee Details / കമ്മിറ്റി വിവരങ്ങൾ (Separate with line breaks)</label>
-          <textarea id="committeeDetails" rows="5" placeholder="Enter names or details here..."></textarea>
-        </div>
-
-        <button class="btn" style="max-width:240px; margin-bottom:20px;" onclick="saveCommitteeText()"><i class="fa fa-save"></i> Save Title &amp; Details</button>
-
-        <!-- Committee Poster Upload -->
-        <div style="border-top:1px solid var(--border); padding-top:20px; margin-top:4px;">
-          <h4 style="font-size:0.95rem; color:var(--text-muted); margin-bottom:16px;"><i class="fa fa-image"></i> Committee Poster Image</h4>
-          <div style="display:flex; align-items:flex-start; gap:20px; flex-wrap:wrap;">
-            <!-- Poster preview -->
-            <div id="committeePosterPreviewWrap" style="display:none; flex-direction:column; align-items:center; gap:8px;">
-              <img id="currentCommitteePosterPreview" src="" alt="Committee Poster Preview" style="width:150px; border-radius:10px; border:2px solid var(--accent);">
-              <button class="btn btn-danger btn-sm" onclick="removeCommitteePoster()"><i class="fa fa-trash"></i> Remove Poster</button>
-            </div>
-            <!-- No poster notice -->
-            <div id="committeeNoPosterNotice" style="color:var(--text-muted); font-size:0.85rem; padding:12px 16px; background:rgba(255,255,255,0.04); border-radius:8px; border:1px dashed var(--border);">
-              <i class="fa fa-image" style="margin-right:6px;"></i> No committee poster uploaded. The latest news will display in full-width.
-            </div>
-            <div style="flex:1;">
-              <form id="committeePosterUploadForm" enctype="multipart/form-data">
-                <div class="form-group">
-                  <label>Upload Committee Poster</label>
-                  <input type="file" id="committeePosterFile" accept="image/*" required>
-                </div>
-                <button type="submit" class="btn" style="max-width:200px;"><i class="fa fa-upload"></i> Upload Poster</button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <!-- GALLERY TAB -->
     <div class="tab-content" id="tab-gallery">
+      <!-- Add Gallery Item Form Card -->
       <div class="card">
-        <h3><i class="fa fa-plus-circle"></i> Add Gallery Item</h3>
+        <h3><i class="fa fa-plus-circle"></i> Add Gallery Item / പുതിയ ഗാലറി പോസ്റ്റ് ചേർക്കുക</h3>
         <form id="galleryForm" enctype="multipart/form-data">
           <div class="form-group">
-            <label>Title</label>
-            <input type="text" id="galleryTitle" placeholder="Item title" required>
+            <label>Title / തലക്കെട്ട് *</label>
+            <input type="text" id="galleryTitle" placeholder="Item title (e.g. Isthifadah Workshop)" required>
           </div>
+
           <div class="form-group">
-            <label>Category</label>
-            <select id="galleryCategory" required>
-              <option value="">Select category</option>
-              <option value="Post (Image)">Post (Image)</option>
-              <option value="Reel (Video)">Reel (Video)</option>
+            <label>Category / കാറ്റഗറി (All / എല്ലാം option supported) *</label>
+            <select id="galleryCategory" onchange="toggleNewCategoryInput()" required>
+              <option value="">Select Category...</option>
+              <option value="Programme">Programme</option>
+              <option value="Collections">Collections</option>
+              <option value="Design">Design</option>
+              <option value="__new__">+ Add New Category (പുതിയ കാറ്റഗറി ചേർക്കുക)</option>
             </select>
           </div>
+          <div class="form-group" id="galleryNewCategoryWrap" style="display:none;">
+            <label>Enter New Category Name / പുതിയ കാറ്റഗറിയുടെ പേര്</label>
+            <input type="text" id="galleryNewCategoryInput" placeholder="e.g. Friday Talk, Milad, Poster">
+          </div>
+
           <div class="form-group">
-            <label>Media Type</label>
+            <label>Media Type / തരം *</label>
             <select id="galleryMediaType" onchange="toggleGalleryMediaInputs()" required>
-              <option value="image">Image</option>
-              <option value="video">Video</option>
+              <option value="image">Image (ചിത്രം)</option>
+              <option value="video">Video / Reel (വീഡിയോ)</option>
             </select>
           </div>
+
+          <div class="form-group">
+            <label>Media Source / മീഡിയ ഉറവിടം</label>
+            <div style="display:flex; gap:20px; align-items:center; margin-top:6px;">
+              <label style="cursor:pointer; font-weight:normal; display:flex; align-items:center; gap:6px;">
+                <input type="radio" name="mediaSource" value="file" checked onchange="toggleGalleryMediaSource()"> Local File Upload
+              </label>
+              <label style="cursor:pointer; font-weight:normal; display:flex; align-items:center; gap:6px;">
+                <input type="radio" name="mediaSource" value="url" onchange="toggleGalleryMediaSource()"> Paste Direct / YouTube URL
+              </label>
+            </div>
+          </div>
+
           <div class="form-group" id="galleryImageInputGroup">
-            <label>Image/Video File</label>
+            <label>Upload Image / Video File (ഫോണിൽ നിന്നോ കമ്പ്യൂട്ടറിൽ നിന്നോ ഉള്ള ഫയൽ)</label>
             <input type="file" id="galleryImage" accept="image/*,video/*">
           </div>
+
           <div class="form-group" id="galleryVideoUrlGroup" style="display:none;">
-            <label>Video URL (YouTube/Direct Link)</label>
-            <input type="text" id="galleryVideoUrl" placeholder="https://...">
+            <label>Image / Video / YouTube URL (ഡയറക്റ്റ് അല്ലെങ്കിൽ യുട്യൂബ് ലിങ്ക്)</label>
+            <input type="text" id="galleryVideoUrl" placeholder="https://youtube.com/watch?v=... or https://... image/video url">
           </div>
+
           <div class="form-group">
-            <label>Description / Caption</label>
-            <textarea id="galleryDesc" placeholder="Post description..."></textarea>
+            <label>Description / Caption / വിവരണം</label>
+            <textarea id="galleryDesc" rows="3" placeholder="Post description or caption..."></textarea>
           </div>
+
           <div class="form-group">
-            <label>Hashtags (comma-separated)</label>
-            <input type="text" id="galleryHashtags" placeholder="samastha, dars, islamic">
+            <label>Hashtags (comma-separated / കോമ ഉപയോഗിച്ച് വേർതിരിക്കുക)</label>
+            <input type="text" id="galleryHashtags" placeholder="muttichira, dars, albayan, samastha">
           </div>
-          <button type="submit" class="btn" style="max-width:200px;"><i class="fa fa-upload"></i> Upload</button>
+
+          <button type="submit" class="btn" style="max-width:220px;"><i class="fa fa-upload"></i> Upload to Gallery</button>
         </form>
       </div>
+
+      <!-- Home Page Gallery Display Settings Card -->
       <div class="card">
-        <h3><i class="fa fa-th"></i> All Gallery Images</h3>
+        <h3><i class="fa fa-cogs"></i> Home Page Gallery Display Settings / ഹോം പേജ് ഗാലറി ക്രമീകരണങ്ങൾ</h3>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:20px;"><i class="fa fa-info-circle"></i> Control how many items and which category items show in the Home Page Gallery Intro section.</p>
+        
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:20px;">
+          <div class="form-group">
+            <label>Items Limit on Home Page / എത്ര ഐറ്റങ്ങൾ കാണിക്കണം (ethra mathi)?</label>
+            <select id="homeGalleryLimit">
+              <option value="3">3 Items</option>
+              <option value="6">6 Items</option>
+              <option value="9">9 Items</option>
+              <option value="12">12 Items</option>
+              <option value="0">All Items (എല്ലാം)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Featured Category on Home Page / ഏത് കാറ്റഗറി വരേണ്ടത് (eth galleryi vareenda)?</label>
+            <select id="homeGalleryCategory">
+              <option value="all">All Categories (എല്ലാം)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Display Mode / ഏത് തരം ഫിൽട്ടർ?</label>
+            <select id="homeGalleryMode">
+              <option value="all">Latest Uploads (ഏറ്റവും പുതിയവ)</option>
+              <option value="popular">Most Popular (ഏറ്റവും ലൈക് / കമന്റ്)</option>
+              <option value="pinned">Pinned / Featured Only (പിൻ ചെയ്തവ മാത്രം)</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="btn" style="max-width:240px; margin-top:10px;" onclick="saveHomeGallerySettings()"><i class="fa fa-save"></i> Save Home Display Settings</button>
+      </div>
+
+      <!-- Category Management Card -->
+      <div class="card">
+        <h3><i class="fa fa-tags"></i> Category Management / കാറ്റഗറികൾ നിയന്ത്രിക്കുക</h3>
+        <div style="display:flex; gap:12px; margin-bottom:20px; flex-wrap:wrap;">
+          <input type="text" id="newCategoryInput" placeholder="Add custom category name (e.g. Programme, Design)..." style="flex:1; min-width:200px;">
+          <button class="btn" style="width:auto; padding:10px 20px;" onclick="addCategoryAdmin()"><i class="fa fa-plus"></i> Add Category</button>
+        </div>
+        <div id="categoryBadgesList" style="display:flex; gap:10px; flex-wrap:wrap;"></div>
+      </div>
+
+      <!-- All Gallery Items Table -->
+      <div class="card">
+        <h3><i class="fa fa-th"></i> All Gallery Items / എല്ലാ ഗാലറി വർക്കുകളും</h3>
         <div style="overflow-x:auto;">
           <table class="data-table">
-            <thead><tr><th>Image</th><th>Title</th><th>Category</th><th>Pin Status</th><th>Date</th><th>Action</th></tr></thead>
+            <thead><tr><th>Media</th><th>Title</th><th>Category</th><th>Pin Status</th><th>Date</th><th>Action</th></tr></thead>
             <tbody id="galleryTableBody"></tbody>
           </table>
         </div>
@@ -678,18 +681,7 @@
       </div>
     </div>
 
-    <!-- SUBSCRIBERS TAB -->
-    <div class="tab-content" id="tab-subscribers">
-      <div class="card">
-        <h3><i class="fa fa-users"></i> Newsletter Subscribers</h3>
-        <div style="overflow-x:auto;">
-          <table class="data-table">
-            <thead><tr><th>#</th><th>Email</th><th>Subscribed At</th></tr></thead>
-            <tbody id="subscribersTableBody"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+    <!-- login with google -->
 
     <!-- SLIDERS TAB -->
     <div class="tab-content" id="tab-sliders">
@@ -1780,13 +1772,13 @@
           
           var mediaTag = '';
           if (item.mediaType === 'video') {
-             if (item.imageUrl.includes('youtube.com') || item.imageUrl.includes('youtu.be')) {
+             if (item.imageUrl && (item.imageUrl.includes('youtube.com') || item.imageUrl.includes('youtu.be'))) {
                 mediaTag = '<i class="fa fa-youtube-play fa-2x text-danger"></i>';
              } else {
                 mediaTag = '<video src="' + item.imageUrl + '" style="width:50px;height:50px;object-fit:cover;" muted></video>';
              }
           } else {
-             mediaTag = '<img src="' + item.imageUrl + '">';
+             mediaTag = '<img src="' + item.imageUrl + '" style="width:50px;height:50px;object-fit:cover;border-radius:6px;">';
           }
 
           var pinText = item.pinned ? '<i class="fa fa-thumb-tack"></i> Pinned' : '<i class="fa fa-thumb-tack"></i> Pin';
@@ -1794,14 +1786,17 @@
 
           html += '<tr>' +
             '<td>' + mediaTag + '</td>' +
-            '<td>' + item.title + '</td>' +
-            '<td><span class="badge ' + (badgeMap[item.category] || '') + '">' + item.category + '</span></td>' +
+            '<td><strong>' + item.title + '</strong>' + (item.description ? '<br><small style="color:var(--text-muted);">' + item.description.substring(0, 40) + '...</small>' : '') + '</td>' +
+            '<td><span class="badge ' + (badgeMap[item.category] || '') + '" style="background:rgba(212,175,55,0.15); color:var(--accent); border:1px solid var(--accent);">' + item.category + '</span></td>' +
             '<td><button class="btn btn-sm" style="' + pinStyle + '" onclick="togglePin(\'' + item._id + '\')">' + pinText + '</button></td>' +
             '<td>' + d + '</td>' +
             '<td><button class="btn btn-danger btn-sm" onclick="deleteItem(\'gallery\',\'' + item._id + '\')"><i class="fa fa-trash"></i></button></td></tr>';
         });
         document.getElementById('galleryTableBody').innerHTML = html || '<tr><td colspan="6" style="text-align:center;color:var(--text-muted)">No gallery items yet</td></tr>';
       });
+
+      loadGalleryCategoriesAdmin();
+      loadHomeGallerySettingsAdmin();
     }
 
     function togglePin(id) {
@@ -1810,40 +1805,182 @@
         .then(function(res) { if(res.success) loadGalleryAdmin(); });
     }
 
-    function toggleGalleryMediaInputs() {
-      var type = document.getElementById('galleryMediaType').value;
-      if (type === 'video') {
-        document.getElementById('galleryVideoUrlGroup').style.display = 'block';
-        document.getElementById('galleryImage').removeAttribute('required');
+    function toggleNewCategoryInput() {
+      var select = document.getElementById('galleryCategory');
+      var wrap = document.getElementById('galleryNewCategoryWrap');
+      if (select.value === '__new__') {
+        wrap.style.display = 'block';
+        document.getElementById('galleryNewCategoryInput').required = true;
       } else {
-        document.getElementById('galleryVideoUrlGroup').style.display = 'none';
-        document.getElementById('galleryImage').setAttribute('required', 'required');
+        wrap.style.display = 'none';
+        document.getElementById('galleryNewCategoryInput').required = false;
       }
     }
+
+    function toggleGalleryMediaSource() {
+      var radios = document.getElementsByName('mediaSource');
+      var source = 'file';
+      for (var i = 0; i < radios.length; i++) {
+        if (radios[i].checked) { source = radios[i].value; break; }
+      }
+      if (source === 'url') {
+        document.getElementById('galleryVideoUrlGroup').style.display = 'block';
+        document.getElementById('galleryImageInputGroup').style.display = 'none';
+      } else {
+        document.getElementById('galleryVideoUrlGroup').style.display = 'none';
+        document.getElementById('galleryImageInputGroup').style.display = 'block';
+      }
+    }
+
+    function toggleGalleryMediaInputs() {
+      // Kept for backward compatibility
+    }
+
+    // Load custom categories in select dropdowns and category manager list
+    function loadGalleryCategoriesAdmin() {
+      fetch('/api/settings/gallery-categories')
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          var categories = d.categories || ['Programme', 'Collections', 'Design'];
+          
+          // Populate Form Category Select
+          var catSelect = document.getElementById('galleryCategory');
+          var currentVal = catSelect.value;
+          var html = '<option value="">Select Category...</option>';
+          categories.forEach(function(c) {
+            html += '<option value="' + c + '">' + c + '</option>';
+          });
+          html += '<option value="__new__">+ Add New Category (പുതിയ കാറ്റഗറി ചേർക്കുക)</option>';
+          catSelect.innerHTML = html;
+          if (currentVal && currentVal !== '__new__') catSelect.value = currentVal;
+
+          // Populate Home Settings Featured Category Select
+          var homeCatSelect = document.getElementById('homeGalleryCategory');
+          var homeCatVal = homeCatSelect.value;
+          var hHtml = '<option value="all">All Categories (എല്ലാം)</option>';
+          categories.forEach(function(c) {
+            hHtml += '<option value="' + c + '">' + c + '</option>';
+          });
+          homeCatSelect.innerHTML = hHtml;
+          if (homeCatVal) homeCatSelect.value = homeCatVal;
+
+          // Render Category Badges list in Manager
+          var badgeHtml = '';
+          categories.forEach(function(c) {
+            badgeHtml += '<div style="background:var(--bg-card); border:1px solid var(--border); padding:6px 14px; border-radius:20px; font-size:0.85rem; display:flex; align-items:center; gap:8px;">' +
+              '<span style="color:var(--accent); font-weight:600;">' + c + '</span>' +
+              '<button type="button" style="background:none; border:none; color:var(--danger); cursor:pointer; font-size:0.85rem;" onclick="deleteCategoryAdmin(\'' + c + '\')">&times;</button>' +
+              '</div>';
+          });
+          document.getElementById('categoryBadgesList').innerHTML = badgeHtml || '<span style="color:var(--text-muted);">No custom categories yet</span>';
+        })
+        .catch(function() {});
+    }
+
+    function addCategoryAdmin() {
+      var name = document.getElementById('newCategoryInput').value.trim();
+      if (!name) { showAdminToast('Enter category name', true); return; }
+      fetch('/api/settings/gallery-categories', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ category: name })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(res) {
+        if (res.success) {
+          showAdminToast('Category added!', false);
+          document.getElementById('newCategoryInput').value = '';
+          loadGalleryCategoriesAdmin();
+        } else {
+          showAdminToast(res.message || 'Error adding category', true);
+        }
+      });
+    }
+
+    function deleteCategoryAdmin(name) {
+      if (!confirm('Delete category "' + name + '"?')) return;
+      fetch('/api/settings/gallery-categories/' + encodeURIComponent(name), { method: 'DELETE' })
+        .then(function(r) { return r.json(); })
+        .then(function(res) {
+          if (res.success) {
+            showAdminToast('Category deleted!', false);
+            loadGalleryCategoriesAdmin();
+          } else {
+            showAdminToast('Failed to delete category', true);
+          }
+        });
+    }
+
+    function loadHomeGallerySettingsAdmin() {
+      fetch('/api/settings/home-gallery')
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          if (d.limit !== undefined) document.getElementById('homeGalleryLimit').value = d.limit;
+          if (d.category) document.getElementById('homeGalleryCategory').value = d.category;
+          if (d.mode) document.getElementById('homeGalleryMode').value = d.mode;
+        })
+        .catch(function() {});
+    }
+
+    window.saveHomeGallerySettings = function() {
+      var limit = parseInt(document.getElementById('homeGalleryLimit').value) || 0;
+      var category = document.getElementById('homeGalleryCategory').value;
+      var mode = document.getElementById('homeGalleryMode').value;
+
+      fetch('/api/settings/home-gallery', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ limit, category, mode })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(res) {
+        if (res.success) {
+          showAdminToast('Home Gallery display settings saved successfully!', false);
+        } else {
+          showAdminToast('Failed to save home settings: ' + (res.message || ''), true);
+        }
+      })
+      .catch(function() { showAdminToast('Network error', true); });
+    };
 
     document.getElementById('galleryForm').addEventListener('submit', function(e) {
       e.preventDefault();
       var fd = new FormData();
-      fd.append('title', document.getElementById('galleryTitle').value);
-      fd.append('category', document.getElementById('galleryCategory').value);
+      fd.append('title', document.getElementById('galleryTitle').value.trim());
+      
+      var categoryVal = document.getElementById('galleryCategory').value;
+      if (categoryVal === '__new__') {
+        categoryVal = document.getElementById('galleryNewCategoryInput').value.trim();
+      }
+      if (!categoryVal) {
+        showAdminToast('Please select or enter a category', true);
+        return;
+      }
+      fd.append('category', categoryVal);
       fd.append('mediaType', document.getElementById('galleryMediaType').value);
-      fd.append('description', document.getElementById('galleryDesc').value);
-      fd.append('hashtags', document.getElementById('galleryHashtags').value);
+      fd.append('description', document.getElementById('galleryDesc').value.trim());
+      fd.append('hashtags', document.getElementById('galleryHashtags').value.trim());
+      
       var file = document.getElementById('galleryImage').files[0];
       if (file) { fd.append('image', file); }
-      var mediaUrl = document.getElementById('galleryVideoUrl').value;
+      var mediaUrl = document.getElementById('galleryVideoUrl').value.trim();
       if (mediaUrl) { fd.append('mediaUrl', mediaUrl); }
+      
       var btn = this.querySelector('button[type=submit]');
       if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Uploading...'; }
       fetch('/api/gallery', { method: 'POST', body: fd })
         .then(function(r) { return r.json(); })
         .then(function(data) {
-          if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Upload'; }
+          if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Upload to Gallery'; }
           showAdminToast(data.message, !data.success);
-          if (data.success) { document.getElementById('galleryForm').reset(); loadGalleryAdmin(); toggleGalleryMediaInputs(); }
+          if (data.success) { 
+            document.getElementById('galleryForm').reset();
+            document.getElementById('galleryNewCategoryWrap').style.display = 'none';
+            loadGalleryAdmin(); 
+          }
         })
         .catch(function() {
-          if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Upload'; }
+          if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa fa-upload"></i> Upload to Gallery'; }
           showAdminToast('Network error. Please try again.', true);
         });
     });
@@ -2182,6 +2319,135 @@
       });
       document.getElementById('branchListAdmin').innerHTML = html || '<p style="color:var(--text-muted);">No branches added yet</p>';
     }
+  </script>
+
+    <!-- COMMENTS TAB -->
+    <div class="tab-content" id="tab-comments">
+      <div class="card">
+        <div class="card-header" style="display:flex;align-items:center;justify-content:space-between;">
+          <h3><i class="fa fa-comments" style="color:var(--accent);"></i> Gallery Comments</h3>
+          <button class="btn" onclick="loadAllComments()" style="background:var(--primary);color:#fff;"><i class="fa fa-refresh"></i> Refresh</button>
+        </div>
+        <div id="commentsAdminList" style="padding:20px;"><p style="color:var(--text-muted);">Loading comments...</p></div>
+      </div>
+    </div>
+
+    <!-- RESET TAB -->
+    <div class="tab-content" id="tab-reset">
+      <div class="card" style="max-width:600px;margin:40px auto;text-align:center;">
+        <div style="padding:40px;">
+          <div style="font-size:60px;margin-bottom:20px;">⚠️</div>
+          <h2 style="color:#e74c3c;margin-bottom:15px;">Full Admin Reset</h2>
+          <p style="color:var(--text-muted);margin-bottom:30px;line-height:1.7;">This will permanently delete <strong style="color:#e74c3c;">ALL data</strong> — news, gallery, admissions, settings, stories, sliders, contacts, and subscribers. This action <strong>cannot be undone</strong>.</p>
+          <button class="btn" onclick="openResetModal()" style="background:#e74c3c;color:#fff;padding:14px 35px;font-size:1.1rem;border-radius:12px;">
+            <i class="fa fa-exclamation-triangle"></i> Proceed to Full Reset
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESET CONFIRMATION MODAL -->
+    <div id="resetModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:9999;display:none;align-items:center;justify-content:center;">
+      <div style="background:var(--bg-card);border:2px solid #e74c3c;border-radius:20px;padding:40px;max-width:450px;width:90%;text-align:center;">
+        <h3 style="color:#e74c3c;margin-bottom:15px;"><i class="fa fa-lock"></i> Confirm Reset</h3>
+        <p style="color:var(--text-muted);margin-bottom:20px;">Enter your admin password to confirm the full reset:</p>
+        <input type="password" id="resetPasswordInput" placeholder="Admin Password" style="width:100%;padding:12px;background:var(--bg-input);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:1rem;margin-bottom:15px;">
+        <div style="display:flex;gap:12px;justify-content:center;">
+          <button class="btn" onclick="closeResetModal()" style="background:var(--bg-input);color:var(--text);padding:12px 25px;border-radius:10px;">Cancel</button>
+          <button class="btn" onclick="executeReset()" style="background:#e74c3c;color:#fff;padding:12px 25px;border-radius:10px;"><i class="fa fa-trash"></i> Confirm Reset</button>
+        </div>
+        <div id="resetStatus" style="margin-top:15px;font-weight:600;"></div>
+      </div>
+    </div>
+
+  <script>
+    // ============================================================
+    // COMMENTS MANAGEMENT
+    // ============================================================
+    function loadAllComments() {
+      fetch('/api/gallery')
+        .then(r => r.json())
+        .then(items => {
+          var html = '';
+          items.forEach(item => {
+            if (item.comments && item.comments.length > 0) {
+              item.comments.forEach(c => {
+                var user = c.user ? (c.user.name || 'Unknown') : 'Unknown';
+                var text = c.text || '';
+                var date = new Date(c.createdAt || Date.now()).toLocaleDateString('en-IN');
+                html += '<div style="display:flex;align-items:flex-start;gap:12px;padding:14px;border-bottom:1px solid var(--border);">' +
+                  '<i class="fa fa-user-circle" style="color:var(--accent);font-size:1.5rem;margin-top:3px;"></i>' +
+                  '<div style="flex:1;">' +
+                    '<strong>' + user + '</strong> <small style="color:var(--text-muted);margin-left:8px;">' + date + '</small>' +
+                    '<br><span style="color:var(--text);">' + text + '</span>' +
+                    '<br><small style="color:var(--text-muted);">Post: ' + (item.title || item._id) + '</small>' +
+                  '</div>' +
+                  '<button class="btn btn-danger btn-sm" onclick="deleteComment(\''+item._id+'\',\''+c._id+'\')" style="min-width:36px;"><i class="fa fa-trash"></i></button>' +
+                '</div>';
+              });
+            }
+          });
+          document.getElementById('commentsAdminList').innerHTML = html || '<p style="color:var(--text-muted);text-align:center;padding:30px;">No comments found.</p>';
+        })
+        .catch(() => {
+          document.getElementById('commentsAdminList').innerHTML = '<p style="color:#e74c3c;">Failed to load comments.</p>';
+        });
+    }
+
+    function deleteComment(galleryId, commentId) {
+      if (!confirm('Delete this comment?')) return;
+      fetch('/api/gallery/' + galleryId + '/comment/' + commentId, { method: 'DELETE' })
+        .then(r => r.json())
+        .then(d => {
+          if (d.success) {
+            showToast('Comment deleted.', false);
+            loadAllComments();
+          } else {
+            showToast(d.message || 'Failed to delete comment.', true);
+          }
+        });
+    }
+
+    // ============================================================
+    // ADMIN RESET
+    // ============================================================
+    function openResetModal() {
+      document.getElementById('resetModal').style.display = 'flex';
+      document.getElementById('resetPasswordInput').value = '';
+      document.getElementById('resetStatus').textContent = '';
+    }
+    function closeResetModal() {
+      document.getElementById('resetModal').style.display = 'none';
+    }
+    function executeReset() {
+      var token = document.getElementById('resetPasswordInput').value.trim();
+      if (!token) { document.getElementById('resetStatus').innerHTML = '<span style="color:#e74c3c;">Please enter your password.</span>'; return; }
+      document.getElementById('resetStatus').innerHTML = '<i class="fa fa-spinner fa-spin"></i> Resetting...';
+      fetch('/api/admin/reset', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token })
+      })
+      .then(r => r.json())
+      .then(d => {
+        if (d.success) {
+          document.getElementById('resetStatus').innerHTML = '<span style="color:#2ecc71;"><i class="fa fa-check-circle"></i> ' + d.message + '</span>';
+          setTimeout(() => { closeResetModal(); loadDashboard(); }, 2500);
+        } else {
+          document.getElementById('resetStatus').innerHTML = '<span style="color:#e74c3c;"><i class="fa fa-times-circle"></i> ' + d.message + '</span>';
+        }
+      })
+      .catch(() => {
+        document.getElementById('resetStatus').innerHTML = '<span style="color:#e74c3c;">Server error. Try again.</span>';
+      });
+    }
+
+    // Auto-load comments when tab is visited
+    var _origSwitchTab = switchTab;
+    switchTab = function(tab) {
+      _origSwitchTab(tab);
+      if (tab === 'comments') loadAllComments();
+    };
   </script>
 </body>
 </html>
