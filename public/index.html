@@ -1008,7 +1008,7 @@
             var activeIds = sections.map(function(s) { return s.sectionId; });
             
             // Hide any section not in the active database response
-            var allSectionKeys = ['latestNews', 'gallery', 'admission', 'aboutUs', 'contact'];
+            var allSectionKeys = ['admission', 'aboutUs', 'contact'];
             allSectionKeys.forEach(function(key) {
               if (activeIds.indexOf(key) === -1) {
                 var el = document.getElementById(containerMap[key]);
