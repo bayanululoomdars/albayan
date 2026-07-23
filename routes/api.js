@@ -1,5 +1,37 @@
 const express = require('express');
 const router = express.Router();
+const https = require('https');
+
+// Helper to send Telegram notifications
+function sendTelegramNotification(text) {
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+  if (!token || !chatId) return;
+
+  const data = JSON.stringify({
+    chat_id: chatId,
+    text: text,
+  });
+
+  const options = {
+    hostname: 'api.telegram.org',
+    port: 443,
+    path: `/bot${token}/sendMessage`,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Content-Length': Buffer.byteLength(data)
+    }
+  };
+
+  const req = https.request(options, (res) => {
+    // Optionally handle response
+  });
+  req.on('error', (e) => console.error('Telegram API error:', e));
+  req.write(data);
+  req.end();
+}
+
 const News = require('../models/News');
 const GalleryItem = require('../models/GalleryItem');
 const Contact = require('../models/Contact');
@@ -41,6 +73,11 @@ router.post('/contact', async (req, res) => {
     }
     const contact = new Contact({ name, email, subject, message });
     await contact.save();
+
+    // Send Telegram Notification
+    const tgMessage = `MESSAGE\nName: ${name}\nMessage: ${message}`;
+    sendTelegramNotification(tgMessage);
+
     res.json({ success: true, message: 'Your message has been sent. Thank you!' });
   } catch (err) {
     console.error('Contact save error:', err);
@@ -522,6 +559,11 @@ router.post('/admission', (req, res) => {
         imageUrl
       });
       await admission.save();
+
+      // Send Telegram Notification
+      const tgMessage = `NEW ADMISSION\nName: ${name}\nParents: ${fatherName} & ${motherName}\nPhone: ${phone.trim()}`;
+      sendTelegramNotification(tgMessage);
+
       res.json({ success: true, message: 'Admission application submitted successfully!' });
     } catch (err) {
       console.error('Admission save error:', err);
