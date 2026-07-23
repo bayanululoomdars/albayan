@@ -1793,10 +1793,11 @@
             '<td><button class="btn btn-danger btn-sm" onclick="deleteItem(\'gallery\',\'' + item._id + '\')"><i class="fa fa-trash"></i></button></td></tr>';
         });
         document.getElementById('galleryTableBody').innerHTML = html || '<tr><td colspan="6" style="text-align:center;color:var(--text-muted)">No gallery items yet</td></tr>';
+      
+        loadGalleryCategoriesAdmin(function() {
+          loadHomeGallerySettingsAdmin();
+        });
       });
-
-      loadGalleryCategoriesAdmin();
-      loadHomeGallerySettingsAdmin();
     }
 
     function togglePin(id) {
@@ -2442,7 +2443,39 @@
       });
     }
 
-    // Auto-load comments when tab is visited
+
+    <!-- Toast Container -->
+    <div id="toastContainer" style="position:fixed;top:20px;right:20px;z-index:20000;display:flex;flex-direction:column;gap:10px;"></div>
+    <script>
+      /**
+       * Show a toast notification in admin panel.
+       * @param {string} message - Message text.
+       * @param {boolean} isError - If true, uses error styling.
+       */
+      function showAdminToast(message, isError) {
+        const container = document.getElementById('toastContainer');
+        if (!container) return;
+        const toast = document.createElement('div');
+        toast.textContent = message;
+        toast.style.minWidth = '200px';
+        toast.style.padding = '12px 16px';
+        toast.style.background = isError ? 'rgba(231,76,60,0.9)' : 'rgba(46,204,113,0.9)';
+        toast.style.color = '#fff';
+        toast.style.borderRadius = '8px';
+        toast.style.boxShadow = '0 4px 12px rgba(0,0,0,0.2)';
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.3s ease';
+        container.appendChild(toast);
+        // trigger fade-in
+        requestAnimationFrame(() => { toast.style.opacity = '1'; });
+        // auto-remove after 3 seconds
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          toast.addEventListener('transitionend', () => toast.remove());
+        }, 3000);
+      }
+    </script>
+
     var _origSwitchTab = switchTab;
     switchTab = function(tab) {
       _origSwitchTab(tab);
