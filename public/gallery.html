@@ -854,7 +854,7 @@
         } else if (imgUrl.includes('instagram.com')) {
           mediaHtml = '<a href="' + imgUrl + '" target="_blank" style="display:flex; align-items:center; justify-content:center; height:100%; color:#fff; text-decoration:none;"><i class="fa fa-instagram" style="font-size:50px; color:#e1306c; margin-right:10px;"></i> Watch on Instagram</a>';
         } else {
-          mediaHtml = '<video src="' + imgUrl + '" controls autoplay loop style="max-height:80vh; max-width:100%;"></video>';
+          mediaHtml = '<video id="modalVideo" src="' + imgUrl + '" controls autoplay muted playsinline loop style="max-height:80vh; max-width:100%; cursor:pointer;" onclick="this.muted=false;"></video>';
         }
       } else {
         mediaHtml = '<img src="' + imgUrl + '" alt="' + (item.title || '') + '" style="max-height:80vh; max-width:100%; object-fit:contain;" onerror="this.src=\'/img/placeholder.jpg\'">';
