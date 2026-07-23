@@ -142,7 +142,7 @@
     <section id="portfolio" class="clearfix" style="padding:60px 0; background:linear-gradient(180deg, #ffffff 0%, #f4f8f5 100%);">
       <div class="container">
         <header class="section-header" id="gallerySecHeader" style="text-align:center; margin-bottom:30px;">
-          <h3 class="section-title" style="font-family:'Outfit',sans-serif; font-weight:700; color:#0a3d1f;">Gallery Highlights / ഗാലറി തിളക്കങ്ങൾ</h3>
+          <h3 class="section-title" style="font-family:'Outfit',sans-serif; font-weight:700; color:#0a3d1f;">Gallery Highlights</h3>
           <p style="max-width:700px; margin:0 auto; color:#555; font-size:0.95rem; line-height:1.6;">
             Explore the memorable moments, academic programs, Sahithya Samajam activities, and student achievements of Muttichira Bayanul Uloom Dars.
           </p>
@@ -669,49 +669,66 @@
       fetch('/api/news')
         .then(function(res) { return res.json(); })
         .then(function(news) {
-          if (news.length > 0) {
-            var container = document.getElementById('dynamicNews');
-            var html = '';
-            var tickerHtml = '<div style="background:#0a3d1f; color:#fff; padding:10px 15px; border-radius:8px; margin-bottom:25px; display:flex; align-items:center; overflow:hidden; box-shadow:0 4px 12px rgba(0,0,0,0.1);"><strong style="min-width:90px; margin-right:15px; border-right:1px solid rgba(255,255,255,0.3); padding-right:15px; color:#d4af37;">UPDATES</strong> <marquee scrollamount="6" style="font-weight:500; font-size:1.05rem;">';
-            
+          var container = document.getElementById('dynamicNews');
+          if (!container) return;
+
+          if (Array.isArray(news) && news.length > 0) {
+            var cardsHtml = '';
+            var tickerTitles = [];
+
             news.forEach(function(item) {
-              tickerHtml += '<span style="margin-right:50px;">&bull; ' + item.title + '</span>';
-              
-              var date = new Date(item.createdAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' });
+              if (item.title) tickerTitles.push(item.title);
+
+              var date = item.createdAt 
+                ? new Date(item.createdAt).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })
+                : '';
+
               var imgHtml = '';
               if (item.imageUrl) {
                 imgHtml = '<div class="news-bar-img-wrapper">' +
-                  '<img src="' + item.imageUrl + '" alt="' + item.title + '" style="width:100%; height:100%; object-fit:cover;" onerror="this.src=\'/img/placeholder.jpg\'">' +
+                  '<img src="' + item.imageUrl + '" alt="' + item.title + '" onerror="this.onerror=null; this.parentElement.innerHTML=\'<div style=\\\u0022width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#0a4d2e;color:#d4af37;\\\u0022><i class=\\\u0022fa fa-newspaper-o fa-2x\\\u0022></i></div>\';">' +
                   '</div>';
               } else {
-                imgHtml = '<div class="news-bar-img-wrapper" style="background:#f4f8f5; display:flex; align-items:center; justify-content:center;">' +
+                imgHtml = '<div class="news-bar-img-wrapper" style="background:linear-gradient(135deg, #0a4d2e 0%, #0f6b3f 100%); display:flex; align-items:center; justify-content:center;">' +
                   '<i class="fa fa-newspaper-o" style="color:#d4af37; font-size:40px;"></i>' +
                   '</div>';
               }
 
-              html += '<div class="col-12 mb-4">' +
-                '<div class="news-bar-card d-flex flex-column flex-md-row bg-white overflow-hidden" style="border-radius:16px; box-shadow:0 8px 24px rgba(0,0,0,0.06); border-left:6px solid #0a3d1f; transition:all 0.3s; background:#fff; cursor:pointer;" onmouseover="this.style.transform=\'translateY(-3px)\';this.style.boxShadow=\'0 12px 30px rgba(0,0,0,0.12)\'" onmouseout="this.style.transform=\'\';this.style.boxShadow=\'0 8px 24px rgba(0,0,0,0.06)\'">' +
+              cardsHtml += '<div class="col-12 mb-4">' +
+                '<div class="news-bar-card achievement-card d-flex flex-column flex-md-row bg-white overflow-hidden" style="border-radius:16px; box-shadow:0 8px 24px rgba(0,0,0,0.06); border-left:6px solid #0a4d2e; transition:all 0.3s; background:#fff;">' +
                 imgHtml +
-                '<div class="p-4" style="flex:1; display:flex; flex-direction:column; justify-content:center; min-width:0;">' +
-                '<span style="color:#888; font-size:0.8rem; margin-bottom:8px; font-weight:600;"><i class="fa fa-calendar" style="color:#d4af37; margin-right:5px;"></i>' + date + '</span>' +
-                '<h4 style="font-family:\'Outfit\',sans-serif; color:#0a3d1f; font-weight:700; font-size:1.2rem; margin:0 0 10px 0; word-wrap:break-word;">' + item.title + '</h4>' +
-                '<p style="color:#555; font-size:0.92rem; margin:0; line-height:1.6;">' + item.description + '</p>' +
+                '<div class="p-4 achievement-content" style="flex:1; display:flex; flex-direction:column; justify-content:center; min-width:0;">' +
+                (date ? '<span style="color:#888; font-size:0.8rem; margin-bottom:8px; font-weight:600;"><i class="fa fa-calendar" style="color:#d4af37; margin-right:5px;"></i>' + date + '</span>' : '') +
+                '<h4 style="font-family:\'Outfit\',sans-serif; color:#0a4d2e; font-weight:700; font-size:1.2rem; margin:0 0 10px 0; word-wrap:break-word;">' + item.title + '</h4>' +
+                '<p style="color:#555; font-size:0.92rem; margin:0; line-height:1.6;">' + (item.description || '') + '</p>' +
                 '</div></div></div>';
             });
-            tickerHtml += '</marquee></div>';
-            
-            container.innerHTML = tickerHtml + html;
+
+            var tickerHtml = '';
+            if (tickerTitles.length > 0) {
+              tickerHtml = '<div class="col-12 mb-4">' +
+                '<div style="background:#0a4d2e; color:#fff; padding:10px 18px; border-radius:10px; display:flex; align-items:center; overflow:hidden; box-shadow:0 4px 12px rgba(10,77,46,0.15);">' +
+                '<strong style="min-width:95px; margin-right:15px; border-right:2px solid rgba(212,175,55,0.4); padding-right:15px; color:#d4af37; font-size:0.85rem; letter-spacing:0.5px;"><i class="fa fa-bullhorn" style="margin-right:4px;"></i> UPDATES</strong>' +
+                '<marquee scrollamount="6" style="font-weight:500; font-size:1rem; color:#fff;">' +
+                tickerTitles.map(function(t){ return '<span style="margin-right:45px;">&bull; ' + t + '</span>'; }).join('') +
+                '</marquee></div></div>';
+            }
+
+            container.innerHTML = tickerHtml + cardsHtml;
             container.style.display = 'flex';
             container.style.flexWrap = 'wrap';
-            // Hide static news
+
             var staticNews = document.getElementById('staticNews');
             if (staticNews) staticNews.style.display = 'none';
           } else {
-            var container = document.getElementById('dynamicNews');
-            if(container) container.innerHTML = '<div class="col-12 text-center" style="color:#999; padding:40px;">No latest news available right now.</div>';
+            container.innerHTML = '<div class="col-12 text-center" style="color:#999; padding:40px;">No latest news available right now.</div>';
           }
         })
-        .catch(function() { /* Keep static news visible */ });
+        .catch(function(err) {
+          console.error('Error loading news:', err);
+          var container = document.getElementById('dynamicNews');
+          if (container) container.innerHTML = '<div class="col-12 text-center" style="color:#999; padding:40px;">No latest news available right now.</div>';
+        });
     }
 
       let allHomeGalleryItems = [];
